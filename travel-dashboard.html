@@ -1,351 +1,192 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>富士山露营 & 东京 Shopping 5日行程 Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>
-    body { background-color: #0f172a; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本 5 天单人行路书 & 路线指引</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', 'Noto Sans JP', sans-serif; }
+    </style>
 </head>
-<body x-data="appData()" class="pb-20">
-
-  <!-- Header Section -->
-  <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
-    <div class="max-w-md mx-auto flex justify-between items-center">
-      <div>
-        <h1 class="text-lg font-bold text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-campground"></i> 富士山露营 & 东京 Shopping
-        </h1>
-        <p class="text-xs text-slate-400 mt-0.5">2026.10.05 – 10.09 (5天4晚)</p>
-      </div>
-      <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1 text-right">
-        <div class="text-[10px] text-amber-400 uppercase tracking-wider font-semibold">出发倒计时</div>
-        <div class="text-xs font-mono font-extrabold text-amber-300" x-text="countdownText"></div>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-md mx-auto p-4 space-y-4">
-
-    <!-- 1. 行程时间线 (Timeline) -->
-    <section x-show="currentTab === 'timeline'" class="space-y-4">
-      <template x-for="(day, idx) in itinerary" :key="idx">
-        <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-lg">
-          <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-700">
-            <div class="flex items-center gap-2">
-              <span class="bg-amber-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded" x-text="day.dayTag"></span>
-              <span class="font-bold text-slate-100 text-sm" x-text="day.date"></span>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-wide text-emerald-400">⛺ 5天日本单人行・路书与路线指引</h1>
+                <p class="text-xs text-slate-400 mt-0.5">浩庵露营场 ⇄ 静冈市区（Hotel Ole Inn）</p>
             </div>
-            <span class="text-xs font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded-full" x-text="day.theme"></span>
-          </div>
-          <div class="space-y-3 pl-1">
-            <template x-for="(item, i) in day.events" :key="i">
-              <div class="flex gap-3 text-xs">
-                <div class="w-12 text-slate-400 font-mono flex-shrink-0 pt-0.5" x-text="item.time"></div>
-                <div class="flex-1">
-                  <div class="text-slate-200 font-medium" x-text="item.title"></div>
-                  <div x-show="item.desc" class="text-slate-400 text-[11px] mt-0.5 leading-relaxed" x-text="item.desc"></div>
+            <div class="text-right">
+                <span class="inline-block bg-emerald-900/60 text-emerald-300 border border-emerald-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                    状态：酒店已锁定 🟢
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- 导航切换 Tabs -->
+        <div class="flex border-b border-slate-700 space-x-6 text-sm font-medium">
+            <button onclick="switchTab('itinerary')" id="btn-itinerary" class="pb-3 border-b-2 border-emerald-400 text-emerald-400 transition-colors focus:outline-none">
+                📅 5天详细行程
+            </button>
+            <button onclick="switchTab('route')" id="btn-route" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors focus:outline-none">
+                🗺️ 核心交通与路线指引
+            </button>
+            <button onclick="switchTab('hotel')" id="btn-hotel" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors focus:outline-none">
+                🏨 住宿核心信息
+            </button>
+        </div>
+
+        <!-- Tab 1: 行程规划 -->
+        <section id="tab-itinerary" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Day 1 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded">Day 1</span>
+                        <span class="text-xs text-slate-400">抵达与移动</span>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">抵达成田/羽田 ➔ 富士五湖区</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">入境后搭乘公共交通或租车前往富士五湖区域，抵达本栖湖附近，准备露营物资与轻量化整备。</p>
                 </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </template>
-    </section>
+                <!-- Day 2 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded">Day 2</span>
+                        <span class="text-xs text-slate-400">浩庵露营场</span>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">本栖湖・浩庵露营场（Solo Camping）</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">面对“千元纸币背面”的富士山绝景搭帐露营。享受山系Bushcraft、柴炉取暖与静谧的自然风光，拍摄日落与星空。</p>
+                </div>
+                <!-- Day 3 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-sm border-emerald-500/50">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500 text-slate-900 rounded">Day 3 (已定酒店)</span>
+                        <span class="text-xs text-slate-400">本栖湖 ➔ 静冈市区</span>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">撤营移动至静冈・入住 Hotel Ole Inn</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">上午在浩庵露营场欣赏清晨富士山，随后跨区域移动至静冈站。入住 <span class="text-emerald-400 font-semibold">Hotel Ole Inn</span>，泡顶楼天然温泉，洗去露营 疲惫，享受周边美食与精酿。</p>
+                </div>
+                <!-- Day 4 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded">Day 4</span>
+                        <span class="text-xs text-slate-400">静冈深度探索</span>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">静冈漫游与人文探索</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">享用酒店免费自助早餐（06:00-09:30）后，在静冈市区或周边深度漫步、街头摄影、探索特色居酒屋或当地咖啡/精酿文化。</p>
+                </div>
+            </div>
+            <!-- Day 5 单独占满一行 -->
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-sm">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded">Day 5</span>
+                    <span class="text-xs text-slate-400">返程</span>
+                </div>
+                <h3 class="font-bold text-base mb-2">静冈 ➔ 机场 ➔ 归程</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">整理行李，搭乘新干线或列车前往机场，结束充实的5天单人自然与都市结合之旅。</p>
+            </div>
+        </section>
 
-    <!-- 2. VJW 填报卡片 -->
-    <section x-show="currentTab === 'vjw'" class="space-y-3">
-      <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-300 flex items-center gap-2">
-        <i class="fa-solid fa-circle-info text-amber-400 text-base"></i>
-        <span>点击任意卡片即可复制对应字段，方便填报 Visit Japan Web。</span>
-      </div>
+        <!-- Tab 2: 路线指引 -->
+        <section id="tab-route" class="hidden space-y-6">
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-emerald-400 mb-2">🗺️ 核心路段：浩庵露营场 ➔ 静冈市区（Hotel Ole Inn）</h2>
+                    <p class="text-sm text-slate-300">从本栖湖畔的浩庵露营场前往静冈市（JR静冈站步行约2分钟），主要动线与接驳方式如下：</p>
+                </div>
 
-      <template x-for="(card, i) in vjwFields" :key="i">
-        <div @click="copyToClipboard(card.val, card.label)" class="bg-slate-800 border border-slate-700 active:border-amber-500 rounded-xl p-3.5 flex justify-between items-center cursor-pointer transition-all">
-          <div>
-            <div class="text-[11px] text-slate-400" x-text="card.label"></div>
-            <div class="text-sm font-semibold text-slate-100 font-mono mt-0.5" x-text="card.val"></div>
-          </div>
-          <button class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-            <i class="fa-regular fa-copy"></i>
-            <span>复制</span>
-          </button>
-        </div>
-      </template>
-    </section>
+                <div class="relative border-l-2 border-emerald-500/40 ml-4 pl-6 space-y-8">
+                    <!-- Step 1 -->
+                    <div class="relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-800"></span>
+                        <h4 class="font-bold text-base text-slate-100">第一步：从浩庵露营场出发 ➔ 身延线车站</h4>
+                        <p class="text-sm text-slate-300 mt-1">
+                            从本栖湖浩庵露营场，需乘坐巴士或预约当地交通前往最近的 JR身延线 车站（如：<strong>身延站</strong> 或 <strong>甲斐常幸站</strong> 等，具体根据班次而定），或选择自驾/包车直接串联。
+                        </p>
+                    </div>
 
-    <!-- 3. 装备打包 (Checklist) -->
-    <section x-show="currentTab === 'gear'" class="space-y-4">
-      <div class="bg-slate-800 rounded-xl p-3 border border-slate-700">
-        <div class="flex justify-between text-xs text-slate-300 mb-1.5">
-          <span>打包进度</span>
-          <span class="font-bold text-emerald-400" x-text="`${packedCount}/${totalCount} (${progressPercent}%)`"></span>
-        </div>
-        <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-          <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" :style="`width: ${progressPercent}%`"></div>
-        </div>
-      </div>
+                    <!-- Step 2 -->
+                    <div class="relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-800"></span>
+                        <h4 class="font-bold text-base text-slate-100">第二步：搭乘 JR 列车 ➔ 富士/甲府方向转乘至静冈</h4>
+                        <p class="text-sm text-slate-300 mt-1">
+                            乘坐 JR 身延线列车，向南经富士站转乘 <strong>JR 东海道本线</strong>，或通过其他最优铁道路径抵达 <strong>JR 静冈站</strong>。全程衔接紧凑，沿途风景极佳。
+                        </p>
+                    </div>
 
-      <!-- 托运包 -->
-      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-suitcase-rolling"></i> 托运包：小鹰 48L (限重 20kg)
-        </h3>
-        <div class="space-y-2.5">
-          <template x-for="item in checkedBagList" :key="item.id">
-            <label class="flex items-center gap-3 text-xs text-slate-200 cursor-pointer select-none">
-              <input type="checkbox" x-model="item.done" @change="saveGearState()" class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0">
-              <span :class="item.done ? 'line-through text-slate-500' : ''" x-text="item.name"></span>
-            </label>
-          </template>
-        </div>
-      </div>
+                    <!-- Step 3 -->
+                    <div class="relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-800"></span>
+                        <h4 class="font-bold text-base text-slate-100">第三步：抵达 JR 静冈站 ➔ 步行直达酒店</h4>
+                        <p class="text-sm text-slate-300 mt-1">
+                            到达 JR 静冈站后，出站步行仅需约 <strong>2 分钟</strong> 即可轻松抵达 <strong>Hotel Ole Inn</strong>，完美卸下行囊，直接泡温泉。
+                        </p>
+                    </div>
+                </div>
 
-      <!-- 随身包 -->
-      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-backpack"></i> 随身包：北极狐双肩包 (限重 7kg)
-        </h3>
-        <div class="space-y-2.5">
-          <template x-for="item in carryOnList" :key="item.id">
-            <label class="flex items-center gap-3 text-xs text-slate-200 cursor-pointer select-none">
-              <input type="checkbox" x-model="item.done" @change="saveGearState()" class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0">
-              <span :class="item.done ? 'line-through text-slate-500' : ''" x-text="item.name"></span>
-            </label>
-          </template>
-        </div>
-      </div>
-    </section>
+                <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700/60 text-xs text-slate-400">
+                    💡 <strong>出行提示：</strong> 建议在出发前一天使用 Google Maps 或换乘案内（Jorudan）再次确认当日的列车实时班次和天气情况。
+                </div>
+            </div>
+        </section>
 
-    <!-- 4. 汇率计算器 (Calc) -->
-    <section x-show="currentTab === 'calc'" class="space-y-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-4">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-calculator"></i> 日元实时换算 (汇率参考: 100 JPY = 4.27 RMB)
-        </h3>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">日元 (JPY)</label>
-            <input type="number" x-model="jpyInput" @input="calcFromJpy()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-500">
-          </div>
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">人民币 (RMB)</label>
-            <input type="number" x-model="rmbInput" @input="calcFromRmb()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-500">
-          </div>
-        </div>
-      </div>
+        <!-- Tab 3: 住宿核心信息 -->
+        <section id="tab-hotel" class="hidden space-y-6">
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-sm space-y-4">
+                <h2 class="text-lg font-bold text-emerald-400">🏨 已锁定的静冈酒店：Hotel Ole Inn</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                        <span class="text-slate-400 block text-xs mb-1">房费与结算</span>
+                        <span class="font-bold text-base text-slate-100">13,300 日元</span> <span class="text-xs text-slate-400">（含税及服务费，现场到店现金/刷卡结算）</span>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                        <span class="text-slate-400 block text-xs mb-1">特色权益</span>
+                        <span class="font-bold text-base text-emerald-400">全员免费自助早餐 + 顶楼天然温泉</span>
+                        <span class="block text-xs text-slate-400 mt-1">早餐时间：06:00 – 09:30（6楼）</span>
+                    </div>
+                </div>
+                <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 text-xs text-slate-300 space-y-2">
+                    <p class="font-semibold text-slate-200">📌 取消政策提醒：</p>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-400">
+                        <li>入住前一天（前日）：收取 20% 违约金</li>
+                        <li>入住当天（当日）：收取 80% 违约金</li>
+                        <li>未入住（No Show）：收取 100% 违约金</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2">
-        <h3 class="text-xs font-bold text-slate-300 mb-2">💴 现金预算拆解 (预备 20,000 JPY)</h3>
-        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">浩庵 / ふもとっぱら 柴火费</span>
-          <span class="text-slate-200 font-mono">~4,000 JPY</span>
-        </div>
-        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">营地至 JR 富士宫站 / 静冈路线巴士</span>
-          <span class="text-slate-200 font-mono">~3,500 JPY</span>
-        </div>
-        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">青叶关东煮横丁 / 自动售货机投币</span>
-          <span class="text-slate-200 font-mono">~3,500 JPY</span>
-        </div>
-        <div class="flex justify-between text-xs py-1 font-semibold text-amber-400 pt-1">
-          <span>备用应急金</span>
-          <span class="font-mono">~9,000 JPY</span>
-        </div>
-      </div>
-    </section>
+    </main>
 
-  </main>
+    <!-- Footer -->
+    <footer class="text-center py-8 text-xs text-slate-500 border-t border-slate-800 mt-12">
+        <p>Japan Solo Trip Itinerary & Route Guide • Enjoy your journey!</p>
+    </footer>
 
-  <!-- Navigation Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-md z-50">
-    <div class="max-w-md mx-auto grid grid-cols-4 text-center py-2 text-[11px]">
-      <button @click="currentTab = 'timeline'" :class="currentTab === 'timeline' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-route text-base"></i>
-        <span>行程</span>
-      </button>
-      <button @click="currentTab = 'vjw'" :class="currentTab === 'vjw' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-id-card text-base"></i>
-        <span>VJW 助手</span>
-      </button>
-      <button @click="currentTab = 'gear'" :class="currentTab === 'gear' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-list-check text-base"></i>
-        <span>装备清单</span>
-      </button>
-      <button @click="currentTab = 'calc'" :class="currentTab === 'calc' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-coins text-base"></i>
-        <span>汇率预算</span>
-      </button>
-    </div>
-  </nav>
+    <!-- JavaScript 切换逻辑 -->
+    <script>
+        function switchTab(tabName) {
+            // 隐藏所有区块
+            document.getElementById('tab-itinerary').classList.add('hidden');
+            document.getElementById('tab-route').classList.add('hidden');
+            document.getElementById('tab-hotel').classList.add('hidden');
 
-  <!-- Copy Toast Notification -->
-  <div x-show="showToast" x-transition class="fixed top-16 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-bold text-xs px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-2">
-    <i class="fa-solid fa-check-circle"></i>
-    <span x-text="toastMsg"></span>
-  </div>
+            // 移除所有按钮高亮
+            document.getElementById('btn-itinerary').className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors focus:outline-none";
+            document.getElementById('btn-route').className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors focus:outline-none";
+            document.getElementById('btn-hotel').className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors focus:outline-none";
 
-  <script>
-    function appData() {
-      return {
-        currentTab: 'timeline',
-        countdownText: '',
-        showToast: false,
-        toastMsg: '',
-        jpyInput: 20000,
-        rmbInput: 854,
-        vjwFields: [
-          { label: '入境航班号', val: 'GK36' },
-          { label: '日本滞在先都道府县', val: '山梨県 (Yamanashi)' },
-          { label: '市区町村', val: '南都留郡身延町 (Minobu-cho)' },
-          { label: '町名番地', val: '中倉 4703-5' },
-          { label: '住宿名称', val: '浩庵キャンプ場 (Koan Camping Ground)' },
-          { label: '联系电话', val: '0556380117' }
-        ],
-        itinerary: [
-          {
-            dayTag: 'Day 1', date: '10/05 (周一)', theme: '本栖湖扎营',
-            events: [
-              { time: '02:15', title: '浦东 T2 起飞 (GK36)', desc: '捷星日本，带好护照凭证' },
-              { time: '06:20', title: '成田 T3 落地', desc: '提取托运包，快速办理通关' },
-              { time: '07:37', title: '京成 Skyaccess 特急', desc: '成田 ➔ 日本桥站 (1,414 JPY)' },
-              { time: '08:45', title: '平地步行至东京站钢铁大厦', desc: '日本桥站 B3 出口，步行 5 分钟' },
-              { time: '09:50', title: '高速大巴前往河口湖', desc: '东京站 ➔ 河口湖站 (2,200 JPY)' },
-              { time: '12:00', title: '河口湖站前补给', desc: '采购高山气罐及两日营地食材' },
-              { time: '13:40', title: '路线巴士 ➔ 浩庵露营场', desc: '约 14:25 抵达本栖湖浩庵' },
-              { time: '14:30+', title: '湖畔扎营 & 富士日落', desc: '搭建营地，拍摄本栖湖富士日落' }
-            ]
-          },
-          {
-            dayTag: 'Day 2', date: '10/06 (周二)', theme: '朝雾高原焚火',
-            events: [
-              { time: '08:30', title: '晨光咖啡 & 撤营', desc: '惬意收拾浩庵营地' },
-              { time: '10:30', title: '转移至ふもとっぱら', desc: '搭乘路线巴士前往朝雾高原/麓原营地' },
-              { time: '12:00', title: '营地 Check-in 扎营', desc: '搭建大包帐篷系统' },
-              { time: '13:00+', title: '购买柴火 & 户外炊事', desc: '购买 3-4 捆柴火，体验草原焚火' }
-            ]
-          },
-          {
-            dayTag: 'Day 3', date: '10/07 (周三)', theme: '静冈精酿 & 关东煮回血',
-            events: [
-              { time: '09:30', title: '朝雾高原撤营下山', desc: '营地门口搭乘富士急巴士前往 JR 富士宫站' },
-              { time: '11:10', title: '换乘电车前往静冈', desc: 'JR 身延线/东海道本线 ➔ JR 静冈站' },
-              { time: '12:15', title: '静冈站酒店 Check-in', desc: '先把 48L 大包扔进酒店/寄存，极速卸重' },
-              { time: '13:30', title: 'WCB 用宗 Taproom / 清水港海鲜', desc: 'JR 坐 2 站至用宗港喝 WCB 精酿，或至清水港吃金枪鱼丼' },
-              { time: '18:00', title: '青叶关东煮街 (青叶横丁)', desc: '红灯笼小巷吃静冈黑汤关东煮，配 Highball 极具烟火气' },
-              { time: '20:30', title: 'WCB Shizuoka / AOI Brewing', desc: '步行至市区直营 Taproom 喝精酿续杯放松' }
-            ]
-          },
-          {
-            dayTag: 'Day 4', date: '10/08 (周四)', theme: '静冈前往新宿 & 户外大采购',
-            events: [
-              { time: '09:00', title: '静冈站搭乘新干线/高速大巴', desc: '新干线 1h 直达东京/品川，或高速大巴直达 Busta Shinjuku' },
-              { time: '11:30', title: '新宿酒店 Check-in', desc: '寄存行李，无包轻装准备扫货' },
-              { time: '12:30+', title: '户外装备大扫货', desc: '重点逛 Alpen Tokyo, L-Breath, Montbell 专卖店' }
-            ]
-          },
-          {
-            dayTag: 'Day 5', date: '10/09 (周五)', theme: '全天 Citywalk & 晚班返程',
-            events: [
-              { time: '09:00', title: '退房寄行李 & 深度 Citywalk', desc: '行李存酒店/车站，全天轻松逛街' },
-              { time: '12:00', title: '市区美食 & 伴手礼补货', desc: '享用美食，采买药妆/手信' },
-              { time: '15:00', title: '潮流街区 / 户外店补漏', desc: '银座、原宿或补买装备' },
-              { time: '18:30', title: '提取行李前往成田机场', desc: '搭乘 Skyaccess 或 N\'EX 前往 NRT T3' },
-              { time: '20:25', title: '成田 T3 办理登机 (GK35)', desc: '托运小鹰 48L (20kg)，免税店最后采购' },
-              { time: '22:25', title: '起飞返程上海 (GK35)', desc: '次日 00:50 落地浦东 T2' }
-            ]
-          }
-        ],
-        checkedBagList: [
-          { id: 1, name: '帐篷系统 (Montbell 月光2 / 塔黄 4)', done: false },
-          { id: 2, name: '睡垫 (挪客徒野 R5.8) & 睡袋 (黑冰 G400)', done: false },
-          { id: 3, name: '折叠椅 (Helinox Chair Zero)', done: false },
-          { id: 4, name: '地钉、营锤、柴刀/锯子、登山杖', done: false },
-          { id: 5, name: '气炉头 (气罐到河口湖买)', done: false },
-          { id: 6, name: '铸铁锅 / 户外小炊具', done: false }
-        ],
-        carryOnList: [
-          { id: 7, name: '护照原件 & VJW 截图凭证', done: false },
-          { id: 8, name: '日元现金 (预备 20,000 JPY)', done: false },
-          { id: 9, name: '相机系统 (Sony α6000)', done: false },
-          { id: 10, name: '充电宝 / 锂电池 (严禁托运)', done: false },
-          { id: 11, name: '手机、eSIM 卡凭证、MacBook', done: false },
-          { id: 12, name: '两脚快充头、数据线', done: false }
-        ],
-        init() {
-          this.updateCountdown();
-          setInterval(() => this.updateCountdown(), 1000);
-          this.loadGearState();
-        },
-        updateCountdown() {
-          const target = new Date('2026-10-05T02:15:00+08:00').getTime();
-          const now = new Date().getTime();
-          const diff = target - now;
-          if (diff <= 0) {
-            this.countdownText = '已出发！';
-            return;
-          }
-          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-          
-          this.countdownText = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
-        },
-        copyToClipboard(val, label) {
-          navigator.clipboard.writeText(val.replace(/\s\(.*\)/, '')).then(() => {
-            this.toastMsg = `已复制 ${label}`;
-            this.showToast = true;
-            setTimeout(() => this.showToast = false, 2000);
-          });
-        },
-        calcFromJpy() {
-          this.rmbInput = Math.round(this.jpyInput * 0.0427);
-        },
-        calcFromRmb() {
-          this.jpyInput = Math.round(this.rmbInput / 0.0427);
-        },
-        get totalCount() {
-          return this.checkedBagList.length + this.carryOnList.length;
-        },
-        get packedCount() {
-          return this.checkedBagList.filter(i => i.done).length + this.carryOnList.filter(i => i.done).length;
-        },
-        get progressPercent() {
-          return Math.round((this.packedCount / this.totalCount) * 100);
-        },
-        saveGearState() {
-          const state = {
-            checked: this.checkedBagList.map(i => ({ id: i.id, done: i.done })),
-            carry: this.carryOnList.map(i => ({ id: i.id, done: i.done }))
-          };
-          localStorage.setItem('fuji_gear_state', JSON.stringify(state));
-        },
-        loadGearState() {
-          const saved = localStorage.getItem('fuji_gear_state');
-          if (saved) {
-            try {
-              const parsed = JSON.parse(saved);
-              parsed.checked?.forEach(s => {
-                const item = this.checkedBagList.find(i => i.id === s.id);
-                if (item) item.done = s.done;
-              });
-              parsed.carry?.forEach(s => {
-                const item = this.carryOnList.find(i => i.id === s.id);
-                if (item) item.done = s.done;
-              });
-            } catch(e){}
-          }
+            // 显示目标区块并高亮按钮
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            document.getElementById('btn-' + tabName).className = "pb-3 border-b-2 border-emerald-400 text-emerald-400 transition-colors focus:outline-none";
         }
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
