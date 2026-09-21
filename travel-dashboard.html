@@ -1,646 +1,346 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>富士山露营 & 东京漫游 · 5日行程</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0c0e12;color:#f5efe6;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:#11141a}
-::-webkit-scrollbar-thumb{background:#3d4456;border-radius:2px}
-
-/* Header */
-.header{position:sticky;top:0;z-index:100;background:rgba(17,20,26,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(45,48,64,0.6)}
-.header-inner{max-width:640px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.header-left{display:flex;align-items:center;gap:10px;min-width:0}
-.header-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#ff6b35,#3d7a35);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.header-title{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.header-sub{font-size:11px;color:rgba(212,197,174,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.weather-tag{display:none;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:rgba(28,33,43,0.8);border:1px solid rgba(45,48,64,0.6);font-size:11px}
-.countdown-tag{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,107,53,0.15),rgba(61,122,53,0.12));border:1px solid rgba(255,107,53,0.3);font-size:11px;font-weight:600;color:#ff8c5a}
-.pulse-dot{width:6px;height:6px;border-radius:50%;background:#ff8c5a;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
-
-/* Hero */
-.hero{max-width:640px;margin:0 auto;padding:20px 16px 8px}
-.hero-card{position:relative;overflow:hidden;border-radius:16px;border:1px solid rgba(45,48,64,0.6);background:linear-gradient(135deg,#161a22,#11141a,#161a22);padding:24px 20px}
-.hero-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,107,53,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(94,158,75,0.12) 0%,transparent 50%);pointer-events:none}
-.hero-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;position:relative}
-.hero-tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
-.tag-orange{background:rgba(255,107,53,0.15);border:1px solid rgba(255,107,53,0.3);color:#ff8c5a}
-.tag-green{background:rgba(94,158,75,0.15);border:1px solid rgba(94,158,75,0.3);color:#7fb069}
-.tag-blue{background:rgba(106,176,222,0.1);border:1px solid rgba(106,176,222,0.25);color:#6ab0de}
-.hero-title{font-size:22px;font-weight:800;margin-bottom:6px;position:relative}
-.gradient-text{background:linear-gradient(135deg,#ff6b35,#ffb08a 50%,#5a9e4b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-desc{font-size:13px;color:rgba(212,197,174,0.7);line-height:1.6;position:relative}
-.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;font-size:12px;color:#e8dfd2;position:relative}
-
-/* Tabs */
-.tab-bar{max-width:640px;margin:0 auto;padding:12px 16px 4px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab-btn{display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:10px;font-size:13px;font-weight:500;white-space:nowrap;border:1px solid transparent;color:rgba(212,197,174,0.7);background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s}
-.tab-btn:active{background:rgba(28,33,43,0.6)}
-.tab-btn.active{background:linear-gradient(135deg,rgba(255,107,53,0.12),rgba(94,158,75,0.08));border-color:rgba(255,107,53,0.4);color:#f5efe6}
-
-/* Content */
-.content{max-width:640px;margin:0 auto;padding:12px 16px 40px}
-.tab-pane{display:none}
-.tab-pane.active{display:block;animation:fadeIn 0.3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* Day Section */
-.day-section{margin-bottom:28px}
-.day-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.day-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
-.num-orange{background:linear-gradient(135deg,#ff6b35,#e85a28)}
-.num-green{background:linear-gradient(135deg,#5a9e4b,#2d5a27)}
-.num-blue{background:linear-gradient(135deg,#4a90c2,#6ab0de)}
-.num-sand{background:linear-gradient(135deg,#d4c5ae,#e8dfd2);color:#11141a}
-.day-title{font-size:16px;font-weight:700}
-.day-subtitle{font-size:11px;color:rgba(212,197,174,0.55);margin-top:1px}
-
-/* Timeline */
-.timeline{position:relative;padding-left:28px}
-.timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,rgba(255,107,53,0.5),rgba(94,158,75,0.3));border-radius:1px}
-.tl-item{position:relative;margin-bottom:10px}
-.tl-dot{position:absolute;left:-24px;top:14px;width:10px;height:10px;border-radius:50%;border:2px solid #0c0e12}
-.dot-orange{background:#ff6b35}
-.dot-green{background:#5a9e4b}
-.dot-blue{background:#4a90c2}
-.dot-sand{background:#d4c5ae}
-.tl-card{background:#161a22;border:1px solid rgba(45,48,64,0.5);border-radius:12px;padding:12px 14px;transition:border-color 0.2s}
-.tl-card:hover{border-color:rgba(255,107,53,0.3)}
-.tl-card.highlight{background:linear-gradient(90deg,#161a22,rgba(255,107,53,0.04));border-color:rgba(255,107,53,0.25)}
-.tl-card.highlight-green{background:linear-gradient(90deg,#161a22,rgba(94,158,75,0.04));border-color:rgba(94,158,75,0.25)}
-.tl-card.highlight-blue{background:linear-gradient(90deg,#161a22,rgba(74,144,194,0.04));border-color:rgba(74,144,194,0.25)}
-.tl-time{font-size:11px;font-family:"SF Mono","Fira Code",monospace;color:#ff8c5a;margin-bottom:4px}
-.tl-time.green{color:#7fb069}
-.tl-time.blue{color:#6ab0de}
-.tl-time.sand{color:#d4c5ae}
-.tl-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px}
-.tl-tag{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500}
-.tag-train{background:rgba(94,158,75,0.12);color:#7fb069}
-.tag-bus{background:rgba(94,158,75,0.12);color:#7fb069}
-.tag-walk{background:rgba(45,48,64,0.5);color:#d4c5ae}
-.tag-shop{background:rgba(255,107,53,0.12);color:#ff8c5a}
-.tag-camp{background:rgba(255,107,53,0.15);color:#ff8c5a}
-.tag-photo{background:rgba(106,176,222,0.1);color:#6ab0de}
-.tag-food{background:rgba(255,107,53,0.12);color:#ff8c5a}
-.tag-onsen{background:rgba(106,176,222,0.12);color:#6ab0de}
-.tag-flight{background:rgba(106,176,222,0.1);color:#6ab0de}
-.tl-cost{font-size:10px;color:rgba(212,197,174,0.4);margin-left:auto}
-.tl-text{font-size:13px;line-height:1.5}
-.tl-shops{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.tl-shop{padding:4px 10px;border-radius:6px;background:#1c212b;border:1px solid rgba(45,48,64,0.6);font-size:11px;color:#e8dfd2}
-.day-accommodation{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(212,197,174,0.5);margin-top:8px;margin-left:28px}
-
-/* Packing */
-.packing-grid{display:grid;gap:16px}
-@media(min-width:600px){.packing-grid{grid-template-columns:1fr 1fr}}
-.packing-card{background:#161a22;border:1px solid rgba(45,48,64,0.5);border-radius:16px;padding:18px}
-.packing-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.packing-title{display:flex;align-items:center;gap:8px}
-.packing-icon{font-size:22px}
-.packing-name{font-size:14px;font-weight:700}
-.packing-desc{font-size:11px;color:rgba(212,197,174,0.5)}
-.packing-count{font-size:11px;color:rgba(212,197,174,0.4)}
-.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(28,33,43,0.5);border:1px solid rgba(45,48,64,0.3);margin-bottom:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color 0.2s}
-.check-item:active{border-color:rgba(94,158,75,0.3)}
-.check-item input[type="checkbox"]{width:18px;height:18px;margin-top:1px;accent-color:#5a9e4b;flex-shrink:0;cursor:pointer}
-.check-item input[type="checkbox"]:checked + span{text-decoration:line-through;opacity:0.45}
-.check-text{font-size:13px;line-height:1.4;flex:1}
-.check-warn{color:#ff8c5a;font-size:11px}
-.progress-bar{height:6px;background:#1c212b;border-radius:3px;overflow:hidden;margin-top:14px}
-.progress-fill{height:100%;border-radius:3px;transition:width 0.4s ease}
-.progress-orange{background:linear-gradient(90deg,#ff6b35,#5a9e4b)}
-.progress-green{background:linear-gradient(90deg,#5a9e4b,#4a90c2)}
-
-/* Finance */
-.finance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.finance-card{background:#161a22;border:1px solid rgba(45,48,64,0.5);border-radius:14px;padding:14px}
-.finance-label{font-size:11px;color:rgba(212,197,174,0.5);margin-bottom:4px}
-.finance-value{font-size:20px;font-weight:700}
-.finance-value.orange{color:#ff8c5a}
-.finance-value.green{color:#7fb069}
-.finance-value.blue{color:#6ab0de}
-.finance-sub{font-size:11px;color:rgba(212,197,174,0.4);margin-top:2px}
-.finance-card.wide{grid-column:1/-1}
-.split-card{background:#161a22;border:1px solid rgba(45,48,64,0.5);border-radius:16px;padding:18px;margin-bottom:16px}
-.split-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.split-grid{display:grid;gap:12px}
-@media(min-width:600px){.split-grid{grid-template-columns:1fr 1fr}}
-.split-box{padding:14px;border-radius:12px}
-.split-box.orange{background:rgba(255,107,53,0.05);border:1px solid rgba(255,107,53,0.15)}
-.split-box.blue{background:rgba(106,176,222,0.05);border:1px solid rgba(106,176,222,0.15)}
-.split-box-title{font-size:12px;font-weight:600;margin-bottom:8px}
-.split-box-title.orange{color:#ff8c5a}
-.split-box-title.blue{color:#6ab0de}
-.split-list{list-style:none;font-size:12px;color:#e8dfd2;line-height:1.8}
-.split-list li::before{content:'•';margin-right:6px}
-.split-list.orange li::before{color:#ff8c5a}
-.split-list.blue li::before{color:#6ab0de}
-
-/* Converter */
-.converter-card{background:#161a22;border:1px solid rgba(45,48,64,0.5);border-radius:16px;padding:18px}
-.converter-title{font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.converter-rate{font-size:11px;color:rgba(212,197,174,0.4);margin-bottom:16px}
-.converter-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.converter-label{font-size:11px;color:rgba(212,197,174,0.6);margin-bottom:6px}
-.converter-input-wrap{position:relative}
-.converter-symbol{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:rgba(212,197,174,0.4)}
-.converter-input{width:100%;background:#1c2122;border:1px solid #2a3040;border-radius:10px;padding:10px 10px 10px 26px;font-size:14px;color:#f5efe6;outline:none;-webkit-appearance:none}
-.converter-input:focus{border-color:rgba(255,107,53,0.4)}
-.converter-input:focus.green-focus{border-color:rgba(94,158,75,0.4)}
-.converter-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-.conv-btn{padding:6px 12px;border-radius:8px;background:rgba(28,33,43,0.6);border:1px solid #2a3040;font-size:11px;color:#d4c5ae;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.conv-btn:active{background:rgba(45,48,64,0.6)}
-
-/* VJW */
-.vjw-card{background:#161a22;border:1px solid rgba(45,48,64,0.5);border-radius:16px;padding:18px}
-.vjw-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.vjw-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
-.copy-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:rgba(255,107,53,0.15);border:1px solid rgba(255,107,53,0.3);color:#ff8c5a;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.copy-btn:active{background:rgba(255,107,53,0.25)}
-.vjw-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(28,33,43,0.5);border:1px solid rgba(45,48,64,0.3);margin-bottom:8px}
-.vjw-icon{font-size:14px;margin-top:1px;flex-shrink:0}
-.vjw-label{font-size:10px;color:rgba(212,197,174,0.45);margin-bottom:2px}
-.vjw-value{font-size:13px;font-weight:500}
-.tips-card{background:linear-gradient(90deg,rgba(94,158,75,0.08),rgba(106,176,222,0.06));border:1px solid rgba(94,158,75,0.15);border-radius:16px;padding:18px;margin-top:16px}
-.tips-title{font-size:13px;font-weight:600;color:#7fb069;margin-bottom:8px}
-.tips-list{font-size:12px;color:#e8dfd2;line-height:1.8;list-style:none}
-.tips-list li::before{content:'• ';color:#7fb069}
-
-/* Footer */
-.footer{border-top:1px solid rgba(45,48,64,0.3);padding:20px 16px;text-align:center;font-size:11px;color:rgba(212,197,174,0.3)}
-
-/* Toast */
-.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(28,33,43,0.95);border:1px solid rgba(94,158,75,0.3);color:#7fb069;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>富士山露营 & 东京 Shopping 5日行程 Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    body { background-color: #0f172a; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body>
+<body x-data="appData()" class="pb-20">
 
-<!-- Header -->
-<div class="header">
-  <div class="header-inner">
-    <div class="header-left">
-      <div class="header-icon">⛰️</div>
+  <!-- Header Section -->
+  <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+    <div class="max-w-md mx-auto flex justify-between items-center">
       <div>
-        <div class="header-title">富士山露营 & 东京漫游</div>
-        <div class="header-sub">5天4晚 · 单人行 · 10/05 – 10/09</div>
+        <h1 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+          <i class="fa-solid fa-campground"></i> 富士山露营 & 东京 Shopping
+        </h1>
+        <p class="text-xs text-slate-400 mt-0.5">2026.10.05 – 10.09 (5天4晚)</p>
+      </div>
+      <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1 text-right">
+        <div class="text-[10px] text-amber-400 uppercase tracking-wider font-semibold">出发倒计时</div>
+        <div class="text-sm font-extrabold text-amber-300" x-text="countdownText"></div>
       </div>
     </div>
-    <div class="header-right">
-      <div class="weather-tag" id="weatherTag">
-        <span>🌤️</span><span style="color:#6ab0de">富士山 8°C</span>
-        <span style="color:rgba(212,197,174,0.3)">|</span>
-        <span style="color:#ff8c5a">新宿 15°C</span>
-      </div>
-      <div class="countdown-tag">
-        <span class="pulse-dot"></span>
-        <span id="countdown">计算中…</span>
-      </div>
-    </div>
-  </div>
-</div>
+  </header>
 
-<!-- Hero -->
-<div class="hero">
-  <div class="hero-card">
-    <div class="hero-tags">
-      <span class="hero-tag tag-orange">🏕️ 轻量化野营</span>
-      <span class="hero-tag tag-green">♨️ 温泉回血</span>
-      <span class="hero-tag tag-blue">🛍️ 户外大采购</span>
-    </div>
-    <div class="hero-title"><span class="gradient-text">富士山 → 东京</span></div>
-    <div class="hero-desc">前段湖畔扎营与焚火炊事，后段温泉泡汤与新宿户外店巡礼 —— 一场山野与都市的 5 日切换。</div>
-    <div class="hero-meta">
-      <span>🎒 小鹰 48L + 北极狐随身</span>
-      <span>📱 KDDI / Docomo eSIM</span>
-      <span>💴 ¥20,000 现金 + VISA</span>
-    </div>
-  </div>
-</div>
+  <main class="max-w-md mx-auto p-4 space-y-4">
 
-<!-- Tab Bar -->
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('timeline',this)">📅 每日行程</button>
-  <button class="tab-btn" onclick="switchTab('packing',this)">🎒 装备打包</button>
-  <button class="tab-btn" onclick="switchTab('finance',this)">💴 预算支付</button>
-  <button class="tab-btn" onclick="switchTab('vjw',this)">📄 通关备忘</button>
-</div>
-
-<!-- Content -->
-<div class="content">
-
-  <!-- ═══ TIMELINE ═══ -->
-  <div class="tab-pane active" id="pane-timeline">
-
-    <!-- Day 1 -->
-    <div class="day-section">
-      <div class="day-header">
-        <div class="day-num num-orange">1</div>
-        <div>
-          <div class="day-title">10/05 周一 · 落地直奔本栖湖</div>
-          <div class="day-subtitle">成田落地 ➔ 东京换乘 ➔ 河口湖补给 ➔ 浩庵扎营日落</div>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">06:20</span><span class="tl-tag tag-flight">✈️ 航班</span></div>
-          <div class="tl-text">成田机场 T3 落地（捷星 GK36），提取托运包</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">07:37–08:40</span><span class="tl-tag tag-train">🚃 京成電鉄</span><span class="tl-cost">¥1,414</span></div>
-          <div class="tl-text">京成 Skyaccess 特急 → 日本桥站</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">08:45–08:50</span><span class="tl-tag tag-walk">🚶 步行</span></div>
-          <div class="tl-text">日本桥 B3 出口 → 东京站钢铁大厦（Tekko Building）</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">09:50–12:00</span><span class="tl-tag tag-bus">🚌 高速巴士</span><span class="tl-cost">¥2,200</span></div>
-          <div class="tl-text">高速大巴 → 河口湖站</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">12:00–13:40</span><span class="tl-tag tag-shop">🛒 补给</span></div>
-          <div class="tl-text">河口湖站前补给：露营气罐、便利店/超市采购食材</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">13:40–14:25</span><span class="tl-tag tag-bus">🚌 路线巴士</span></div>
-          <div class="tl-text">富士急路线巴士 → 浩庵露营场</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card highlight">
-          <div class="tl-tags"><span class="tl-time">14:30+</span><span class="tl-tag tag-camp">🏕️ 扎营</span></div>
-          <div class="tl-text">浩庵营地 Check-in、湖畔扎营、Sony α6000 拍摄本栖湖富士山日落</div>
-        </div></div>
-      </div>
-      <div class="day-accommodation">🏕️ 住宿：浩庵露营场（Koan Camping Ground）帐篷露营</div>
-    </div>
-
-    <!-- Day 2 -->
-    <div class="day-section">
-      <div class="day-header">
-        <div class="day-num num-green">2</div>
-        <div>
-          <div class="day-title">10/06 周二 · 转移ふもとっぱら / 朝雾高原</div>
-          <div class="day-subtitle">本栖湖撤营 ➔ 转移至ふもとっぱら ➔ 柴火生火 & 深度露营</div>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><div class="tl-dot dot-green"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time green">08:30–10:00</span><span class="tl-tag tag-camp">☕ 营地时光</span></div>
-          <div class="tl-text">浩庵营地晨光咖啡、惬意撤营</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-green"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time green">10:30–11:30</span><span class="tl-tag tag-bus">🚌 路线巴士</span></div>
-          <div class="tl-text">转移至 ふもとっぱら（Fumotoppara）/ 朝雾高原区域</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-green"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time green">12:00</span><span class="tl-tag tag-camp">⛺ 扎营</span></div>
-          <div class="tl-text">营地 Check-in，搭建大包帐篷系统</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-green"></div><div class="tl-card highlight-green">
-          <div class="tl-tags"><span class="tl-time green">13:00+</span><span class="tl-tag tag-camp">🔥 焚火</span><span class="tl-cost">柴火 ¥800–1,000/捆</span></div>
-          <div class="tl-text">购买柴火，户外炊事，体验焚火与壮丽富士大草原</div>
-        </div></div>
-      </div>
-      <div class="day-accommodation">⛺ 住宿：ふもとっぱら 露营场</div>
-    </div>
-
-    <!-- Day 3 -->
-    <div class="day-section">
-      <div class="day-header">
-        <div class="day-num num-blue">3</div>
-        <div>
-          <div class="day-title">10/07 周三 · 山野撤营 ➔ 温泉民宿回血</div>
-          <div class="day-subtitle">高原日出 ➔ 撤营下山 ➔ 温泉大浴场洗去柴火味 ➔ 恢复精力</div>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><div class="tl-dot dot-blue"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time blue">06:00</span><span class="tl-tag tag-photo">📸 摄影</span></div>
-          <div class="tl-text">逆富士 / 露营场日出摄影</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-blue"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time blue">09:30–11:00</span><span class="tl-tag tag-bus">🚌 路线巴士</span></div>
-          <div class="tl-text">彻底打包撤营，返回河口湖 / 富士宫区域</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-blue"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time blue">12:00–14:00</span><span class="tl-tag tag-food">🍜 美食</span></div>
-          <div class="tl-text">地方特色：甲州馓主面 Hoto / 静冈富士宫炒面</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-blue"></div><div class="tl-card highlight-blue">
-          <div class="tl-tags"><span class="tl-time blue">15:00+</span><span class="tl-tag tag-onsen">♨️ 温泉</span></div>
-          <div class="tl-text">入住温泉民宿/酒店，泡汤洗漱、整理露营装备、全面回血</div>
-        </div></div>
-      </div>
-      <div class="day-accommodation">♨️ 住宿：河口湖/富士山周边温泉酒店（待定预订）</div>
-    </div>
-
-    <!-- Day 4 -->
-    <div class="day-section">
-      <div class="day-header">
-        <div class="day-num num-orange">4</div>
-        <div>
-          <div class="day-title">10/08 周四 · 进发东京 ➔ 新宿户外街大采购</div>
-          <div class="day-subtitle">山林 ➔ 繁华都市 ➔ Alpen Tokyo & L-Breath 户外店巡礼</div>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">08:30–10:30</span><span class="tl-tag tag-bus">🚌 高速巴士</span></div>
-          <div class="tl-text">河口湖站 → 新宿巴士总站 Busta Shinjuku</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">11:00</span><span class="tl-tag tag-walk">🏨 酒店</span></div>
-          <div class="tl-text">新宿酒店寄放行李</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card highlight">
-          <div class="tl-tags"><span class="tl-time">12:00+</span><span class="tl-tag tag-shop">🛍️ 购物拉满</span></div>
-          <div class="tl-text">新宿户外购物：</div>
-          <div class="tl-shops">
-            <span class="tl-shop">Alpen Tokyo（8层旗舰店）</span>
-            <span class="tl-shop">Victoria L-Breath 新宿</span>
-            <span class="tl-shop">石井运动 / Montbell</span>
+    <!-- 1. 行程时间线 (Timeline) -->
+    <section x-show="currentTab === 'timeline'" class="space-y-4">
+      <template x-for="(day, idx) in itinerary" :key="idx">
+        <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-lg">
+          <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-700">
+            <div class="flex items-center gap-2">
+              <span class="bg-amber-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded" x-text="day.dayTag"></span>
+              <span class="font-bold text-slate-100 text-sm" x-text="day.date"></span>
+            </div>
+            <span class="text-xs font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded-full" x-text="day.theme"></span>
           </div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-orange"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time">19:00+</span><span class="tl-tag tag-food">🍶 夜生活</span></div>
-          <div class="tl-text">新宿居酒屋晚餐，享受东京夜生活</div>
-        </div></div>
-      </div>
-      <div class="day-accommodation">🏨 住宿：新宿站附近酒店（待定预订）</div>
-    </div>
-
-    <!-- Day 5 -->
-    <div class="day-section">
-      <div class="day-header">
-        <div class="day-num num-sand">5</div>
-        <div>
-          <div class="day-title">10/09 周五 · 东京 Citywalk ➔ 返程成田</div>
-          <div class="day-subtitle">最后补货 ➔ 轻松平地交通 ➔ 返程</div>
-        </div>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><div class="tl-dot dot-sand"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time sand">09:00–12:00</span><span class="tl-tag tag-walk">🚶 Citywalk</span></div>
-          <div class="tl-text">极简 Citywalk / 购买伴手礼</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-sand"></div><div class="tl-card">
-          <div class="tl-tags"><span class="tl-time sand">13:00–15:00</span><span class="tl-tag tag-train">🚃 N'EX / 机场大巴</span></div>
-          <div class="tl-text">前往成田机场 T3</div>
-        </div></div>
-        <div class="tl-item"><div class="tl-dot dot-sand"></div><div class="tl-card highlight-blue">
-          <div class="tl-tags"><span class="tl-time sand">17:00+</span><span class="tl-tag tag-flight">✈️ 登机</span></div>
-          <div class="tl-text">办理登机、托运小鹰 48L，满载返程</div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ PACKING ═══ -->
-  <div class="tab-pane" id="pane-packing">
-    <div class="packing-grid">
-      <!-- Checked -->
-      <div class="packing-card">
-        <div class="packing-header">
-          <div class="packing-title">
-            <span class="packing-icon">🎒</span>
-            <div><div class="packing-name">托运包</div><div class="packing-desc">小鹰 48L · Osprey Kestrel 48 · 20kg</div></div>
-          </div>
-          <span class="packing-count" id="checked-count">0/6</span>
-        </div>
-        <div id="checked-list">
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('checked')"><span class="check-text">帐篷系统（Montbell 月光2 / 塔黄 4 营地帐）</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('checked')"><span class="check-text">睡垫（挪客徒野 R5.8）& 睡袋（黑冰 G400）</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('checked')"><span class="check-text">折叠椅子（Helinox Chair Zero）</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('checked')"><span class="check-text">地钉、营锤、柴刀/锯子、登山杖</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('checked')"><span class="check-text">气炉头 <span class="check-warn">（⚠️ 严禁带气罐，到河口湖购买）</span></span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('checked')"><span class="check-text">铸铁锅 / 户外小炊具</span></label>
-        </div>
-        <div class="progress-bar"><div class="progress-fill progress-orange" id="checked-bar" style="width:0%"></div></div>
-      </div>
-      <!-- Carry-on -->
-      <div class="packing-card">
-        <div class="packing-header">
-          <div class="packing-title">
-            <span class="packing-icon">🎒</span>
-            <div><div class="packing-name">随身包</div><div class="packing-desc">北极狐双肩包 · Fjällräven Kånken · 7kg</div></div>
-          </div>
-          <span class="packing-count" id="carryon-count">0/5</span>
-        </div>
-        <div id="carryon-list">
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('carryon')"><span class="check-text">护照原件、VJW 截图、现金 (20,000 JPY)</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('carryon')"><span class="check-text">相机系统（Sony α6000）</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('carryon')"><span class="check-text">充电宝 / 锂电池 <span class="check-warn">（⚠️ 严禁托运）</span></span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('carryon')"><span class="check-text">手机、eSIM 卡激活凭证、MacBook</span></label>
-          <label class="check-item"><input type="checkbox" onchange="updateProgress('carryon')"><span class="check-text">备用两脚快充头、数据线</span></label>
-        </div>
-        <div class="progress-bar"><div class="progress-fill progress-green" id="carryon-bar" style="width:0%"></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ FINANCE ═══ -->
-  <div class="tab-pane" id="pane-finance">
-    <div class="finance-grid">
-      <div class="finance-card">
-        <div class="finance-label">现金预算</div>
-        <div class="finance-value orange">¥20,000</div>
-        <div class="finance-sub">≈ ¥854 RMB</div>
-      </div>
-      <div class="finance-card">
-        <div class="finance-label">交通预估</div>
-        <div class="finance-value green">¥3,614</div>
-        <div class="finance-sub">京成 + 高速巴士</div>
-      </div>
-      <div class="finance-card">
-        <div class="finance-label">购物+杂费</div>
-        <div class="finance-value blue">弹性</div>
-        <div class="finance-sub">柴火·餐饮·伴手礼</div>
-      </div>
-    </div>
-
-    <div class="split-card">
-      <div class="split-title">💳 现金 vs 刷卡场景分配</div>
-      <div class="split-grid">
-        <div class="split-box orange">
-          <div class="split-box-title orange">💴 现金场景</div>
-          <ul class="split-list orange">
-            <li>柴火购买（浩庵/ふもとっぱら）</li>
-            <li>路线巴士投币</li>
-            <li>Coin Locker 寄存</li>
-            <li>部分小店/居酒屋</li>
-          </ul>
-        </div>
-        <div class="split-box blue">
-          <div class="split-box-title blue">💳 刷卡/手机Pay</div>
-          <ul class="split-list blue">
-            <li>高速巴士 / 京成电铁</li>
-            <li>便利店 / 超市</li>
-            <li>户外店购物（Alpen等）</li>
-            <li>酒店 / 温泉</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="converter-card">
-      <div class="converter-title">💱 日元/人民币换算器</div>
-      <div class="converter-rate">汇率：100 JPY = 4.27 RMB</div>
-      <div class="converter-row">
-        <div>
-          <div class="converter-label">日元 (JPY)</div>
-          <div class="converter-input-wrap">
-            <span class="converter-symbol">¥</span>
-            <input type="number" class="converter-input" id="jpy-input" placeholder="10000" oninput="convertCurrency('jpy')">
+          <div class="space-y-3 pl-1">
+            <template x-for="(item, i) in day.events" :key="i">
+              <div class="flex gap-3 text-xs">
+                <div class="w-12 text-slate-400 font-mono flex-shrink-0 pt-0.5" x-text="item.time"></div>
+                <div class="flex-1">
+                  <div class="text-slate-200 font-medium" x-text="item.title"></div>
+                  <div x-show="item.desc" class="text-slate-400 text-[11px] mt-0.5 leading-relaxed" x-text="item.desc"></div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
-        <div>
-          <div class="converter-label">人民币 (RMB)</div>
-          <div class="converter-input-wrap">
-            <span class="converter-symbol">¥</span>
-            <input type="number" class="converter-input green-focus" id="rmb-input" placeholder="427" oninput="convertCurrency('rmb')">
+      </template>
+    </section>
+
+    <!-- 2. VJW 填报卡片 -->
+    <section x-show="currentTab === 'vjw'" class="space-y-3">
+      <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-300 flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-amber-400 text-base"></i>
+        <span>点击任意卡片即可直接复制对应字段，方便填报 Visit Japan Web。</span>
+      </div>
+
+      <template x-for="(card, i) in vjwFields" :key="i">
+        <div @click="copyToClipboard(card.val, card.label)" class="bg-slate-800 border border-slate-700 active:border-amber-500 rounded-xl p-3.5 flex justify-between items-center cursor-pointer transition-all">
+          <div>
+            <div class="text-[11px] text-slate-400" x-text="card.label"></div>
+            <div class="text-sm font-semibold text-slate-100 font-mono mt-0.5" x-text="card.val"></div>
+          </div>
+          <button class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+            <i class="fa-regular fa-copy"></i>
+            <span>复制</span>
+          </button>
+        </div>
+      </template>
+    </section>
+
+    <!-- 3. 装备打包 (Checklist) -->
+    <section x-show="currentTab === 'gear'" class="space-y-4">
+      <div class="bg-slate-800 rounded-xl p-3 border border-slate-700">
+        <div class="flex justify-between text-xs text-slate-300 mb-1.5">
+          <span>打包进度</span>
+          <span class="font-bold text-emerald-400" x-text="`${packedCount}/${totalCount} (${progressPercent}%)`"></span>
+        </div>
+        <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+          <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" :style="`width: ${progressPercent}%`"></div>
+        </div>
+      </div>
+
+      <!-- 托运包 -->
+      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4">
+        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-suitcase-rolling"></i> 托运包：小鹰 48L (限重 20kg)
+        </h3>
+        <div class="space-y-2.5">
+          <template x-for="item in checkedBagList" :key="item.id">
+            <label class="flex items-center gap-3 text-xs text-slate-200 cursor-pointer select-none">
+              <input type="checkbox" x-model="item.done" @change="saveGearState()" class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0">
+              <span :class="item.done ? 'line-through text-slate-500' : ''" x-text="item.name"></span>
+            </label>
+          </template>
+        </div>
+      </div>
+
+      <!-- 随身包 -->
+      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4">
+        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-backpack"></i> 随身包：北极狐双肩包 (限重 7kg)
+        </h3>
+        <div class="space-y-2.5">
+          <template x-for="item in carryOnList" :key="item.id">
+            <label class="flex items-center gap-3 text-xs text-slate-200 cursor-pointer select-none">
+              <input type="checkbox" x-model="item.done" @change="saveGearState()" class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0">
+              <span :class="item.done ? 'line-through text-slate-500' : ''" x-text="item.name"></span>
+            </label>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 汇率计算器 (Calc) -->
+    <section x-show="currentTab === 'calc'" class="space-y-4">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-4">
+        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-calculator"></i> 日元实时换算 (汇率参考: 100 JPY = 4.27 RMB)
+        </h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">日元 (JPY)</label>
+            <input type="number" x-model="jpyInput" @input="calcFromJpy()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">人民币 (RMB)</label>
+            <input type="number" x-model="rmbInput" @input="calcFromRmb()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-500">
           </div>
         </div>
       </div>
-      <div class="converter-buttons">
-        <button class="conv-btn" onclick="setAmount(1000)">¥1,000</button>
-        <button class="conv-btn" onclick="setAmount(2000)">¥2,000</button>
-        <button class="conv-btn" onclick="setAmount(5000)">¥5,000</button>
-        <button class="conv-btn" onclick="setAmount(10000)">¥10,000</button>
-        <button class="conv-btn" onclick="setAmount(20000)">¥20,000</button>
+
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2">
+        <h3 class="text-xs font-bold text-slate-300 mb-2">💴 现金预算拆解 (预备 20,000 JPY)</h3>
+        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">浩庵 / ふもとっぱら 柴火费</span>
+          <span class="text-slate-200 font-mono">~4,000 JPY</span>
+        </div>
+        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">朝雾高原 / 本栖湖路线巴士投币</span>
+          <span class="text-slate-200 font-mono">~4,000 JPY</span>
+        </div>
+        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
+          <span class="text-slate-400">温泉柜 Coin Locker & 售货机</span>
+          <span class="text-slate-200 font-mono">~2,000 JPY</span>
+        </div>
+        <div class="flex justify-between text-xs py-1 font-semibold text-amber-400 pt-1">
+          <span>备用应急金</span>
+          <span class="font-mono">~10,000 JPY</span>
+        </div>
       </div>
+    </section>
+
+  </main>
+
+  <!-- Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-md z-50">
+    <div class="max-w-md mx-auto grid grid-cols-4 text-center py-2 text-[11px]">
+      <button @click="currentTab = 'timeline'" :class="currentTab === 'timeline' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
+        <i class="fa-solid fa-route text-base"></i>
+        <span>行程</span>
+      </button>
+      <button @click="currentTab = 'vjw'" :class="currentTab === 'vjw' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
+        <i class="fa-solid fa-id-card text-base"></i>
+        <span>VJW 助手</span>
+      </button>
+      <button @click="currentTab = 'gear'" :class="currentTab === 'gear' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
+        <i class="fa-solid fa-list-check text-base"></i>
+        <span>装备清单</span>
+      </button>
+      <button @click="currentTab = 'calc'" :class="currentTab === 'calc' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
+        <i class="fa-solid fa-coins text-base"></i>
+        <span>汇率预算</span>
+      </button>
     </div>
+  </nav>
+
+  <!-- Copy Toast Notification -->
+  <div x-show="showToast" x-transition class="fixed top-16 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-bold text-xs px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-2">
+    <i class="fa-solid fa-check-circle"></i>
+    <span x-text="toastMsg"></span>
   </div>
 
-  <!-- ═══ VJW ═══ -->
-  <div class="tab-pane" id="pane-vjw">
-    <div class="vjw-card">
-      <div class="vjw-header">
-        <div class="vjw-title">📄 Visit Japan Web 快速凭证</div>
-        <button class="copy-btn" onclick="copyVJW()"><span id="copy-icon">📋</span><span id="copy-text">一键复制</span></button>
-      </div>
-      <div id="vjw-fields">
-        <div class="vjw-item"><span class="vjw-icon" style="color:#6ab0de">✈️</span><div><div class="vjw-label">入境航班</div><div class="vjw-value">Jetstar Japan (GK36) | 落地 NRT T3</div></div></div>
-        <div class="vjw-item"><span class="vjw-icon" style="color:#7fb069">🗾</span><div><div class="vjw-label">日本滞在先都道府县</div><div class="vjw-value">山梨県 (Yamanashi)</div></div></div>
-        <div class="vjw-item"><span class="vjw-icon" style="color:#ff8c5a">📍</span><div><div class="vjw-label">市区町村</div><div class="vjw-value">南都留郡身延町 (Minobu-cho)</div></div></div>
-        <div class="vjw-item"><span class="vjw-icon" style="color:#d4c5ae">🏠</span><div><div class="vjw-label">町名番地</div><div class="vjw-value">中倉 4703-5</div></div></div>
-        <div class="vjw-item"><span class="vjw-icon" style="color:#7fb069">🏕️</span><div><div class="vjw-label">住宿名称</div><div class="vjw-value">浩庵キャンプ場 (Koan Camping Ground)</div></div></div>
-        <div class="vjw-item"><span class="vjw-icon" style="color:#6ab0de">📞</span><div><div class="vjw-label">联系电话</div><div class="vjw-value">0556380117</div></div></div>
-      </div>
-    </div>
-    <div class="tips-card">
-      <div class="tips-title">💡 填报小贴士</div>
-      <ul class="tips-list">
-        <li>提前在 Visit Japan Web 完成入境申报，生成 QR 码截图保存</li>
-        <li>住宿信息填写第一晚（浩庵露营场），后续酒店确定后可修改</li>
-        <li>联系电话填营地电话即可，入境时可能抽查</li>
-      </ul>
-    </div>
-  </div>
-
-</div>
-
-<!-- Footer -->
-<div class="footer">⛰️ 富士山露营 & 东京漫游 · 5天4晚单人行 · 2026.10.05 – 10.09</div>
-
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
-<script>
-// Countdown
-function updateCountdown(){
-  var target=new Date('2026-10-05T06:20:00+09:00');
-  var now=new Date();
-  var diff=target-now;
-  var el=document.getElementById('countdown');
-  if(diff<=0){el.textContent='🎉 出发日快乐！';return}
-  var d=Math.floor(diff/86400000);
-  var h=Math.floor((diff%86400000)/3600000);
-  var m=Math.floor((diff%3600000)/60000);
-  var s=Math.floor((diff%60000)/1000);
-  if(d>0){el.textContent='⏳ '+d+'天 '+h+'h '+m+'m'}
-  else{el.textContent='⏳ '+h+'h '+m+'m '+s+'s'}
-}
-updateCountdown();
-setInterval(updateCountdown,1000);
-
-// Show weather on wider screens
-if(window.innerWidth>=640){document.getElementById('weatherTag').style.display='flex'}
-
-// Tab switching
-function switchTab(id,btn){
-  var panes=document.querySelectorAll('.tab-pane');
-  for(var i=0;i<panes.length;i++){panes[i].classList.remove('active')}
-  var btns=document.querySelectorAll('.tab-btn');
-  for(var j=0;j<btns.length;j++){btns[j].classList.remove('active')}
-  document.getElementById('pane-'+id).classList.add('active');
-  btn.classList.add('active');
-}
-
-// Packing progress
-function updateProgress(type){
-  var list=document.getElementById(type+'-list');
-  var items=list.querySelectorAll('input[type="checkbox"]');
-  var checked=list.querySelectorAll('input[type="checkbox"]:checked').length;
-  var total=items.length;
-  document.getElementById(type+'-count').textContent=checked+'/'+total;
-  document.getElementById(type+'-bar').style.width=(checked/total*100)+'%';
-}
-
-// Currency converter
-var RATE=4.27/100;
-function convertCurrency(from){
-  var jpyEl=document.getElementById('jpy-input');
-  var rmbEl=document.getElementById('rmb-input');
-  if(from==='jpy'){
-    var val=parseFloat(jpyEl.value);
-    if(!isNaN(val)){rmbEl.value=(val*RATE).toFixed(2)}else{rmbEl.value=''}
-  }else{
-    var val2=parseFloat(rmbEl.value);
-    if(!isNaN(val2)){jpyEl.value=(val2/RATE).toFixed(0)}else{jpyEl.value=''}
-  }
-}
-function setAmount(jpy){
-  document.getElementById('jpy-input').value=jpy;
-  convertCurrency('jpy');
-}
-
-// VJW copy
-function copyVJW(){
-  var text='【Visit Japan Web 快速凭证】\n入境航班：Jetstar Japan (GK36) | 落地 NRT T3\n日本滞在先都道府县：山梨県 (Yamanashi)\n市区町村：南都留郡身延町 (Minobu-cho)\n町名番地：中倉 4703-5\n住宿名称：浩庵キャンプ場 (Koan Camping Ground)\n联系电话：0556380117';
-  var done=function(){
-    var btn=document.getElementById('copy-text');
-    var icon=document.getElementById('copy-icon');
-    btn.textContent='已复制!';
-    icon.textContent='✅';
-    showToast('✅ 已复制到剪贴板');
-    setTimeout(function(){btn.textContent='一键复制';icon.textContent='📋'},2000);
-  };
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(done).catch(function(){fallbackCopy(text);done()});
-  }else{fallbackCopy(text);done()}
-}
-function fallbackCopy(text){
-  var ta=document.createElement('textarea');
-  ta.value=text;
-  ta.style.position='fixed';
-  ta.style.left='-9999px';
-  document.body.appendChild(ta);
-  ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-}
-function showToast(msg){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show')},2000);
-}
-</script>
+  <script>
+    function appData() {
+      return {
+        currentTab: 'timeline',
+        countdownText: '',
+        showToast: false,
+        toastMsg: '',
+        jpyInput: 20000,
+        rmbInput: 854,
+        vjwFields: [
+          { label: '入境航班号', val: 'GK36' },
+          { label: '日本滞在先都道府县', val: '山梨県 (Yamanashi)' },
+          { label: '市区町村', val: '南都留郡身延町 (Minobu-cho)' },
+          { label: '町名番地', val: '中倉 4703-5' },
+          { label: '住宿名称', val: '浩庵キャンプ場 (Koan Camping Ground)' },
+          { label: '联系电话', val: '0556380117' }
+        ],
+        itinerary: [
+          {
+            dayTag: 'Day 1', date: '10/05 (周一)', theme: '本栖湖扎营',
+            events: [
+              { time: '02:15', title: '浦东 T2 起飞 (GK36)', desc: '捷星日本，带好护照凭证' },
+              { time: '06:20', title: '成田 T3 落地', desc: '提取托运包，快速办理通关' },
+              { time: '07:37', title: '京成 Skyaccess 特急', desc: '成田 ➔ 日本桥站 (1,414 JPY)' },
+              { time: '08:45', title: '平地步行至东京站钢铁大厦', desc: '日本桥站 B3 出口，步行 5 分钟' },
+              { time: '09:50', title: '高速大巴前往河口湖', desc: '东京站 ➔ 河口湖站 (2,200 JPY)' },
+              { time: '12:00', title: '河口湖站前补给', desc: '采购高山气罐及两日营地食材' },
+              { time: '13:40', title: '路线巴士 ➔ 浩庵露营场', desc: '约 14:25 抵达本栖湖浩庵' },
+              { time: '14:30+', title: '湖畔扎营 & 富士日落', desc: '搭建营地，拍摄本栖湖富士日落' }
+            ]
+          },
+          {
+            dayTag: 'Day 2', date: '10/06 (周二)', theme: '朝雾高原焚火',
+            events: [
+              { time: '08:30', title: '晨光咖啡 & 撤营', desc: '惬意收拾浩庵营地' },
+              { time: '10:30', title: '转移至ふもとっぱら', desc: '搭乘路线巴士前往朝雾高原/麓原营地' },
+              { time: '12:00', title: '营地 Check-in 扎营', desc: '搭建大包帐篷系统' },
+              { time: '13:00+', title: '购买柴火 & 户外炊事', desc: '购买 3-4 捆柴火，体验草原焚火' }
+            ]
+          },
+          {
+            dayTag: 'Day 3', date: '10/07 (周三)', theme: '温泉民宿回血',
+            events: [
+              { time: '06:00', title: '逆富士 / 朝雾日出摄影', desc: '拍摄富士大草原日出' },
+              { time: '09:30', title: '打包撤营下山', desc: '路线巴士返回河口湖/富士宫' },
+              { time: '12:00', title: '享用特色午餐', desc: '甲州馓主面 Hoto / 富士宫炒面' },
+              { time: '15:00+', title: '入住温泉酒店', desc: '泡汤洗漱、收拾装备、全面回血' }
+            ]
+          },
+          {
+            dayTag: 'Day 4', date: '10/08 (周四)', theme: '新宿户外大采购',
+            events: [
+              { time: '08:30', title: '高速大巴 ➔ 新宿', desc: '河口湖 ➔ Busta Shinjuku' },
+              { time: '11:00', title: '酒店寄放行李', desc: '前往新宿酒店 Check-in' },
+              { time: '12:00+', title: '户外装备大扫货', desc: 'Alpen Tokyo, L-Breath, Montbell 专卖店' }
+            ]
+          },
+          {
+            dayTag: 'Day 5', date: '10/09 (周五)', theme: '全天 Citywalk & 晚班返程',
+            events: [
+              { time: '09:00', title: '退房寄行李 & 深度 Citywalk', desc: '行李存酒店/车站，全天轻松逛街' },
+              { time: '12:00', title: '市区美食 & 伴手礼补货', desc: '享用美食，采买药妆/手信' },
+              { time: '15:00', title: '潮流街区 / 户外店补漏', desc: '银座、原宿或补买装备' },
+              { time: '18:30', title: '提取行李前往成田机场', desc: '搭乘 Skyaccess 或 N\'EX 前往 NRT T3' },
+              { time: '20:25', title: '成田 T3 办理登机 (GK35)', desc: '托运小鹰 48L (20kg)，免税店最后采购' },
+              { time: '22:25', title: '起飞返程上海 (GK35)', desc: '次日 00:50 落地浦东 T2' }
+            ]
+          }
+        ],
+        checkedBagList: [
+          { id: 1, name: '帐篷系统 (Montbell 月光2 / 塔黄 4)', done: false },
+          { id: 2, name: '睡垫 (挪客徒野 R5.8) & 睡袋 (黑冰 G400)', done: false },
+          { id: 3, name: '折叠椅 (Helinox Chair Zero)', done: false },
+          { id: 4, name: '地钉、营锤、柴刀/锯子、登山杖', done: false },
+          { id: 5, name: '气炉头 (气罐到河口湖买)', done: false },
+          { id: 6, name: '铸铁锅 / 户外小炊具', done: false }
+        ],
+        carryOnList: [
+          { id: 7, name: '护照原件 & VJW 截图凭证', done: false },
+          { id: 8, name: '日元现金 (预备 20,000 JPY)', done: false },
+          { id: 9, name: '相机系统 (Sony α6000)', done: false },
+          { id: 10, name: '充电宝 / 锂电池 (严禁托运)', done: false },
+          { id: 11, name: '手机、eSIM 卡凭证、MacBook', done: false },
+          { id: 12, name: '两脚快充头、数据线', done: false }
+        ],
+        init() {
+          this.updateCountdown();
+          setInterval(() => this.updateCountdown(), 1000);
+          this.loadGearState();
+        },
+        updateCountdown() {
+          const target = new Date('2026-10-05T02:15:00+08:00').getTime();
+          const now = new Date().getTime();
+          const diff = target - now;
+          if (diff <= 0) {
+            this.countdownText = '已出发！';
+            return;
+          }
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          this.countdownText = `${days}天 ${hours}小时`;
+        },
+        copyToClipboard(val, label) {
+          navigator.clipboard.writeText(val.replace(/\s\(.*\)/, '')).then(() => {
+            this.toastMsg = `已复制 ${label}`;
+            this.showToast = true;
+            setTimeout(() => this.showToast = false, 2000);
+          });
+        },
+        calcFromJpy() {
+          this.rmbInput = Math.round(this.jpyInput * 0.0427);
+        },
+        calcFromRmb() {
+          this.jpyInput = Math.round(this.rmbInput / 0.0427);
+        },
+        get totalCount() {
+          return this.checkedBagList.length + this.carryOnList.length;
+        },
+        get packedCount() {
+          return this.checkedBagList.filter(i => i.done).length + this.carryOnList.filter(i => i.done).length;
+        },
+        get progressPercent() {
+          return Math.round((this.packedCount / this.totalCount) * 100);
+        },
+        saveGearState() {
+          const state = {
+            checked: this.checkedBagList.map(i => ({ id: i.id, done: i.done })),
+            carry: this.carryOnList.map(i => ({ id: i.id, done: i.done }))
+          };
+          localStorage.setItem('fuji_gear_state', JSON.stringify(state));
+        },
+        loadGearState() {
+          const saved = localStorage.getItem('fuji_gear_state');
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              parsed.checked?.forEach(s => {
+                const item = this.checkedBagList.find(i => i.id === s.id);
+                if (item) item.done = s.done;
+              });
+              parsed.carry?.forEach(s => {
+                const item = this.carryOnList.find(i => i.id === s.id);
+                if (item) item.done = s.done;
+              });
+            } catch(e){}
+          }
+        }
+      }
+    }
+  </script>
 </body>
 </html>
