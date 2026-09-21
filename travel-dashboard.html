@@ -63,7 +63,7 @@
     <section x-show="currentTab === 'vjw'" class="space-y-3">
       <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-300 flex items-center gap-2">
         <i class="fa-solid fa-circle-info text-amber-400 text-base"></i>
-        <span>点击任意卡片即可直接复制对应字段，方便填报 Visit Japan Web。</span>
+        <span>点击任意卡片即可复制对应字段，方便填报 Visit Japan Web。</span>
       </div>
 
       <template x-for="(card, i) in vjwFields" :key="i">
@@ -148,16 +148,16 @@
           <span class="text-slate-200 font-mono">~4,000 JPY</span>
         </div>
         <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">朝雾高原 / 本栖湖路线巴士投币</span>
-          <span class="text-slate-200 font-mono">~4,000 JPY</span>
+          <span class="text-slate-400">营地至 JR 富士宫站 / 静冈路线巴士</span>
+          <span class="text-slate-200 font-mono">~3,500 JPY</span>
         </div>
         <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">温泉柜 Coin Locker & 售货机</span>
-          <span class="text-slate-200 font-mono">~2,000 JPY</span>
+          <span class="text-slate-400">青叶关东煮横丁 / 自动售货机投币</span>
+          <span class="text-slate-200 font-mono">~3,500 JPY</span>
         </div>
         <div class="flex justify-between text-xs py-1 font-semibold text-amber-400 pt-1">
           <span>备用应急金</span>
-          <span class="font-mono">~10,000 JPY</span>
+          <span class="font-mono">~9,000 JPY</span>
         </div>
       </div>
     </section>
@@ -233,20 +233,22 @@
             ]
           },
           {
-            dayTag: 'Day 3', date: '10/07 (周三)', theme: '温泉民宿回血',
+            dayTag: 'Day 3', date: '10/07 (周三)', theme: '静冈精酿 & 关东煮回血',
             events: [
-              { time: '06:00', title: '逆富士 / 朝雾日出摄影', desc: '拍摄富士大草原日出' },
-              { time: '09:30', title: '打包撤营下山', desc: '路线巴士返回河口湖/富士宫' },
-              { time: '12:00', title: '享用特色午餐', desc: '甲州馓主面 Hoto / 富士宫炒面' },
-              { time: '15:00+', title: '入住温泉酒店', desc: '泡汤洗漱、收拾装备、全面回血' }
+              { time: '09:30', title: '朝雾高原撤营下山', desc: '营地门口搭乘富士急巴士前往 JR 富士宫站' },
+              { time: '11:10', title: '换乘电车前往静冈', desc: 'JR 身延线/东海道本线 ➔ JR 静冈站' },
+              { time: '12:15', title: '静冈站酒店 Check-in', desc: '先把 48L 大包扔进酒店/寄存，极速卸重' },
+              { time: '13:30', title: 'WCB 用宗 Taproom / 清水港海鲜', desc: 'JR 坐 2 站至用宗港喝 WCB 精酿，或至清水港吃金枪鱼丼' },
+              { time: '18:00', title: '青叶关东煮街 (青叶横丁)', desc: '红灯笼小巷吃静冈黑汤关东煮，配 Highball 极具烟火气' },
+              { time: '20:30', title: 'WCB Shizuoka / AOI Brewing', desc: '步行至市区直营 Taproom 喝精酿续杯放松' }
             ]
           },
           {
-            dayTag: 'Day 4', date: '10/08 (周四)', theme: '新宿户外大采购',
+            dayTag: 'Day 4', date: '10/08 (周四)', theme: '静冈前往新宿 & 户外大采购',
             events: [
-              { time: '08:30', title: '高速大巴 ➔ 新宿', desc: '河口湖 ➔ Busta Shinjuku' },
-              { time: '11:00', title: '酒店寄放行李', desc: '前往新宿酒店 Check-in' },
-              { time: '12:00+', title: '户外装备大扫货', desc: 'Alpen Tokyo, L-Breath, Montbell 专卖店' }
+              { time: '09:00', title: '静冈站搭乘新干线/高速大巴', desc: '新干线 1h 直达东京/品川，或高速大巴直达 Busta Shinjuku' },
+              { time: '11:30', title: '新宿酒店 Check-in', desc: '寄存行李，无包轻装准备扫货' },
+              { time: '12:30+', title: '户外装备大扫货', desc: '重点逛 Alpen Tokyo, L-Breath, Montbell 专卖店' }
             ]
           },
           {
