@@ -1,351 +1,2189 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>富士山露营 & 东京 Shopping 5日行程 Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>
-    body { background-color: #0f172a; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>富士山单人露营路书</title>
+<style>
+  :root {
+    --bg-primary: #0c0c0a;
+    --bg-secondary: #161612;
+    --bg-card: #1c1c17;
+    --bg-card-alt: #202019;
+    --bg-elevated: #252520;
+    --bg-input: #1a1a15;
+    --border: #2a2a23;
+    --border-light: #33332b;
+    --border-accent: #4a4a3c;
+    --text-primary: #e8e4dc;
+    --text-secondary: #a09c90;
+    --text-muted: #6a665c;
+    --text-faint: #4a4740;
+    --accent-amber: #d4a853;
+    --accent-amber-dim: #b8923f;
+    --accent-green: #7a9e7e;
+    --accent-green-dim: #5e7e62;
+    --accent-sage: #8fa882;
+    --accent-rust: #c4784a;
+    --accent-rust-dim: #a8653a;
+    --accent-sky: #7aadde;
+    --accent-sky-dim: #5e8ab8;
+    --accent-moss: #6b8f5e;
+    --accent-teal: #5eaaa8;
+    --accent-purple: #9a8ad4;
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+    --radius-lg: 16px;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 15% 10%, rgba(122,158,126,0.035) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% 90%, rgba(212,168,83,0.025) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(122,173,222,0.015) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+  }
+
+  /* ===== TAB NAVIGATION ===== */
+  .tab-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(12,12,10,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 8px 12px 20px;
+  }
+
+  .tab-nav-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .tab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: inherit;
+    flex: 1;
+  }
+
+  .tab-btn .tab-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .tab-btn.active {
+    color: var(--accent-amber);
+  }
+
+  .tab-btn:active {
+    opacity: 0.7;
+  }
+
+  /* ===== PANELS ===== */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 72px 0 48px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+    opacity: 0.6;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-amber);
+    border: 1px solid rgba(212,168,83,0.4);
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+    opacity: 0.9;
+    background: rgba(212,168,83,0.05);
+  }
+
+  .hero h1 {
+    font-size: 1.9rem;
+    font-weight: 200;
+    letter-spacing: 3px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+  }
+
+  .hero h1 .accent {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--accent-amber);
+    letter-spacing: 5px;
+    margin-top: 10px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    letter-spacing: 1.5px;
+    line-height: 2.2;
+  }
+
+  .hero-subtitle em {
+    font-style: normal;
+    color: var(--accent-sage);
+    font-weight: 500;
+  }
+
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .hero-divider .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-amber);
+    opacity: 0.5;
+  }
+
+  .hero-divider .line {
+    width: 40px;
+    height: 1px;
+    background: var(--border-light);
+  }
+
+  /* ===== COUNTDOWN ===== */
+  .countdown {
+    padding: 40px 0 30px;
+  }
+
+  .countdown-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-alt) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .countdown-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+  }
+
+  .countdown-label {
+    font-size: 0.65rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .countdown-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .countdown-unit {
+    text-align: center;
+    min-width: 56px;
+  }
+
+  .countdown-number {
+    font-size: 2.2rem;
+    font-weight: 200;
+    color: var(--accent-amber);
+    font-family: "SF Mono", "Fira Code", "Monaco", monospace;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .countdown-unit-label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  .countdown-sep {
+    font-size: 1.6rem;
+    color: var(--text-faint);
+    font-weight: 200;
+    margin-top: -12px;
+  }
+
+  .countdown-sub {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    margin-top: 14px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== SECTION TITLES ===== */
+  .section {
+    padding: 40px 0 20px;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: var(--accent-amber);
+    border-radius: 2px;
+  }
+
+  .section-title .count {
+    margin-left: auto;
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    letter-spacing: 1px;
+  }
+
+  /* ===== CREDENTIALS ===== */
+  .cred-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .cred-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .cred-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .cred-label {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .cred-value {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+  }
+
+  .cred-value.highlight {
+    color: var(--accent-amber);
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+  }
+
+  .cred-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .flight-badge {
+    display: inline-block;
+    font-size: 0.55rem;
+    background: rgba(212,168,83,0.12);
+    color: var(--accent-amber);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    letter-spacing: 1.5px;
+    border: 1px solid rgba(212,168,83,0.2);
+  }
+
+  .cred-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+    font-size: 0.68rem;
+    color: var(--text-faint);
+  }
+
+  .cred-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ===== DAY CARDS ===== */
+  .day-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .day-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .day-number {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-amber);
+    font-weight: 600;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .day-date {
+    font-size: 0.68rem;
+    color: var(--text-faint);
+    letter-spacing: 0.5px;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .day-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    padding: 14px 20px 0;
+    letter-spacing: 0.5px;
+  }
+
+  .day-timeline {
+    padding: 14px 20px 18px;
+    position: relative;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 24px;
+    padding-bottom: 16px;
+    border-left: 2px solid var(--border);
+    margin-left: 5px;
+  }
+
+  .timeline-item:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--accent-amber);
+    box-shadow: 0 0 0 2px var(--bg-card);
+  }
+
+  .timeline-item.start::before {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 3px rgba(122,158,126,0.3);
+  }
+
+  .timeline-item.end::before {
+    background: var(--accent-rust);
+    border-color: var(--accent-rust);
+  }
+
+  .timeline-time {
+    font-size: 0.68rem;
+    color: var(--accent-amber);
+    font-family: "SF Mono", "Fira Code", monospace;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+
+  .timeline-content {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .timeline-content strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .timeline-note {
+    display: inline-block;
+    font-size: 0.65rem;
+    color: var(--accent-sage);
+    background: rgba(122,158,126,0.08);
+    border: 1px solid rgba(122,158,126,0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  .timeline-note.warm {
+    color: var(--accent-rust);
+    background: rgba(196,120,74,0.08);
+    border-color: rgba(196,120,74,0.15);
+  }
+
+  .timeline-note.info {
+    color: var(--accent-sky);
+    background: rgba(122,173,222,0.08);
+    border-color: rgba(122,173,222,0.15);
+  }
+
+  /* ===== TRANSPORT DETAILS ===== */
+  .transport-detail {
+    margin-top: 8px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xs);
+    padding: 10px 12px;
+    border-left: 3px solid var(--border-light);
+  }
+
+  .transport-detail.train { border-left-color: var(--accent-sky-dim); }
+  .transport-detail.bus { border-left-color: var(--accent-green-dim); }
+  .transport-detail.walk { border-left-color: var(--accent-rust-dim); }
+
+  .transport-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-wrap: wrap;
+  }
+
+  .transport-line .line-badge {
+    font-size: 0.55rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .line-badge.jr { background: rgba(122,173,222,0.12); color: var(--accent-sky); }
+  .line-badge.bus { background: rgba(122,158,126,0.12); color: var(--accent-green); }
+  .line-badge.walk { background: rgba(196,120,74,0.12); color: var(--accent-rust); }
+
+  .transport-line .station {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .transport-line .arrow-icon {
+    color: var(--text-faint);
+    font-size: 0.65rem;
+  }
+
+  .transport-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  /* ===== WEATHER MODULE ===== */
+  .weather-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .weather-tab {
+    font-size: 0.7rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+
+  .weather-tab.active {
+    background: var(--accent-amber);
+    color: var(--bg-primary);
+    border-color: var(--accent-amber);
+    font-weight: 500;
+  }
+
+  .weather-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .weather-icon {
+    font-size: 3.5rem;
+    margin-bottom: 8px;
+  }
+
+  .weather-temp {
+    font-size: 2.8rem;
+    font-weight: 200;
+    color: var(--text-primary);
+    font-family: "SF Mono", "Fira Code", monospace;
+    line-height: 1;
+  }
+
+  .weather-temp span {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+
+  .weather-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  .weather-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .weather-detail-item {
+    text-align: center;
+    padding: 10px 4px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xs);
+  }
+
+  .weather-detail-label {
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .weather-detail-value {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .weather-forecast {
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .forecast-title {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .forecast-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .forecast-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 4px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xs);
+  }
+
+  .forecast-day {
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    margin-bottom: 4px;
+  }
+
+  .forecast-icon {
+    font-size: 1.3rem;
+    margin: 4px 0;
+  }
+
+  .forecast-temp {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .forecast-temp .high { color: var(--text-primary); }
+  .forecast-temp .low { color: var(--text-faint); }
+
+  .weather-loading {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 40px 0;
+  }
+
+  .weather-error {
+    font-size: 0.75rem;
+    color: var(--accent-rust);
+    padding: 20px 0;
+  }
+
+  .weather-update-time {
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    margin-top: 12px;
+  }
+
+  /* ===== CURRENCY MODULE ===== */
+  .currency-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+
+  .currency-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .currency-rate-display {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--accent-amber);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .currency-rate-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .currency-swap-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .currency-swap-btn:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+  }
+
+  .currency-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .currency-input-group {
+    flex: 1;
+    position: relative;
+  }
+
+  .currency-input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    font-family: "SF Mono", "Fira Code", monospace;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .currency-input:focus {
+    border-color: var(--accent-amber);
+  }
+
+  .currency-code {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .currency-quick {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .currency-quick-btn {
+    font-size: 0.7rem;
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .currency-quick-btn:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+  }
+
+  .currency-update {
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    margin-top: 16px;
+    text-align: right;
+  }
+
+  .currency-refresh-btn {
+    background: none;
+    border: none;
+    color: var(--accent-sky);
+    cursor: pointer;
+    font-size: 0.65rem;
+    font-family: inherit;
+    padding: 0;
+  }
+
+  /* ===== GEAR MODULE ===== */
+  .gear-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .gear-progress {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .gear-progress .done {
+    color: var(--accent-green);
+  }
+
+  .gear-reset-btn {
+    font-size: 0.65rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .gear-reset-btn:hover {
+    border-color: var(--accent-rust);
+    color: var(--accent-rust);
+  }
+
+  .gear-category {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .gear-cat-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gear-cat-title {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--accent-sage);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .gear-cat-count {
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+
+  .gear-items {
+    padding: 8px 16px 12px;
+  }
+
+  .gear-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .gear-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-light);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .gear-checkbox.checked {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+  }
+
+  .gear-checkbox.checked::after {
+    content: '✓';
+    color: var(--bg-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .gear-item-name {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+  }
+
+  .gear-item.checked .gear-item-name {
+    color: var(--text-faint);
+    text-decoration: line-through;
+  }
+
+  /* ===== TIPS ===== */
+  .tips-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 12px;
+  }
+
+  .tips-title {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-amber);
+    margin-bottom: 12px;
+  }
+
+  .tips-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tips-list li {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .tips-list li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--accent-amber);
+    font-weight: 700;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 48px 0 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .footer-mountain {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    opacity: 0.3;
+  }
+
+  .footer-text {
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    letter-spacing: 3px;
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 480px) {
+    .app { padding: 0 14px 90px; }
+
+    .hero { padding: 56px 0 36px; }
+    .hero h1 { font-size: 1.5rem; letter-spacing: 2px; }
+    .hero h1 .accent { font-size: 0.8rem; letter-spacing: 3px; }
+    .hero-subtitle { font-size: 0.75rem; letter-spacing: 1px; }
+
+    .countdown { padding: 28px 0 20px; }
+    .countdown-card { padding: 22px 16px; }
+    .countdown-number { font-size: 1.8rem; }
+    .countdown-unit { min-width: 44px; }
+    .countdown-sep { font-size: 1.2rem; }
+    .countdown-unit-label { font-size: 0.55rem; }
+
+    .section { padding: 28px 0 16px; }
+    .section-title { margin-bottom: 14px; }
+
+    .cred-grid { grid-template-columns: 1fr; gap: 8px; }
+    .cred-card { padding: 14px; }
+    .cred-value { font-size: 0.82rem; }
+    .cred-value.highlight { font-size: 0.78rem; }
+
+    .day-header { padding: 14px 16px 12px; }
+    .day-title { padding: 12px 16px 0; font-size: 0.92rem; }
+    .day-timeline { padding: 12px 16px 16px; }
+    .timeline-item { padding-left: 20px; padding-bottom: 14px; }
+    .timeline-item::before { width: 7px; height: 7px; left: -4px; top: 4px; }
+    .timeline-time { font-size: 0.64rem; }
+    .timeline-content { font-size: 0.8rem; }
+    .timeline-note { font-size: 0.62rem; }
+
+    .transport-detail { padding: 8px 10px; }
+    .transport-line { font-size: 0.68rem; gap: 6px; }
+    .transport-meta { font-size: 0.6rem; gap: 8px; }
+
+    .weather-card { padding: 20px 16px; }
+    .weather-temp { font-size: 2.2rem; }
+    .weather-icon { font-size: 2.8rem; }
+    .weather-details { gap: 8px; }
+
+    .currency-card { padding: 20px 16px; }
+    .currency-rate-display { font-size: 1.3rem; }
+    .currency-input { font-size: 1.1rem; padding: 12px 14px; }
+
+    .countdown-display { gap: 4px; }
+  }
+
+  @media (max-width: 360px) {
+    .hero h1 { font-size: 1.3rem; }
+    .countdown-number { font-size: 1.5rem; }
+    .countdown-unit { min-width: 38px; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 2px; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; color: #1a1a1a; }
+    .tab-nav { display: none; }
+    .panel { display: block !important; }
+    .countdown-card, .cred-card, .day-card, .gear-category, .tips-card {
+      break-inside: avoid;
+      border-color: #ddd;
+      background: #fafafa;
+    }
+  }
+</style>
 </head>
-<body x-data="appData()" class="pb-20">
+<body>
 
-  <!-- Header Section -->
-  <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
-    <div class="max-w-md mx-auto flex justify-between items-center">
-      <div>
-        <h1 class="text-lg font-bold text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-campground"></i> 富士山露营 & 东京 Shopping
-        </h1>
-        <p class="text-xs text-slate-400 mt-0.5">2026.10.05 – 10.09 (5天4晚)</p>
+<div class="app">
+
+  <!-- ==================== PANEL: 行程 ==================== -->
+  <div class="panel active" id="panel-itinerary">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-badge">Solo Camping · 5 Days 4 Nights</div>
+      <h1>
+        富士山单人露营路书
+        <span class="accent">⛺ MOUNT FUJI SOLO JOURNEY</span>
+      </h1>
+      <p class="hero-subtitle">
+        5天4晚 &nbsp;/&nbsp; 纯公共交通 &nbsp;/&nbsp; 重装 Solo Camping<br>
+        <em>10月5日 — 10月9日</em> &nbsp;/&nbsp; 山梨 → 静冈 → 东京
+      </p>
+      <div class="hero-divider">
+        <span class="line"></span>
+        <span class="dot"></span>
+        <span class="line"></span>
       </div>
-      <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg px-2.5 py-1 text-right">
-        <div class="text-[10px] text-amber-400 uppercase tracking-wider font-semibold">出发倒计时</div>
-        <div class="text-xs font-mono font-extrabold text-amber-300" x-text="countdownText"></div>
+    </header>
+
+    <!-- COUNTDOWN -->
+    <section class="countdown">
+      <div class="countdown-card">
+        <div class="countdown-label">距离出发还有</div>
+        <div class="countdown-display" id="countdown">
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-days">--</div>
+            <div class="countdown-unit-label">天</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-hours">--</div>
+            <div class="countdown-unit-label">时</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-mins">--</div>
+            <div class="countdown-unit-label">分</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-number" id="cd-secs">--</div>
+            <div class="countdown-unit-label">秒</div>
+          </div>
+        </div>
+        <div class="countdown-sub" id="countdown-status">正在计算...</div>
       </div>
-    </div>
-  </header>
+    </section>
 
-  <main class="max-w-md mx-auto p-4 space-y-4">
+    <!-- CORE CREDENTIALS -->
+    <section class="section">
+      <div class="section-title">核心凭证与预订</div>
+      <div class="cred-grid">
+        <div class="cred-card full-width">
+          <div class="flight-badge">✈ DEPARTURE 去程</div>
+          <div class="cred-label">Jetstar GK36 · 10月5日</div>
+          <div class="cred-value">上海浦东 T2 → 东京成田 T3</div>
+          <div class="cred-time">02:15 出发 — 06:20 抵达（+1h 时差）</div>
+        </div>
+        <div class="cred-card full-width">
+          <div class="flight-badge">✈ RETURN 回程</div>
+          <div class="cred-label">Jetstar GK35 · 10月9日</div>
+          <div class="cred-value">东京成田 T3 → 上海浦东 T2</div>
+          <div class="cred-time">22:25 出发 — 次日 00:50 抵达</div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">浩庵露营场 · 10.5</div>
+          <div class="cred-value highlight">#2026100500097</div>
+          <div class="cred-meta"><span>📍 本栖湖</span><span>🏔 湖景富士山</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">Fumotoppara · 10.6</div>
+          <div class="cred-value highlight">#202609-529944</div>
+          <div class="cred-meta"><span>📍 麓之原</span><span>🌾 平原绝景</span></div>
+        </div>
+        <div class="cred-card full-width">
+          <div class="cred-label">Hotel Ole Inn · 静冈 · 10.7</div>
+          <div class="cred-value">¥13,300 现场支付</div>
+          <div class="cred-meta"><span>♨ 天然温泉</span><span>🚶 JR静冈站步行2分钟</span></div>
+        </div>
+      </div>
+    </section>
 
-    <!-- 1. 行程时间线 (Timeline) -->
-    <section x-show="currentTab === 'timeline'" class="space-y-4">
-      <template x-for="(day, idx) in itinerary" :key="idx">
-        <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-lg">
-          <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-700">
-            <div class="flex items-center gap-2">
-              <span class="bg-amber-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded" x-text="day.dayTag"></span>
-              <span class="font-bold text-slate-100 text-sm" x-text="day.date"></span>
+    <!-- ITINERARY -->
+    <section class="section">
+      <div class="section-title">逐日详细动线 <span class="count">5 Days</span></div>
+
+      <!-- Day 1 -->
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-number">DAY 01</span>
+          <span class="day-date">10.5 Mon</span>
+        </div>
+        <div class="day-title">落地东京 → 本栖湖浩庵扎营</div>
+        <div class="day-timeline">
+          <div class="timeline-item start">
+            <div class="timeline-time">06:20</div>
+            <div class="timeline-content">抵达东京成田 T3，出关取行李</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">07:00–08:00</div>
+            <div class="timeline-content">
+              <strong>京成 Access 特急</strong> 成田机场 → 日本桥 → 钢铁大厦
             </div>
-            <span class="text-xs font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded-full" x-text="day.theme"></span>
-          </div>
-          <div class="space-y-3 pl-1">
-            <template x-for="(item, i) in day.events" :key="i">
-              <div class="flex gap-3 text-xs">
-                <div class="w-12 text-slate-400 font-mono flex-shrink-0 pt-0.5" x-text="item.time"></div>
-                <div class="flex-1">
-                  <div class="text-slate-200 font-medium" x-text="item.title"></div>
-                  <div x-show="item.desc" class="text-slate-400 text-[11px] mt-0.5 leading-relaxed" x-text="item.desc"></div>
-                </div>
+            <div class="transport-detail train">
+              <div class="transport-line">
+                <span class="line-badge jr" style="background:rgba(196,120,74,0.12);color:var(--accent-rust);">京成 Sky Access</span>
+                <span class="station">成田机场T1/T2/T3</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">日本桥（直通浅草线）</span>
               </div>
-            </template>
+              <div class="transport-meta">
+                <span>⏱ 约55分</span>
+                <span><strong>¥1,340</strong>（省 ¥1,730）</span>
+                <span>每30–60分一班</span>
+              </div>
+            </div>
+            <div class="transport-detail walk">
+              <div class="transport-line">
+                <span class="line-badge walk">徒歩</span>
+                <span>日本桥站 → 钢铁大厦（约800m，步行约10分）</span>
+              </div>
+            </div>
+            <span class="timeline-note info">💡 比 N'EX 便宜 ¥1,730/程，终点离钢铁大厦更近</span>
           </div>
-        </div>
-      </template>
-    </section>
-
-    <!-- 2. VJW 填报卡片 -->
-    <section x-show="currentTab === 'vjw'" class="space-y-3">
-      <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-xs text-amber-300 flex items-center gap-2">
-        <i class="fa-solid fa-circle-info text-amber-400 text-base"></i>
-        <span>点击任意卡片即可复制对应字段，方便填报 Visit Japan Web。</span>
-      </div>
-
-      <template x-for="(card, i) in vjwFields" :key="i">
-        <div @click="copyToClipboard(card.val, card.label)" class="bg-slate-800 border border-slate-700 active:border-amber-500 rounded-xl p-3.5 flex justify-between items-center cursor-pointer transition-all">
-          <div>
-            <div class="text-[11px] text-slate-400" x-text="card.label"></div>
-            <div class="text-sm font-semibold text-slate-100 font-mono mt-0.5" x-text="card.val"></div>
+          <div class="timeline-item">
+            <div class="timeline-time">09:00–11:30</div>
+            <div class="timeline-content">
+              <strong>高速巴士</strong> 东京站 → 河口湖站
+            </div>
+            <div class="transport-detail bus">
+              <div class="transport-line">
+                <span class="line-badge bus">富士急行巴士</span>
+                <span class="station">钢铁大厦</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">河口湖站</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 约2h30m</span>
+                <span>¥2,000–2,200</span>
+                <span>官网/Highway Bus预约</span>
+              </div>
+            </div>
           </div>
-          <button class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-            <i class="fa-regular fa-copy"></i>
-            <span>复制</span>
-          </button>
-        </div>
-      </template>
-    </section>
-
-    <!-- 3. 装备打包 (Checklist) -->
-    <section x-show="currentTab === 'gear'" class="space-y-4">
-      <div class="bg-slate-800 rounded-xl p-3 border border-slate-700">
-        <div class="flex justify-between text-xs text-slate-300 mb-1.5">
-          <span>打包进度</span>
-          <span class="font-bold text-emerald-400" x-text="`${packedCount}/${totalCount} (${progressPercent}%)`"></span>
-        </div>
-        <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-          <div class="bg-emerald-500 h-2 rounded-full transition-all duration-300" :style="`width: ${progressPercent}%`"></div>
-        </div>
-      </div>
-
-      <!-- 托运包 -->
-      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-suitcase-rolling"></i> 托运包：小鹰 48L (限重 20kg)
-        </h3>
-        <div class="space-y-2.5">
-          <template x-for="item in checkedBagList" :key="item.id">
-            <label class="flex items-center gap-3 text-xs text-slate-200 cursor-pointer select-none">
-              <input type="checkbox" x-model="item.done" @change="saveGearState()" class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0">
-              <span :class="item.done ? 'line-through text-slate-500' : ''" x-text="item.name"></span>
-            </label>
-          </template>
-        </div>
-      </div>
-
-      <!-- 随身包 -->
-      <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-backpack"></i> 随身包：北极狐双肩包 (限重 7kg)
-        </h3>
-        <div class="space-y-2.5">
-          <template x-for="item in carryOnList" :key="item.id">
-            <label class="flex items-center gap-3 text-xs text-slate-200 cursor-pointer select-none">
-              <input type="checkbox" x-model="item.done" @change="saveGearState()" class="w-4 h-4 rounded border-slate-600 bg-slate-900 text-amber-500 focus:ring-0">
-              <span :class="item.done ? 'line-through text-slate-500' : ''" x-text="item.name"></span>
-            </label>
-          </template>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. 汇率计算器 (Calc) -->
-    <section x-show="currentTab === 'calc'" class="space-y-4">
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-4">
-        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-calculator"></i> 日元实时换算 (汇率参考: 100 JPY = 4.27 RMB)
-        </h3>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">日元 (JPY)</label>
-            <input type="number" x-model="jpyInput" @input="calcFromJpy()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-500">
+          <div class="timeline-item">
+            <div class="timeline-time">12:00–13:30</div>
+            <div class="timeline-content">
+              河口湖站转乘 <strong>周游巴士（本栖湖行）</strong> 前往浩庵
+            </div>
+            <div class="transport-detail bus">
+              <div class="transport-line">
+                <span class="line-badge bus">富士急行巴士</span>
+                <span class="station">河口湖站</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">本栖湖（浩庵入口）</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 约40–60分</span>
+                <span>每日班次有限</span>
+                <span>⚠ 建议事前确认时刻表</span>
+              </div>
+            </div>
+            <span class="timeline-note info">🚌 也可预约浩庵接驳车（约15–20分）</span>
           </div>
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">人民币 (RMB)</label>
-            <input type="number" x-model="rmbInput" @input="calcFromRmb()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 font-mono focus:outline-none focus:border-amber-500">
+          <div class="timeline-item end">
+            <div class="timeline-time">14:00</div>
+            <div class="timeline-content">抵达 <strong>浩庵露营场</strong>，完成首次扎营</div>
+            <span class="timeline-note">🏔 湖景富士山 · 夜间星空拍摄</span>
           </div>
         </div>
       </div>
 
-      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2">
-        <h3 class="text-xs font-bold text-slate-300 mb-2">💴 现金预算拆解 (预备 20,000 JPY)</h3>
-        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">浩庵 / ふもとっぱら 柴火费</span>
-          <span class="text-slate-200 font-mono">~4,000 JPY</span>
+      <!-- Day 2 -->
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-number">DAY 02</span>
+          <span class="day-date">10.6 Tue</span>
         </div>
-        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">营地至 JR 富士宫站 / 静冈路线巴士</span>
-          <span class="text-slate-200 font-mono">~3,500 JPY</span>
+        <div class="day-title">撤营南移 → Fumotoppara麓之原</div>
+        <div class="day-timeline">
+          <div class="timeline-item start">
+            <div class="timeline-time">06:30–07:30</div>
+            <div class="timeline-content">浩庵 <strong>撤营</strong>，整理重装</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">08:00–09:00</div>
+            <div class="timeline-content">
+              <strong>富士急行巴士</strong> 浩庵 → 富士宮駅（朝霧高原経由・直通）
+            </div>
+            <div class="transport-detail bus">
+              <div class="transport-line">
+                <span class="line-badge bus">富士急行バス</span>
+                <span class="station">浩庵キャンプ場</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">富士宮駅</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 約60分</span>
+                <span>朝霧高原経由直通</span>
+                <span>⚠ 事前に時刻表確認必須</span>
+              </div>
+            </div>
+            <span class="timeline-note info">🚌 沿朝霧高原南下，直達富士宮，无需換乘</span>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">09:00–09:10</div>
+            <div class="timeline-content">
+              <strong>富士急行线</strong> 富士宮 → 富士山駅
+            </div>
+            <div class="transport-detail train">
+              <div class="transport-line">
+                <span class="line-badge jr">富士急行线</span>
+                <span class="station">富士宮</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">富士山</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 約5分</span>
+                <span>¥280</span>
+                <span>1站直达</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">09:10–09:30</div>
+            <div class="timeline-content">
+              <strong>徒歩</strong> 富士山駅 → Fumotoppara露营场
+            </div>
+            <div class="transport-detail walk">
+              <div class="transport-line">
+                <span class="line-badge walk">徒歩</span>
+                <span>富士山駅 → Fumotoppara（约15–20分）</span>
+              </div>
+              <div class="transport-meta">
+                <span>⚠ 重裝注意體力分配</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item end">
+            <div class="timeline-time">10:00</div>
+            <div class="timeline-content">抵達 <strong>Fumotoppara（麓之原）</strong>，完成第二次紮營</div>
+            <span class="timeline-note">🌾 360° 平原無遮擋富士山視野</span>
+          </div>
         </div>
-        <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-          <span class="text-slate-400">青叶关东煮横丁 / 自动售货机投币</span>
-          <span class="text-slate-200 font-mono">~3,500 JPY</span>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-number">DAY 03</span>
+          <span class="day-date">10.7 Wed</span>
         </div>
-        <div class="flex justify-between text-xs py-1 font-semibold text-amber-400 pt-1">
-          <span>备用应急金</span>
-          <span class="font-mono">~9,000 JPY</span>
+        <div class="day-title">下山进城 → 静冈温泉回血</div>
+        <div class="day-timeline">
+          <div class="timeline-item start">
+            <div class="timeline-time">06:00–07:00</div>
+            <div class="timeline-content">Fumotoppara <strong>撤营</strong></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">07:00–07:20</div>
+            <div class="timeline-content">
+              <strong>徒歩</strong> 返回 富士山駅
+            </div>
+            <div class="transport-detail walk">
+              <div class="transport-line">
+                <span class="line-badge walk">徒歩</span>
+                <span>Fumotoppara → 富士山駅（约15–20分）</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">07:30–09:30</div>
+            <div class="timeline-content">
+              <strong>JR身延线</strong> 富士山 → 富士 → <strong>东海道本线</strong> → 静冈
+            </div>
+            <div class="transport-detail train">
+              <div class="transport-line">
+                <span class="line-badge jr">身延线/东海道线</span>
+                <span class="station">富士山</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">富士</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">静冈</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 约1h30m–2h</span>
+                <span>¥1,500–2,000</span>
+                <span>富士站换乘东海道本线</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">09:30–10:00</div>
+            <div class="timeline-content">
+              <strong>徒歩</strong> JR静冈站 → Hotel Ole Inn
+            </div>
+            <div class="transport-detail walk">
+              <div class="transport-line">
+                <span class="line-badge walk">徒歩</span>
+                <span>JR静冈站 → Hotel Ole Inn（约2分钟）</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item end">
+            <div class="timeline-time">10:00</div>
+            <div class="timeline-content">入住 <strong>Hotel Ole Inn</strong></div>
+            <span class="timeline-note warm">♨ 顶楼天然温泉 · 彻底洗去两晚疲惫</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 4 -->
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-number">DAY 04</span>
+          <span class="day-date">10.8 Thu</span>
+        </div>
+        <div class="day-title">静冈漫游 → 重返东京</div>
+        <div class="day-timeline">
+          <div class="timeline-item start">
+            <div class="timeline-time">06:00–09:30</div>
+            <div class="timeline-content">酒店 <strong>自助早餐</strong>，慢节奏开启一天</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">09:30–13:00</div>
+            <div class="timeline-content">静冈市区 <strong>Citywalk</strong> 与街拍</div>
+            <span class="timeline-note">📷 富士山远景 · 街头人文 · 安倍川</span>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">13:30–15:00</div>
+            <div class="timeline-content">
+              <strong>东海道新干线</strong> 静冈 → 东京
+            </div>
+            <div class="transport-detail train">
+              <div class="transport-line">
+                <span class="line-badge jr">新干线 光号</span>
+                <span class="station">静冈</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">东京</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 约1h</span>
+                <span>¥5,900–6,700</span>
+                <span>Hikari / Kodama</span>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item end">
+            <div class="timeline-time">15:30</div>
+            <div class="timeline-content">抵达东京，办理酒店入住</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 5 -->
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-number">DAY 05</span>
+          <span class="day-date">10.9 Fri</span>
+        </div>
+        <div class="day-title">东京漫游 → 返程</div>
+        <div class="day-timeline">
+          <div class="timeline-item start">
+            <div class="timeline-time">全天</div>
+            <div class="timeline-content">东京市区完整一天 — 购物、闲逛、探店</div>
+            <span class="timeline-note">🛍 代官山 · 下北泽 · 自由支配</span>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">18:00–19:00</div>
+            <div class="timeline-content">
+              <strong>京成 Access 特急</strong> 日本桥 → 成田机场T3
+            </div>
+            <div class="transport-detail train">
+              <div class="transport-line">
+                <span class="line-badge jr" style="background:rgba(196,120,74,0.12);color:var(--accent-rust);">京成 Sky Access</span>
+                <span class="station">日本桥（从钢铁大厦步行约10分）</span>
+                <span class="arrow-icon">→</span>
+                <span class="station">成田机场T3</span>
+              </div>
+              <div class="transport-meta">
+                <span>⏱ 约55分</span>
+                <span><strong>¥1,340</strong>（省 ¥1,730）</span>
+                <span>建议18:00前出发</span>
+              </div>
+            </div>
+            <span class="timeline-note info">💡 回程同样推荐 Access 特急，往返共省 ¥3,460</span>
+          </div>
+          <div class="timeline-item end">
+            <div class="timeline-time">22:25</div>
+            <div class="timeline-content"><strong>GK35 起飞</strong>，次日 00:50 抵达上海浦东</div>
+          </div>
         </div>
       </div>
     </section>
 
-  </main>
+    <!-- BUDGET -->
+    <section class="section">
+      <div class="section-title">总体花销预算 <span class="count">日元 / 人民币</span></div>
+      <div class="cred-grid">
+        <div class="cred-card full-width" style="border-color:var(--accent-sky-dim);">
+          <div class="cred-label">✈ 机票（往返）</div>
+          <div class="cred-value">捷星 GK36 + GK35</div>
+          <div class="cred-meta"><span>已单独购买</span><span>约 ¥1,500–2,500</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚌 机场↔市区</div>
+          <div class="cred-value highlight">¥2,680</div>
+          <div class="cred-meta"><span>Access特急往返</span><span>≈ ¥120</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚌 高速巴士</div>
+          <div class="cred-value highlight">¥2,100</div>
+          <div class="cred-meta"><span>东京→河口湖</span><span>≈ ¥98</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚌 周游巴士</div>
+          <div class="cred-value highlight">¥800</div>
+          <div class="cred-meta"><span>河口湖→浩庵</span><span>≈ ¥37</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚌 浩庵→富士宮</div>
+          <div class="cred-value highlight">¥1,200</div>
+          <div class="cred-meta"><span>富士急行巴士</span><span>≈ ¥56</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚆 富士山→静冈</div>
+          <div class="cred-value highlight">¥1,800</div>
+          <div class="cred-meta"><span>身延线+东海道线</span><span>≈ ¥84</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚄 新干线</div>
+          <div class="cred-value highlight">¥6,300</div>
+          <div class="cred-meta"><span>静冈→东京</span><span>≈ ¥293</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🚇 东京市内</div>
+          <div class="cred-value highlight">¥1,500</div>
+          <div class="cred-meta"><span>地铁+步行</span><span>≈ ¥70</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">⛺ 浩庵露营场</div>
+          <div class="cred-value highlight">¥4,000</div>
+          <div class="cred-meta"><span>1晚</span><span>≈ ¥186</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">⛺ Fumotoppara</div>
+          <div class="cred-value highlight">¥4,000</div>
+          <div class="cred-meta"><span>1晚</span><span>≈ ¥186</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🏨 Hotel Ole Inn</div>
+          <div class="cred-value highlight">¥13,300</div>
+          <div class="cred-meta"><span>1晚含早餐</span><span>≈ ¥619</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🏨 东京酒店</div>
+          <div class="cred-value highlight">¥12,000</div>
+          <div class="cred-meta"><span>1晚预估</span><span>≈ ¥558</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🍜 餐饮</div>
+          <div class="cred-value highlight">¥12,000</div>
+          <div class="cred-meta"><span>5天</span><span>≈ ¥558</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">📱 SIM/WiFi</div>
+          <div class="cred-value highlight">¥3,000</div>
+          <div class="cred-meta"><span>流量卡</span><span>≈ ¥140</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🧳 行李寄存/寄送</div>
+          <div class="cred-value highlight">¥3,000</div>
+          <div class="cred-meta"><span>预估</span><span>≈ ¥140</span></div>
+        </div>
+        <div class="cred-card">
+          <div class="cred-label">🎁 杂项/纪念品</div>
+          <div class="cred-value highlight">¥5,000</div>
+          <div class="cred-meta"><span>预估</span><span>≈ ¥233</span></div>
+        </div>
+      </div>
+      <!-- Total -->
+      <div style="margin-top:16px;background:linear-gradient(135deg,rgba(212,168,83,0.08),rgba(212,168,83,0.03));border:1px solid rgba(212,168,83,0.2);border-radius:var(--radius);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">合计（不含机票）</div>
+          <div style="font-size:1.6rem;font-weight:300;color:var(--accent-amber);font-family:'SF Mono','Fira Code',monospace;">¥62,680</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:0.6rem;color:var(--text-faint);">≈ 人民币</div>
+          <div style="font-size:1.2rem;font-weight:300;color:var(--text-primary);font-family:'SF Mono','Fira Code',monospace;">¥2,920</div>
+          <div style="font-size:0.6rem;color:var(--text-faint);margin-top:2px;">按 1 JPY ≈ 0.0465</div>
+        </div>
+      </div>
+    </section>
 
-  <!-- Navigation Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-md z-50">
-    <div class="max-w-md mx-auto grid grid-cols-4 text-center py-2 text-[11px]">
-      <button @click="currentTab = 'timeline'" :class="currentTab === 'timeline' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-route text-base"></i>
-        <span>行程</span>
-      </button>
-      <button @click="currentTab = 'vjw'" :class="currentTab === 'vjw' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-id-card text-base"></i>
-        <span>VJW 助手</span>
-      </button>
-      <button @click="currentTab = 'gear'" :class="currentTab === 'gear' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-list-check text-base"></i>
-        <span>装备清单</span>
-      </button>
-      <button @click="currentTab = 'calc'" :class="currentTab === 'calc' ? 'text-amber-400 font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-1">
-        <i class="fa-solid fa-coins text-base"></i>
-        <span>汇率预算</span>
-      </button>
-    </div>
-  </nav>
+    <!-- TIPS -->
+    <section class="section">
+      <div class="section-title">实用贴士</div>
+      <div class="tips-card">
+        <div class="tips-title">交通与出行</div>
+        <ul class="tips-list">
+          <li>推荐 <strong>京成 Access 特急（成田 Sky Access）</strong> 往返机场，¥1,340/程，比 N'EX 省 ¥1,730，终点日本桥离钢铁大厦更近</li>
+          <li>高速巴士（河口湖行）建议提前在 <strong>Highway Bus</strong> 官网预约，旺季易满座</li>
+          <li>本栖湖方向巴士班次较少，务必提前确认当日时刻表</li>
+          <li>身延线班次间隔较长（约1小时一班），建议提前查好衔接时间</li>
+          <li>新干线静冈→东京可选 <strong>Hikari（光号）</strong>，约1小时直达</li>
+        </ul>
+      </div>
+      <div class="tips-card" style="margin-top: 10px;">
+        <div class="tips-title">露营注意</div>
+        <ul class="tips-list">
+          <li>10月山区夜间气温约 <strong>5–10°C</strong>，注意保暖（睡袋温标建议 -5°C 以下）</li>
+          <li>浩庵与Fumotoppara均无便利店，务必在河口湖站周边完成补给</li>
+          <li>两露营场均使用 <strong>焚烧炉</strong>，垃圾请自行带出</li>
+          <li>浩庵可预约接驳车，建议提前联系确认</li>
+        </ul>
+      </div>
+    </section>
 
-  <!-- Copy Toast Notification -->
-  <div x-show="showToast" x-transition class="fixed top-16 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-bold text-xs px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-2">
-    <i class="fa-solid fa-check-circle"></i>
-    <span x-text="toastMsg"></span>
+    <footer class="footer">
+      <div class="footer-mountain">⛰</div>
+      <div class="footer-text">SOLO CAMPING · MOUNT FUJI · 2026</div>
+    </footer>
   </div>
 
-  <script>
-    function appData() {
-      return {
-        currentTab: 'timeline',
-        countdownText: '',
-        showToast: false,
-        toastMsg: '',
-        jpyInput: 20000,
-        rmbInput: 854,
-        vjwFields: [
-          { label: '入境航班号', val: 'GK36' },
-          { label: '日本滞在先都道府县', val: '山梨県 (Yamanashi)' },
-          { label: '市区町村', val: '南都留郡身延町 (Minobu-cho)' },
-          { label: '町名番地', val: '中倉 4703-5' },
-          { label: '住宿名称', val: '浩庵キャンプ場 (Koan Camping Ground)' },
-          { label: '联系电话', val: '0556380117' }
-        ],
-        itinerary: [
-          {
-            dayTag: 'Day 1', date: '10/05 (周一)', theme: '本栖湖扎营',
-            events: [
-              { time: '02:15', title: '浦东 T2 起飞 (GK36)', desc: '捷星日本，带好护照凭证' },
-              { time: '06:20', title: '成田 T3 落地', desc: '提取托运包，快速办理通关' },
-              { time: '07:37', title: '京成 Skyaccess 特急', desc: '成田 ➔ 日本桥站 (1,414 JPY)' },
-              { time: '08:45', title: '平地步行至东京站钢铁大厦', desc: '日本桥站 B3 出口，步行 5 分钟' },
-              { time: '09:50', title: '高速大巴前往河口湖', desc: '东京站 ➔ 河口湖站 (2,200 JPY)' },
-              { time: '12:00', title: '河口湖站前补给', desc: '采购高山气罐及两日营地食材' },
-              { time: '13:40', title: '路线巴士 ➔ 浩庵露营场', desc: '约 14:25 抵达本栖湖浩庵' },
-              { time: '14:30+', title: '湖畔扎营 & 富士日落', desc: '搭建营地，拍摄本栖湖富士日落' }
-            ]
-          },
-          {
-            dayTag: 'Day 2', date: '10/06 (周二)', theme: '朝雾高原焚火',
-            events: [
-              { time: '08:30', title: '晨光咖啡 & 撤营', desc: '惬意收拾浩庵营地' },
-              { time: '10:30', title: '转移至ふもとっぱら', desc: '搭乘路线巴士前往朝雾高原/麓原营地' },
-              { time: '12:00', title: '营地 Check-in 扎营', desc: '搭建大包帐篷系统' },
-              { time: '13:00+', title: '购买柴火 & 户外炊事', desc: '购买 3-4 捆柴火，体验草原焚火' }
-            ]
-          },
-          {
-            dayTag: 'Day 3', date: '10/07 (周三)', theme: '静冈精酿 & 关东煮回血',
-            events: [
-              { time: '09:30', title: '朝雾高原撤营下山', desc: '营地门口搭乘富士急巴士前往 JR 富士宫站' },
-              { time: '11:10', title: '换乘电车前往静冈', desc: 'JR 身延线/东海道本线 ➔ JR 静冈站' },
-              { time: '12:15', title: '静冈站酒店 Check-in', desc: '先把 48L 大包扔进酒店/寄存，极速卸重' },
-              { time: '13:30', title: 'WCB 用宗 Taproom / 清水港海鲜', desc: 'JR 坐 2 站至用宗港喝 WCB 精酿，或至清水港吃金枪鱼丼' },
-              { time: '18:00', title: '青叶关东煮街 (青叶横丁)', desc: '红灯笼小巷吃静冈黑汤关东煮，配 Highball 极具烟火气' },
-              { time: '20:30', title: 'WCB Shizuoka / AOI Brewing', desc: '步行至市区直营 Taproom 喝精酿续杯放松' }
-            ]
-          },
-          {
-            dayTag: 'Day 4', date: '10/08 (周四)', theme: '静冈前往新宿 & 户外大采购',
-            events: [
-              { time: '09:00', title: '静冈站搭乘新干线/高速大巴', desc: '新干线 1h 直达东京/品川，或高速大巴直达 Busta Shinjuku' },
-              { time: '11:30', title: '新宿酒店 Check-in', desc: '寄存行李，无包轻装准备扫货' },
-              { time: '12:30+', title: '户外装备大扫货', desc: '重点逛 Alpen Tokyo, L-Breath, Montbell 专卖店' }
-            ]
-          },
-          {
-            dayTag: 'Day 5', date: '10/09 (周五)', theme: '全天 Citywalk & 晚班返程',
-            events: [
-              { time: '09:00', title: '退房寄行李 & 深度 Citywalk', desc: '行李存酒店/车站，全天轻松逛街' },
-              { time: '12:00', title: '市区美食 & 伴手礼补货', desc: '享用美食，采买药妆/手信' },
-              { time: '15:00', title: '潮流街区 / 户外店补漏', desc: '银座、原宿或补买装备' },
-              { time: '18:30', title: '提取行李前往成田机场', desc: '搭乘 Skyaccess 或 N\'EX 前往 NRT T3' },
-              { time: '20:25', title: '成田 T3 办理登机 (GK35)', desc: '托运小鹰 48L (20kg)，免税店最后采购' },
-              { time: '22:25', title: '起飞返程上海 (GK35)', desc: '次日 00:50 落地浦东 T2' }
-            ]
-          }
-        ],
-        checkedBagList: [
-          { id: 1, name: '帐篷系统 (Montbell 月光2 / 塔黄 4)', done: false },
-          { id: 2, name: '睡垫 (挪客徒野 R5.8) & 睡袋 (黑冰 G400)', done: false },
-          { id: 3, name: '折叠椅 (Helinox Chair Zero)', done: false },
-          { id: 4, name: '地钉、营锤、柴刀/锯子、登山杖', done: false },
-          { id: 5, name: '气炉头 (气罐到河口湖买)', done: false },
-          { id: 6, name: '铸铁锅 / 户外小炊具', done: false }
-        ],
-        carryOnList: [
-          { id: 7, name: '护照原件 & VJW 截图凭证', done: false },
-          { id: 8, name: '日元现金 (预备 20,000 JPY)', done: false },
-          { id: 9, name: '相机系统 (Sony α6000)', done: false },
-          { id: 10, name: '充电宝 / 锂电池 (严禁托运)', done: false },
-          { id: 11, name: '手机、eSIM 卡凭证、MacBook', done: false },
-          { id: 12, name: '两脚快充头、数据线', done: false }
-        ],
-        init() {
-          this.updateCountdown();
-          setInterval(() => this.updateCountdown(), 1000);
-          this.loadGearState();
-        },
-        updateCountdown() {
-          const target = new Date('2026-10-05T02:15:00+08:00').getTime();
-          const now = new Date().getTime();
-          const diff = target - now;
-          if (diff <= 0) {
-            this.countdownText = '已出发！';
-            return;
-          }
-          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-          
-          this.countdownText = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
-        },
-        copyToClipboard(val, label) {
-          navigator.clipboard.writeText(val.replace(/\s\(.*\)/, '')).then(() => {
-            this.toastMsg = `已复制 ${label}`;
-            this.showToast = true;
-            setTimeout(() => this.showToast = false, 2000);
-          });
-        },
-        calcFromJpy() {
-          this.rmbInput = Math.round(this.jpyInput * 0.0427);
-        },
-        calcFromRmb() {
-          this.jpyInput = Math.round(this.rmbInput / 0.0427);
-        },
-        get totalCount() {
-          return this.checkedBagList.length + this.carryOnList.length;
-        },
-        get packedCount() {
-          return this.checkedBagList.filter(i => i.done).length + this.carryOnList.filter(i => i.done).length;
-        },
-        get progressPercent() {
-          return Math.round((this.packedCount / this.totalCount) * 100);
-        },
-        saveGearState() {
-          const state = {
-            checked: this.checkedBagList.map(i => ({ id: i.id, done: i.done })),
-            carry: this.carryOnList.map(i => ({ id: i.id, done: i.done }))
-          };
-          localStorage.setItem('fuji_gear_state', JSON.stringify(state));
-        },
-        loadGearState() {
-          const saved = localStorage.getItem('fuji_gear_state');
-          if (saved) {
-            try {
-              const parsed = JSON.parse(saved);
-              parsed.checked?.forEach(s => {
-                const item = this.checkedBagList.find(i => i.id === s.id);
-                if (item) item.done = s.done;
-              });
-              parsed.carry?.forEach(s => {
-                const item = this.carryOnList.find(i => i.id === s.id);
-                if (item) item.done = s.done;
-              });
-            } catch(e){}
-          }
-        }
-      }
+  <!-- ==================== PANEL: 天气 ==================== -->
+  <div class="panel" id="panel-weather">
+    <div style="padding: 56px 0 24px;">
+      <h2 style="font-size:1.3rem;font-weight:300;letter-spacing:2px;margin-bottom:8px;">实时天气</h2>
+      <p style="font-size:0.75rem;color:var(--text-muted);">行程关键点天气 · 数据来自 Open-Meteo</p>
+    </div>
+
+    <div class="weather-controls">
+      <button class="weather-tab active" data-loc="fuji">🏔 富士山</button>
+      <button class="weather-tab" data-loc="motosu">🌊 本栖湖</button>
+      <button class="weather-tab" data-loc="shizuoka">🏙 静冈</button>
+      <button class="weather-tab" data-loc="tokyo">🗼 东京</button>
+    </div>
+
+    <div class="weather-card" id="weather-display">
+      <div class="weather-loading">正在获取天气数据...</div>
+    </div>
+  </div>
+
+  <!-- ==================== PANEL: 汇率 ==================== -->
+  <div class="panel" id="panel-currency">
+    <div style="padding: 56px 0 24px;">
+      <h2 style="font-size:1.3rem;font-weight:300;letter-spacing:2px;margin-bottom:8px;">汇率换算</h2>
+      <p style="font-size:0.75rem;color:var(--text-muted);">日元 ↔ 人民币 · 实时汇率</p>
+    </div>
+
+    <div class="currency-card">
+      <div class="currency-header">
+        <div>
+          <div class="currency-rate-label">当前汇率</div>
+          <div class="currency-rate-display" id="rate-display">1 JPY = -- CNY</div>
+        </div>
+        <button class="currency-swap-btn" id="swap-btn" title="切换方向">⇅</button>
+      </div>
+
+      <div class="currency-row">
+        <div class="currency-input-group">
+          <input type="number" class="currency-input" id="input-from" placeholder="0" min="0" step="0.01">
+          <span class="currency-code" id="code-from">JPY</span>
+        </div>
+      </div>
+
+      <div class="currency-row">
+        <div class="currency-input-group">
+          <input type="number" class="currency-input" id="input-to" placeholder="0" min="0" step="0.01">
+          <span class="currency-code" id="code-to">CNY</span>
+        </div>
+      </div>
+
+      <div class="currency-quick">
+        <button class="currency-quick-btn" data-val="1000">¥1,000</button>
+        <button class="currency-quick-btn" data-val="5000">¥5,000</button>
+        <button class="currency-quick-btn" data-val="10000">¥10,000</button>
+        <button class="currency-quick-btn" data-val="50000">¥50,000</button>
+        <button class="currency-quick-btn" data-val="100000">¥100,000</button>
+      </div>
+
+      <div class="currency-update">
+        <button class="currency-refresh-btn" id="refresh-rate">↻ 刷新汇率</button>
+        <span id="rate-update-time"></span>
+      </div>
+    </div>
+
+    <!-- 常用价格参考 -->
+    <div class="tips-card" style="margin-top: 16px;">
+      <div class="tips-title">行程费用参考</div>
+      <ul class="tips-list" id="cost-reference">
+        <li>正在计算...</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== PANEL: 装备 ==================== -->
+  <div class="panel" id="panel-gear">
+    <div style="padding: 56px 0 24px;">
+      <h2 style="font-size:1.3rem;font-weight:300;letter-spacing:2px;margin-bottom:8px;">装备清单</h2>
+      <p style="font-size:0.75rem;color:var(--text-muted);">点击勾选 · 自动保存进度</p>
+    </div>
+
+    <div class="gear-header">
+      <div class="gear-progress">
+        <span class="done" id="gear-done">0</span> / <span id="gear-total">0</span> 已打包
+      </div>
+      <button class="gear-reset-btn" id="gear-reset">重置</button>
+    </div>
+
+    <div id="gear-list"></div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB NAVIGATION ==================== -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" data-panel="itinerary">
+      <span class="tab-icon">📋</span>
+      <span>行程</span>
+    </button>
+    <button class="tab-btn" data-panel="weather">
+      <span class="tab-icon">🌤</span>
+      <span>天气</span>
+    </button>
+    <button class="tab-btn" data-panel="currency">
+      <span class="tab-icon">💱</span>
+      <span>汇率</span>
+    </button>
+    <button class="tab-btn" data-panel="gear">
+      <span class="tab-icon">🎒</span>
+      <span>装备</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+// ===== TAB NAVIGATION =====
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var panel = this.dataset.panel;
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    this.classList.add('active');
+    document.getElementById('panel-' + panel).classList.add('active');
+    // Trigger weather load if weather tab
+    if (panel === 'weather' && !window.weatherLoaded) {
+      loadWeather('fuji');
+      window.weatherLoaded = true;
     }
-  </script>
+  });
+});
+
+// ===== COUNTDOWN =====
+(function() {
+  var target = new Date('2026-10-05T02:15:00+08:00').getTime();
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function update() {
+    var now = Date.now();
+    var diff = target - now;
+    var daysEl = document.getElementById('cd-days');
+    var hoursEl = document.getElementById('cd-hours');
+    var minsEl = document.getElementById('cd-mins');
+    var secsEl = document.getElementById('cd-secs');
+    var statusEl = document.getElementById('countdown-status');
+    if (diff <= 0) {
+      daysEl.textContent = '00'; hoursEl.textContent = '00';
+      minsEl.textContent = '00'; secsEl.textContent = '00';
+      statusEl.textContent = '🎌 旅途进行中 — 享受每一刻！';
+      return;
+    }
+    var totalSeconds = Math.floor(diff / 1000);
+    var days = Math.floor(totalSeconds / 86400);
+    var hours = Math.floor((totalSeconds % 86400) / 3600);
+    var mins = Math.floor((totalSeconds % 3600) / 60);
+    var secs = totalSeconds % 60;
+    daysEl.textContent = pad(days); hoursEl.textContent = pad(hours);
+    minsEl.textContent = pad(mins); secsEl.textContent = pad(secs);
+    if (days > 30) statusEl.textContent = '还有一段时间，慢慢准备装备 🎒';
+    else if (days > 7) statusEl.textContent = '一周倒计时，开始检查清单 ✅';
+    else if (days > 0) statusEl.textContent = '最后一周！确认所有预约 🔥';
+    else if (hours > 0) statusEl.textContent = '就在明天！早点休息 🌙';
+    else statusEl.textContent = '即将出发！一路顺风 ✈';
+  }
+  update();
+  setInterval(update, 1000);
+})();
+
+// ===== WEATHER MODULE =====
+var weatherLocations = {
+  fuji: { name: '富士山', lat: 35.3606, lon: 138.7274, icon: '🏔' },
+  motosu: { name: '本栖湖', lat: 35.4683, lon: 138.5983, icon: '🌊' },
+  shizuoka: { name: '静冈', lat: 34.9756, lon: 138.3828, icon: '🏙' },
+  tokyo: { name: '东京', lat: 35.6762, lon: 139.6503, icon: '🗼' }
+};
+
+var weatherCodeMap = {
+  0: { icon: '☀️', desc: '晴朗' },
+  1: { icon: '🌤', desc: '大部晴朗' },
+  2: { icon: '⛅', desc: '多云' },
+  3: { icon: '☁️', desc: '阴天' },
+  45: { icon: '🌫', desc: '雾' },
+  48: { icon: '🌫', desc: '雾凇' },
+  51: { icon: '🌦', desc: '小毛毛雨' },
+  53: { icon: '🌦', desc: '中毛毛雨' },
+  55: { icon: '🌧', desc: '大毛毛雨' },
+  61: { icon: '🌧', desc: '小雨' },
+  63: { icon: '🌧', desc: '中雨' },
+  65: { icon: '🌧', desc: '大雨' },
+  71: { icon: '🌨', desc: '小雪' },
+  73: { icon: '🌨', desc: '中雪' },
+  75: { icon: '❄️', desc: '大雪' },
+  77: { icon: '🌨', desc: '雪粒' },
+  80: { icon: '🌦', desc: '阵雨' },
+  81: { icon: '🌧', desc: '强阵雨' },
+  82: { icon: '⛈', desc: '暴雨' },
+  85: { icon: '🌨', desc: '阵雪' },
+  86: { icon: '❄️', desc: '强阵雪' },
+  95: { icon: '⛈', desc: '雷暴' },
+  96: { icon: '⛈', desc: '雷暴+冰雹' },
+  99: { icon: '⛈', desc: '强雷暴+冰雹' }
+};
+
+function getWindDir(deg) {
+  var dirs = ['北','东北','东','东南','南','西南','西','西北'];
+  return dirs[Math.round(deg / 45) % 8];
+}
+
+function loadWeather(loc) {
+  var locData = weatherLocations[loc];
+  var display = document.getElementById('weather-display');
+  display.innerHTML = '<div class="weather-loading">正在获取天气数据...</div>';
+
+  // Update active tab
+  document.querySelectorAll('.weather-tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.loc === loc);
+  });
+
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + locData.lat +
+    '&longitude=' + locData.lon +
+    '&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum' +
+    '&timezone=Asia%2FTokyo&forecast_days=5';
+
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      renderWeather(data, locData);
+    })
+    .catch(function() {
+      display.innerHTML = '<div class="weather-error">⚠ 天气数据获取失败<br><span style="font-size:0.65rem">请检查网络连接后重试</span></div>';
+    });
+}
+
+function renderWeather(data, locData) {
+  var cur = data.current;
+  var daily = data.daily;
+  var code = cur.weather_code;
+  var wInfo = weatherCodeMap[code] || { icon: '🌡', desc: '未知' };
+
+  var html = '';
+  html += '<div class="weather-icon">' + wInfo.icon + '</div>';
+  html += '<div class="weather-temp">' + Math.round(cur.temperature_2m) + '<span>°C</span></div>';
+  html += '<div class="weather-desc">' + locData.name + ' · ' + wInfo.desc + '</div>';
+
+  html += '<div class="weather-details">';
+  html += '<div class="weather-detail-item">';
+  html += '<div class="weather-detail-label">体感</div>';
+  html += '<div class="weather-detail-value">' + Math.round(cur.apparent_temperature) + '°</div>';
+  html += '</div>';
+  html += '<div class="weather-detail-item">';
+  html += '<div class="weather-detail-label">湿度</div>';
+  html += '<div class="weather-detail-value">' + cur.relative_humidity_2m + '%</div>';
+  html += '</div>';
+  html += '<div class="weather-detail-item">';
+  html += '<div class="weather-detail-label">风速</div>';
+  html += '<div class="weather-detail-value">' + Math.round(cur.wind_speed_10m) + ' km/h</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // 5-day forecast
+  html += '<div class="weather-forecast">';
+  html += '<div class="forecast-title">5日预报</div>';
+  html += '<div class="forecast-row">';
+  var dayNames = ['日','一','二','三','四','五','六'];
+  for (var i = 0; i < 5; i++) {
+    var d = new Date(daily.time[i]);
+    var dayCode = daily.weather_code[i];
+    var dayW = weatherCodeMap[dayCode] || { icon: '🌡' };
+    html += '<div class="forecast-item">';
+    html += '<div class="forecast-day">' + (i === 0 ? '今天' : dayNames[d.getDay()]) + '</div>';
+    html += '<div class="forecast-icon">' + dayW.icon + '</div>';
+    html += '<div class="forecast-temp"><span class="high">' + Math.round(daily.temperature_2m_max) + '°</span> <span class="low">' + Math.round(daily.temperature_2m_min) + '°</span></div>';
+    html += '</div>';
+  }
+  html += '</div></div>';
+
+  html += '<div class="weather-update-time">更新于 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'}) + '</div>';
+
+  document.getElementById('weather-display').innerHTML = html;
+}
+
+document.querySelectorAll('.weather-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    loadWeather(this.dataset.loc);
+  });
+});
+
+// ===== CURRENCY MODULE =====
+var exchangeRate = 0.0465; // fallback rate
+var rateDirection = 'JPY_TO_CNY'; // or 'CNY_TO_JPY'
+
+function fetchExchangeRate() {
+  // Try multiple free APIs
+  var apis = [
+    'https://open.er-api.com/v6/latest/JPY',
+    'https://api.exchangerate-api.com/v4/latest/JPY'
+  ];
+
+  function tryFetch(index) {
+    if (index >= apis.length) {
+      document.getElementById('rate-update-time').textContent = '使用缓存汇率';
+      return;
+    }
+    fetch(apis[index])
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.rates && data.rates.CNY) {
+          exchangeRate = data.rates.CNY;
+          updateRateDisplay();
+          var now = new Date();
+          document.getElementById('rate-update-time').textContent =
+            '更新于 ' + now.toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
+        } else {
+          tryFetch(index + 1);
+        }
+      })
+      .catch(function() { tryFetch(index + 1); });
+  }
+  tryFetch(0);
+}
+
+function updateRateDisplay() {
+  var display = document.getElementById('rate-display');
+  if (rateDirection === 'JPY_TO_CNY') {
+    display.textContent = '1 JPY = ' + exchangeRate.toFixed(4) + ' CNY';
+  } else {
+    display.textContent = '1 CNY = ' + (1 / exchangeRate).toFixed(2) + ' JPY';
+  }
+  convertCurrency();
+  updateCostReference();
+}
+
+function convertCurrency() {
+  var fromInput = document.getElementById('input-from');
+  var toInput = document.getElementById('input-to');
+  var val = parseFloat(fromInput.value) || 0;
+  var result;
+  if (rateDirection === 'JPY_TO_CNY') {
+    result = val * exchangeRate;
+  } else {
+    result = val / exchangeRate;
+  }
+  toInput.value = result > 0 ? (rateDirection === 'JPY_TO_CNY' ? result.toFixed(2) : result.toFixed(0)) : '';
+}
+
+function convertCurrencyReverse() {
+  var fromInput = document.getElementById('input-from');
+  var toInput = document.getElementById('input-to');
+  var val = parseFloat(toInput.value) || 0;
+  var result;
+  if (rateDirection === 'JPY_TO_CNY') {
+    result = val / exchangeRate;
+  } else {
+    result = val * exchangeRate;
+  }
+  fromInput.value = result > 0 ? (rateDirection === 'JPY_TO_CNY' ? result.toFixed(0) : result.toFixed(2)) : '';
+}
+
+function updateCostReference() {
+  var costs = [
+    { name: '浩庵露营场', jpy: 0, note: '预约确认' },
+    { name: 'Fumotoppara露营场', jpy: 0, note: '预约确认' },
+    { name: 'Hotel Ole Inn', jpy: 13300, note: '现场支付' },
+    { name: 'N\'EX 成田↔东京', jpy: 3070, note: '指定席' },
+    { name: 'Access 特急', jpy: 1340, note: '推荐' },
+    { name: '高速巴士 东京↔河口湖', jpy: 2100, note: '单程' },
+    { name: '新干线 静冈↔东京', jpy: 6300, note: 'Hikari' }
+  ];
+
+  var html = '';
+  costs.forEach(function(c) {
+    var cny = (c.jpy * exchangeRate).toFixed(0);
+    html += '<li>' + c.name + ' · <strong>¥' + c.jpy.toLocaleString() + '</strong> ≈ <strong style="color:var(--accent-amber)">¥' + cny + '</strong> CNY <span style="color:var(--text-faint);font-size:0.7rem">(' + c.note + ')</span></li>';
+  });
+  document.getElementById('cost-reference').innerHTML = html;
+}
+
+document.getElementById('input-from').addEventListener('input', convertCurrency);
+document.getElementById('input-to').addEventListener('input', convertCurrencyReverse);
+
+document.getElementById('swap-btn').addEventListener('click', function() {
+  rateDirection = rateDirection === 'JPY_TO_CNY' ? 'CNY_TO_JPY' : 'JPY_TO_CNY';
+  document.getElementById('code-from').textContent = rateDirection === 'JPY_TO_CNY' ? 'JPY' : 'CNY';
+  document.getElementById('code-to').textContent = rateDirection === 'JPY_TO_CNY' ? 'CNY' : 'JPY';
+  // Swap values
+  var fromVal = document.getElementById('input-from').value;
+  var toVal = document.getElementById('input-to').value;
+  document.getElementById('input-from').value = toVal;
+  updateRateDisplay();
+});
+
+document.getElementById('refresh-rate').addEventListener('click', fetchExchangeRate);
+
+document.querySelectorAll('.currency-quick-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var val = this.dataset.val;
+    if (rateDirection === 'JPY_TO_CNY') {
+      document.getElementById('input-from').value = val;
+    } else {
+      document.getElementById('input-to').value = val;
+    }
+    convertCurrency();
+  });
+});
+
+// Init currency
+fetchExchangeRate();
+
+// ===== GEAR MODULE =====
+var gearData = [
+  {
+    category: '睡眠系统',
+    icon: '⛺',
+    items: ['月光帐+帐杆', '天幕+天幕杆', '地垫', '气垫', '睡袋', '头枕']
+  },
+  {
+    category: '饮食系统',
+    icon: '🍳',
+    items: ['蛋卷桌', 'Helinox椅子', '炉头', '小铝锅', '烤盘+夹子', '钛叉勺', '钛杯+挂耳架', '打火机']
+  },
+  {
+    category: '照明系统',
+    icon: '💡',
+    items: ['GZ灯', '三脚架']
+  },
+  {
+    category: '洗漱用品',
+    icon: '🧴',
+    items: ['牙刷', '牙膏', '浴巾']
+  },
+  {
+    category: '电子设备',
+    icon: '📱',
+    items: ['相机', '充电宝', 'Kindle', '充电线+充电头']
+  },
+  {
+    category: '衣物穿搭',
+    icon: '🧥',
+    items: ['冲锋衣', '保暖中层', '速干裤', '登山鞋', '袜子×3', '手套', '帽子']
+  },
+  {
+    category: '杂项收纳',
+    icon: '🎒',
+    items: ['购物袋', '保鲜袋', '垃圾袋', '绳索', '折叠水桶']
+  },
+  {
+    category: '证件财务',
+    icon: '📄',
+    items: ['护照', '日元现金', '信用卡', '保险单', '驾照（如需租车）']
+  }
+];
+
+function loadGearState() {
+  try {
+    return JSON.parse(localStorage.getItem('fuji-gear-state') || '{}');
+  } catch(e) {
+    return {};
+  }
+}
+
+function saveGearState(state) {
+  localStorage.setItem('fuji-gear-state', JSON.stringify(state));
+}
+
+function renderGear() {
+  var state = loadGearState();
+  var total = 0;
+  var done = 0;
+  var html = '';
+
+  gearData.forEach(function(cat, catIdx) {
+    total += cat.items.length;
+    var catDone = 0;
+    html += '<div class="gear-category">';
+    html += '<div class="gear-cat-header">';
+    html += '<span class="gear-cat-title"><span>' + cat.icon + '</span> ' + cat.category + '</span>';
+    html += '<span class="gear-cat-count" id="cat-count-' + catIdx + '">0/' + cat.items.length + '</span>';
+    html += '</div>';
+    html += '<div class="gear-items">';
+    cat.items.forEach(function(item, itemIdx) {
+      var key = catIdx + '-' + itemIdx;
+      var checked = state[key] ? ' checked' : '';
+      if (state[key]) { done++; catDone++; }
+      html += '<div class="gear-item' + (state[key] ? ' checked' : '') + '" data-key="' + key + '" data-cat="' + catIdx + '">';
+      html += '<div class="gear-checkbox' + (state[key] ? ' checked' : '') + '"></div>';
+      html += '<span class="gear-item-name">' + item + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+
+  document.getElementById('gear-list').innerHTML = html;
+  document.getElementById('gear-total').textContent = total;
+  document.getElementById('gear-done').textContent = done;
+
+  // Update category counts
+  gearData.forEach(function(cat, catIdx) {
+    var catDone = 0;
+    cat.items.forEach(function(item, itemIdx) {
+      if (state[catIdx + '-' + itemIdx]) catDone++;
+    });
+    document.getElementById('cat-count-' + catIdx).textContent = catDone + '/' + cat.items.length;
+  });
+
+  // Add click handlers
+  document.querySelectorAll('.gear-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var key = this.dataset.key;
+      var cat = parseInt(this.dataset.cat);
+      var state = loadGearState();
+      state[key] = !state[key];
+      saveGearState(state);
+      renderGear();
+    });
+  });
+}
+
+document.getElementById('gear-reset').addEventListener('click', function() {
+  if (confirm('确定要重置所有勾选状态吗？')) {
+    localStorage.removeItem('fuji-gear-state');
+    renderGear();
+  }
+});
+
+// Init gear
+renderGear();
+</script>
+
 </body>
 </html>
