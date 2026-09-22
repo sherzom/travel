@@ -1928,7 +1928,7 @@ function renderWeather(data, locData) {
     html += '<div class="forecast-item">';
     html += '<div class="forecast-day">' + (i === 0 ? '今天' : (d.getMonth()+1) + '/' + d.getDate()) + '</div>';
     html += '<div class="forecast-icon">' + dayW.icon + '</div>';
-    html += '<div class="forecast-temp"><span class="high">' + Math.round(daily.temperature_2m_max) + '°</span> <span class="low">' + Math.round(daily.temperature_2m_min) + '°</span></div>';
+    html += '<div class="forecast-temp"><span class="high">' + Math.round(daily.temperature_2m_max[i]) + '°</span> <span class="low">' + Math.round(daily.temperature_2m_min[i]) + '°</span></div>';
     html += '</div>';
   }
   html += '</div></div>';
