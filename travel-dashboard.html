@@ -762,6 +762,7 @@
   .fuji-visibility .vis-text { flex: 1; line-height: 1.4; }
   .fuji-visibility .vis-text strong { display: block; font-size: 0.8rem; margin-bottom: 2px; }
   .fuji-visibility .vis-text span { font-size: 0.65rem; opacity: 0.8; }
+  .vis-icon-lg { font-size: 1.2rem; }
 
   /* ===== CURRENCY MODULE ===== */
   .currency-card {
@@ -2007,17 +2008,28 @@ function renderWeather(data, locData) {
   html += '</div>';
   html += '</div>';
 
-  // 富士山可见度
-  var visKm = (cur.visibility || 0) / 1000;
-  var cloudPct = cur.cloud_cover || 0;
-  var precipProb = daily.precipitation_probability_max ? (daily.precipitation_probability_max[0] || 0) : 0;
-  var vis = getVisRating(cloudPct, precipProb, visKm);
-  html += '<div class="fuji-visibility ' + vis.level + '">';
-  html += '<span class="vis-icon">' + vis.icon + '</span>';
-  html += '<div class="vis-text"><strong>富士山可见度 · ' + vis.label + '</strong><span>' + vis.desc + ' · 云量' + Math.round(cloudPct) + '% · 能见度' + visKm.toFixed(1) + 'km</span></div>';
+  // 富士山可见度 - 5天预报
+  html += '<div class="weather-forecast">';
+  html += '<div class="forecast-title">富士山可见度预报</div>';
+  html += '<div class="forecast-row">';
+  for (var i = 0; i < 5; i++) {
+    var d = new Date(daily.time[i]);
+    var dayCloud = daily.cloud_cover_mean ? (daily.cloud_cover_mean[i] || 0) : 0;
+    var dayVisKm = daily.visibility_mean ? (daily.visibility_mean[i] || 0) / 1000 : 0;
+    var dayPrecip = daily.precipitation_probability_max ? (daily.precipitation_probability_max[i] || 0) : 0;
+    var dayVis = getVisRating(dayCloud, dayPrecip, dayVisKm);
+    html += '<div class="forecast-item">';
+    html += '<div class="forecast-day">' + (i === 0 ? '今天' : (d.getMonth()+1) + '/' + d.getDate()) + '</div>';
+    html += '<div class="forecast-icon vis-icon-lg">' + dayVis.icon + '</div>';
+    html += '<div class="forecast-temp"><span class="high">' + dayVis.label + '</span></div>';
+    html += '<div style="font-size:0.55rem;color:var(--text-faint);margin-top:2px;">云' + Math.round(dayCloud) + '% · 能' + dayVisKm.toFixed(0) + 'km</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<a href="https://tenki.jp/mt_fuji_kinshi/" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:0.6rem;color:var(--accent-sky);text-decoration:none;opacity:0.8;">tenki.jp 富士山見通し予報 →</a>';
   html += '</div>';
 
-  // 近5天预报
+  // 近5天天气
   html += '<div class="weather-forecast">';
   html += '<div class="forecast-title">近5天预报</div>';
   html += '<div class="forecast-row">';
@@ -2031,11 +2043,6 @@ function renderWeather(data, locData) {
     html += '<div class="forecast-day">' + (i === 0 ? '今天' : (d.getMonth()+1) + '/' + d.getDate()) + '</div>';
     html += '<div class="forecast-icon">' + dayW.icon + '</div>';
     html += '<div class="forecast-temp"><span class="high">' + Math.round(daily.temperature_2m_max[i]) + '°</span> <span class="low">' + Math.round(daily.temperature_2m_min[i]) + '°</span></div>';
-    var dayCloud = daily.cloud_cover_mean ? (daily.cloud_cover_mean[i] || 0) : 0;
-    var dayVisKm = daily.visibility_mean ? (daily.visibility_mean[i] || 0) / 1000 : 0;
-    var dayPrecip = daily.precipitation_probability_max ? (daily.precipitation_probability_max[i] || 0) : 0;
-    var dayVis = getVisRating(dayCloud, dayPrecip, dayVisKm);
-    html += '<div style="font-size:0.6rem;margin-top:2px;" title="富士山可见度:' + vis.label + '">' + dayVis.icon + '</div>';
     html += '</div>';
   }
   html += '</div></div>';
