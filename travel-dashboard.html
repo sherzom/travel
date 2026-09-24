@@ -1329,6 +1329,12 @@
                 • 也可预约浩庵接驳车（约15–20分，需提前联系）
               </div>
             </div>
+            <div style="margin-top:8px;">
+              <button onclick="fetchBusSchedule()" style="background:var(--bg-elevated);border:1px solid var(--border-light);color:var(--accent-sky);font-size:0.7rem;padding:8px 16px;border-radius:var(--radius-xs);cursor:pointer;font-family:inherit;transition:all 0.2s;">
+                🚌 查询实时班次（河口湖→本栖湖）
+              </button>
+              <div id="bus-schedule-result" style="margin-top:8px;font-size:0.72rem;color:var(--text-secondary);"></div>
+            </div>
           </div>
           <div class="timeline-item end">
             <div class="timeline-time">14:00</div>
@@ -2237,6 +2243,72 @@ document.getElementById('gear-reset').addEventListener('click', function() {
 
 // Init gear
 renderGear();
+
+// ===== BUS SCHEDULE LOOKUP =====
+function fetchBusSchedule() {
+  var resultDiv = document.getElementById('bus-schedule-result');
+  resultDiv.innerHTML = '<span style="color:var(--text-muted)">正在查询班次...</span>';
+
+  var today = new Date();
+  var dateStr = today.getFullYear() + String(today.getMonth()+1).padStart(2,'0') + String(today.getDate()).padStart(2,'0');
+  var timeStr = String(today.getHours()).padStart(2,'0') + String(today.getMinutes()).padStart(2,'0');
+
+  // Yahoo! Transit API (JSONP, supports CORS)
+  var script = document.createElement('script');
+  var callbackName = 'busCallback_' + Date.now();
+
+  window[callbackName] = function(data) {
+    delete window[callbackName];
+    document.head.removeChild(script);
+
+    try {
+      var routes = data.Result.Routes || [];
+      var html = '<div style="background:var(--bg-secondary);border-radius:var(--radius-xs);padding:10px 12px;margin-top:6px;">';
+      html += '<div style="font-size:0.65rem;color:var(--accent-sky);margin-bottom:6px;">🚌 河口湖駅 → 本栖湖・浩庵（今日班次）</div>';
+
+      if (routes.length === 0) {
+        html += '<div style="color:var(--text-muted);">未查到班次，请稍后重试或手动查询</div>';
+      } else {
+        html += '<div style="display:flex;flex-direction:column;gap:6px;">';
+        for (var i = 0; i < Math.min(routes.length, 6); i++) {
+          var r = routes[i];
+          var sections = r.Sections || [];
+          var firstSection = sections[0] || {};
+          var lastSection = sections[sections.length - 1] || {};
+          var departTime = firstSection.Departure ? (firstSection.Departure.Time || '') : '';
+          var arriveTime = lastSection.Arrival ? (lastSection.Arrival.Time || '') : '';
+          var transport = firstSection.Transport ? firstSection.Transport.Name : '';
+          html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--bg-card);border-radius:4px;">';
+          html += '<span style="font-family:"SF Mono","Fira Code",monospace;color:var(--text-primary);">' + departTime + ' → ' + arriveTime + '</span>';
+          html += '<span style="font-size:0.62rem;color:var(--text-muted);">' + transport + '</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+      html += '<div style="font-size:0.6rem;color:var(--text-faint);margin-top:6px;">数据来源：Yahoo! 乗換案内 · ' + new Date().toLocaleDateString('zh-CN') + '</div>';
+      html += '</div>';
+      resultDiv.innerHTML = html;
+    } catch(e) {
+      resultDiv.innerHTML = '<span style="color:var(--accent-rust)">解析失败，请直接访问富士急行巴士官网查询</span>';
+    }
+  };
+
+  script.src = 'https://transit.yahoo.co.jp/api/route/search?' +
+    'v=2&' +
+    'from=' + encodeURIComponent('河口湖駅') +
+    '&to=' + encodeURIComponent('本栖湖') +
+    '&date=' + dateStr +
+    '&time=' + timeStr +
+    '&type=1&' +
+    'callback=' + callbackName;
+
+  script.onerror = function() {
+    resultDiv.innerHTML = '<span style="color:var(--accent-rust)">⚠ 查询失败，请直接访问富士急行巴士官网</span><br>' +
+      '<a href="https://www.fujikyu.co.jp/bus/" target="_blank" style="color:var(--accent-sky);font-size:0.68rem;">富士急行バス 公式サイト</a>';
+  };
+
+  document.head.appendChild(script);
+}
 </script>
 
 </body>
