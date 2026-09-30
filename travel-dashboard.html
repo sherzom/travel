@@ -2082,7 +2082,7 @@ function loadWeather(loc) {
     '&longitude=' + locData.lon +
     '&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,cloud_cover,precipitation,visibility' +
     '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,cloud_cover_mean,visibility_mean' +
-    '&timezone=Asia%2FTokyo&forecast_days=5';
+    '&timezone=Asia%2FTokyo&forecast_days=7';
 
   fetch(url)
     .then(function(r) { return r.json(); })
@@ -2128,11 +2128,11 @@ function renderWeather(data, locData) {
   html += '</div>';
   html += '</div>';
 
-  // 富士山可见度 - 5天预报
+  // 富士山可见度 - 7天预报
   html += '<div class="weather-forecast">';
   html += '<div class="forecast-title">富士山可见度预报</div>';
   html += '<div class="forecast-row">';
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 7; i++) {
     var d = new Date(daily.time[i]);
     var dayCloud = daily.cloud_cover_mean ? (daily.cloud_cover_mean[i] || 0) : 0;
     var dayVisKm = daily.visibility_mean ? (daily.visibility_mean[i] || 0) / 1000 : 0;
@@ -2149,13 +2149,13 @@ function renderWeather(data, locData) {
   html += '<a href="https://weather.yahoo.co.jp/weather/jp/13/4410/13462.html" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:0.6rem;color:var(--accent-sky);text-decoration:none;opacity:0.8;">Yahoo! 天気 富士山 →</a>';
   html += '</div>';
 
-  // 近5天天气
+  // 近7天天气
   html += '<div class="weather-forecast">';
-  html += '<div class="forecast-title">近5天预报</div>';
+  html += '<div class="forecast-title">近7天预报</div>';
   html += '<div class="forecast-row">';
   var dayNames = ['日','一','二','三','四','五','六'];
   var month = new Date().getMonth() + 1;
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 7; i++) {
     var d = new Date(daily.time[i]);
     var dayCode = daily.weather_code[i];
     var dayW = weatherCodeMap[dayCode] || { icon: '🌡' };
