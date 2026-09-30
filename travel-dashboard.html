@@ -2273,27 +2273,27 @@ var gearData = [
   {
     category: '睡眠系统',
     icon: '⛺',
-    items: ['月光帐+帐杆', '天幕+天幕杆', '地垫', '气垫', '睡袋', '头枕']
+    items: ['地垫', '月光帐+帐杆', '单人天幕+登山杖', '气垫', '睡袋', '头枕', '毛线帽']
   },
   {
     category: '饮食系统',
     icon: '🍳',
-    items: ['蛋卷桌', 'Helinox椅子', '炉头', '小铝锅', '烤盘+夹子', '钛叉勺', '钛杯+挂耳架', '打火机']
+    items: ['蛋卷桌', 'Helinox椅子', '炉头', '小铝锅', '烤盘+夹子', '砧板+小刀', '钛叉勺', '钛杯+挂耳架', '打火机', '焚火台', '调料']
   },
   {
     category: '照明系统',
     icon: '💡',
-    items: ['GZ灯', '三脚架']
+    items: ['GZ灯', '三脚架', '头灯']
   },
   {
     category: '洗漱用品',
     icon: '🧴',
-    items: ['牙刷', '牙膏', '浴巾']
+    items: ['牙刷', '牙膏', '洗面奶+洗发露+香香', '浴巾']
   },
   {
     category: '电子设备',
     icon: '📱',
-    items: ['相机', '充电宝', 'Kindle', '充电线+充电头']
+    items: ['相机×2', '充电宝×2', 'Kindle', '充电线+充电头']
   },
   {
     category: '衣物穿搭',
@@ -2301,9 +2301,9 @@ var gearData = [
     items: ['冲锋衣', '抓绒衣', '保暖中层', '速干裤', '登山鞋', '袜子×3', '手套', '帽子']
   },
   {
-    category: '杂项收纳',
-    icon: '🎒',
-    items: ['购物袋', '保鲜袋', '垃圾袋', '绳索', '折叠水桶']
+    category: '其他',
+    icon: '🔧',
+    items: ['购物袋', '手套', '保鲜袋', '胃药+感冒药', '眼镜']
   },
   {
     category: '证件财务',
@@ -2314,6 +2314,12 @@ var gearData = [
 
 function loadGearState() {
   try {
+    var ver = localStorage.getItem('fuji-gear-ver');
+    if (ver !== 'v2') {
+      localStorage.removeItem('fuji-gear-state');
+      localStorage.setItem('fuji-gear-ver', 'v2');
+      return {};
+    }
     return JSON.parse(localStorage.getItem('fuji-gear-state') || '{}');
   } catch(e) {
     return {};
