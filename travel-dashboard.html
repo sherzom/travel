@@ -921,12 +921,23 @@
     border-radius: 4px;
   }
 
+  .gear-item-meta {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-left: auto;
+    padding-left: 8px;
+  }
   .gear-item-weight {
     font-size: 0.6rem;
     color: var(--text-faint);
     font-family: "SF Mono", "Fira Code", monospace;
-    margin-left: auto;
-    padding-left: 8px;
+  }
+  .gear-item-vol {
+    font-size: 0.6rem;
+    color: var(--accent-blue);
+    font-family: "SF Mono", "Fira Code", monospace;
+    opacity: 0.7;
   }
 
   .gear-cat-weight {
@@ -1947,7 +1958,7 @@
         <span class="done" id="gear-done">0</span> / <span id="gear-total">0</span> 已打包
       </div>
       <div class="gear-weight-summary">
-        总重 <span id="gear-weight-summary">--</span>
+        总重/体积 <span id="gear-weight-summary">--</span>
       </div>
       <button class="gear-reset-btn" id="gear-reset">重置</button>
     </div>
@@ -2310,95 +2321,95 @@ var gearData = [
     category: '睡眠系统',
     icon: '⛺',
     items: [
-      { n: '地垫', w: 0.2 },
-      { n: '月光帐+帐杆', w: 2.5 },
-      { n: '单人天幕+登山杖', w: 1.5 },
-      { n: '气垫', w: 0.5 },
-      { n: '睡袋', w: 1.0 },
-      { n: '头枕', w: 0.1 },
-      { n: '毛线帽', w: 0.05 }
+      { n: '地垫', w: 0.2, v: 3 },
+      { n: '月光帐+帐杆', w: 2.5, v: 8 },
+      { n: '单人天幕+登山杖', w: 1.5, v: 5 },
+      { n: '气垫', w: 0.5, v: 2 },
+      { n: '睡袋', w: 1.0, v: 8 },
+      { n: '头枕', w: 0.1, v: 0.5 },
+      { n: '毛线帽', w: 0.05, v: 0.3 }
     ]
   },
   {
     category: '饮食系统',
     icon: '🍳',
     items: [
-      { n: '蛋卷桌', w: 1.0 },
-      { n: 'Helinox椅子', w: 0.8 },
-      { n: '炉头', w: 0.1 },
-      { n: '小铝锅', w: 0.2 },
-      { n: '烤盘+夹子', w: 0.3 },
-      { n: '砧板+小刀', w: 0.2 },
-      { n: '钛叉勺', w: 0.05 },
-      { n: '钛杯+挂耳架', w: 0.1 },
-      { n: '打火机', w: 0.02 },
-      { n: '焚火台', w: 0.5 },
-      { n: '调料', w: 0.2 }
+      { n: '蛋卷桌', w: 1.0, v: 3 },
+      { n: 'Helinox椅子', w: 0.8, v: 2 },
+      { n: '炉头', w: 0.1, v: 0.2 },
+      { n: '小铝锅', w: 0.2, v: 0.5 },
+      { n: '烤盘+夹子', w: 0.3, v: 0.5 },
+      { n: '砧板+小刀', w: 0.2, v: 0.3 },
+      { n: '钛叉勺', w: 0.05, v: 0.1 },
+      { n: '钛杯+挂耳架', w: 0.1, v: 0.3 },
+      { n: '打火机', w: 0.02, v: 0.05 },
+      { n: '焚火台', w: 0.5, v: 2 },
+      { n: '调料', w: 0.2, v: 0.3 }
     ]
   },
   {
     category: '照明系统',
     icon: '💡',
     items: [
-      { n: 'GZ灯', w: 0.3 },
-      { n: '三脚架', w: 0.2 },
-      { n: '头灯', w: 0.1 }
+      { n: 'GZ灯', w: 0.3, v: 0.5 },
+      { n: '三脚架', w: 0.2, v: 1 },
+      { n: '头灯', w: 0.1, v: 0.1 }
     ]
   },
   {
     category: '洗漱用品',
     icon: '🧴',
     items: [
-      { n: '牙刷', w: 0.02 },
-      { n: '牙膏', w: 0.05 },
-      { n: '洗面奶+洗发露+香香', w: 0.3 },
-      { n: '浴巾', w: 0.2 }
+      { n: '牙刷', w: 0.02, v: 0.05 },
+      { n: '牙膏', w: 0.05, v: 0.1 },
+      { n: '洗面奶+洗发露+香香', w: 0.3, v: 0.3 },
+      { n: '浴巾', w: 0.2, v: 0.5 }
     ]
   },
   {
     category: '电子设备',
     icon: '📱',
     items: [
-      { n: '相机×2', w: 0.8 },
-      { n: '充电宝×2', w: 0.4 },
-      { n: 'Kindle', w: 0.2 },
-      { n: '充电线+充电头', w: 0.15 }
+      { n: '相机×2', w: 0.8, v: 1 },
+      { n: '充电宝×2', w: 0.4, v: 0.3 },
+      { n: 'Kindle', w: 0.2, v: 0.2 },
+      { n: '充电线+充电头', w: 0.15, v: 0.2 }
     ]
   },
   {
     category: '衣物穿搭',
     icon: '🧥',
     items: [
-      { n: '冲锋衣', w: 0.5 },
-      { n: '抓绒衣', w: 0.3 },
-      { n: '保暖中层', w: 0.3 },
-      { n: '速干裤', w: 0.2 },
-      { n: '登山鞋', w: 0.8 },
-      { n: '袜子×3', w: 0.15 },
-      { n: '手套', w: 0.05 },
-      { n: '帽子', w: 0.1 }
+      { n: '冲锋衣', w: 0.5, v: 3 },
+      { n: '抓绒衣', w: 0.3, v: 2 },
+      { n: '保暖中层', w: 0.3, v: 2 },
+      { n: '速干裤', w: 0.2, v: 1 },
+      { n: '登山鞋', w: 0.8, v: 2 },
+      { n: '袜子×3', w: 0.15, v: 0.3 },
+      { n: '手套', w: 0.05, v: 0.1 },
+      { n: '帽子', w: 0.1, v: 0.3 }
     ]
   },
   {
     category: '其他',
     icon: '🔧',
     items: [
-      { n: '购物袋', w: 0.05 },
-      { n: '手套', w: 0.05 },
-      { n: '保鲜袋', w: 0.03 },
-      { n: '胃药+感冒药', w: 0.1 },
-      { n: '眼镜', w: 0.05 }
+      { n: '购物袋', w: 0.05, v: 0.1 },
+      { n: '手套', w: 0.05, v: 0.1 },
+      { n: '保鲜袋', w: 0.03, v: 0.1 },
+      { n: '胃药+感冒药', w: 0.1, v: 0.1 },
+      { n: '眼镜', w: 0.05, v: 0.1 }
     ]
   },
   {
     category: '证件财务',
     icon: '📄',
     items: [
-      { n: '护照', w: 0.05 },
-      { n: '日元现金', w: 0.1 },
-      { n: '信用卡', w: 0.05 },
-      { n: '保险单', w: 0.02 },
-      { n: '驾照（如需租车）', w: 0.03 }
+      { n: '护照', w: 0.05, v: 0.05 },
+      { n: '日元现金', w: 0.1, v: 0.1 },
+      { n: '信用卡', w: 0.05, v: 0.02 },
+      { n: '保险单', w: 0.02, v: 0.02 },
+      { n: '驾照（如需租车）', w: 0.03, v: 0.02 }
     ]
   }
 ];
@@ -2406,9 +2417,9 @@ var gearData = [
 function loadGearState() {
   try {
     var ver = localStorage.getItem('fuji-gear-ver');
-    if (ver !== 'v3') {
+    if (ver !== 'v4') {
       localStorage.removeItem('fuji-gear-state');
-      localStorage.setItem('fuji-gear-ver', 'v3');
+      localStorage.setItem('fuji-gear-ver', 'v4');
       return {};
     }
     return JSON.parse(localStorage.getItem('fuji-gear-state') || '{}');
@@ -2421,17 +2432,22 @@ function saveGearState(state) {
   localStorage.setItem('fuji-gear-state', JSON.stringify(state));
 }
 
+function fmtWeight(w) { return w >= 1 ? w.toFixed(1) + 'kg' : Math.round(w * 1000) + 'g'; }
+function fmtVol(v) { return v >= 1 ? (v % 1 === 0 ? v.toFixed(0) : v.toFixed(1)) + 'L' : Math.round(v * 1000) + 'ml'; }
+
 function renderGear() {
   var state = loadGearState();
   var totalItems = 0;
   var doneItems = 0;
   var totalWeight = 0;
+  var totalVol = 0;
   var html = '';
 
   gearData.forEach(function(cat, catIdx) {
     totalItems += cat.items.length;
     var catDone = 0;
     var catWeight = 0;
+    var catVol = 0;
     html += '<div class="gear-category">';
     html += '<div class="gear-cat-header">';
     html += '<span class="gear-cat-title"><span>' + cat.icon + '</span> ' + cat.category + '</span>';
@@ -2443,26 +2459,28 @@ function renderGear() {
       var checked = state[key] ? ' checked' : '';
       if (state[key]) { doneItems++; catDone++; }
       catWeight += item.w;
+      catVol += item.v || 0;
       html += '<div class="gear-item' + (state[key] ? ' checked' : '') + '" data-key="' + key + '" data-cat="' + catIdx + '">';
       html += '<div class="gear-checkbox' + (state[key] ? ' checked' : '') + '"></div>';
       html += '<span class="gear-item-name">' + item.n + '</span>';
-      html += '<span class="gear-item-weight">' + (item.w >= 1 ? item.w.toFixed(1) + 'kg' : Math.round(item.w * 1000) + 'g') + '</span>';
+      html += '<span class="gear-item-meta"><span class="gear-item-weight">' + fmtWeight(item.w) + '</span><span class="gear-item-vol">' + fmtVol(item.v || 0) + '</span></span>';
       html += '</div>';
     });
     html += '</div>';
-    html += '<div class="gear-cat-weight">小计: ' + (catWeight >= 1 ? catWeight.toFixed(1) + 'kg' : Math.round(catWeight * 1000) + 'g') + '</div>';
+    html += '<div class="gear-cat-weight">小计: ' + fmtWeight(catWeight) + ' · ' + fmtVol(catVol) + '</div>';
     html += '</div>';
     totalWeight += catWeight;
+    totalVol += catVol;
   });
 
   document.getElementById('gear-list').innerHTML = html;
   document.getElementById('gear-total').textContent = totalItems;
   document.getElementById('gear-done').textContent = doneItems;
 
-  // Weight summary
+  // Weight & volume summary
   var weightEl = document.getElementById('gear-weight-summary');
   if (weightEl) {
-    weightEl.textContent = totalWeight.toFixed(1) + 'kg';
+    weightEl.textContent = fmtWeight(totalWeight) + ' · ' + fmtVol(totalVol);
   }
 
   // Update category counts
