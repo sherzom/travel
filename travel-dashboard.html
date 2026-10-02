@@ -2392,7 +2392,8 @@ var gearData = [
     items: [
       { n: 'GZ灯', w: 0.3, v: 0.5 },
       { n: '三脚架', w: 0.2, v: 1 },
-      { n: '头灯', w: 0.1, v: 0.1 }
+      { n: '头灯', w: 0.1, v: 0.1 },
+      { n: '挂钩', w: 0.05, v: 0.05 }
     ]
   },
   {
@@ -2412,7 +2413,8 @@ var gearData = [
       { n: '相机×2', w: 0.8, v: 1 },
       { n: '充电宝×2', w: 0.4, v: 0.3 },
       { n: 'Kindle', w: 0.2, v: 0.2 },
-      { n: '充电线+充电头', w: 0.15, v: 0.2 }
+      { n: '充电线+充电头', w: 0.15, v: 0.2 },
+      { n: '暴力风扇', w: 0.35, v: 0.3 }
     ]
   },
   {
@@ -2437,7 +2439,9 @@ var gearData = [
       { n: '手套', w: 0.05, v: 0.1 },
       { n: '保鲜袋', w: 0.03, v: 0.1 },
       { n: '胃药+感冒药', w: 0.1, v: 0.1 },
-      { n: '眼镜', w: 0.05, v: 0.1 }
+      { n: '眼镜', w: 0.05, v: 0.1 },
+      { n: '纸巾', w: 0.1, v: 0.15 },
+      { n: '暖宝宝', w: 0.1, v: 0.1 }
     ]
   },
   {
@@ -2456,9 +2460,9 @@ var gearData = [
 function loadGearState() {
   try {
     var ver = localStorage.getItem('fuji-gear-ver');
-    if (ver !== 'v4') {
+    if (ver !== 'v6') {
       localStorage.removeItem('fuji-gear-state');
-      localStorage.setItem('fuji-gear-ver', 'v4');
+      localStorage.setItem('fuji-gear-ver', 'v6');
       return {};
     }
     return JSON.parse(localStorage.getItem('fuji-gear-state') || '{}');
