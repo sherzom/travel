@@ -2030,6 +2030,53 @@
     <div id="gear-list"></div>
   </div>
 
+  <!-- ==================== PANEL: 拍摄 ==================== -->
+  <div class="panel" id="panel-camera">
+    <div style="padding: 56px 0 24px;">
+      <h2 style="font-size:1.3rem;font-weight:300;letter-spacing:2px;margin-bottom:8px;">拍摄指南</h2>
+      <p style="font-size:0.75rem;color:var(--text-muted);">索尼 α6000 · 露营预设调色</p>
+    </div>
+
+    <div class="tips-card">
+      <div class="tips-title">三大风格档位（MR）</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+        <div style="background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 12px;border-left:3px solid var(--accent-sky-dim);">
+          <div style="font-size:0.75rem;color:var(--accent-sky);font-weight:500;">MR 1 · 理光 GR 拟真</div>
+          <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:4px;">高反差、低饱和、冷青调（4800K, B1/G1）· 硬朗通透</div>
+          <div style="font-size:0.62rem;color:var(--text-muted);margin-top:4px;">场景：阴天/雨后 · 露营地纪实 · 金属/钛合金装备特写 · 行进过程</div>
+        </div>
+        <div style="background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 12px;border-left:3px solid var(--accent-amber-dim);">
+          <div style="font-size:0.75rem;color:var(--accent-amber);font-weight:500;">MR 2 · 富士胶片拟真</div>
+          <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:4px;">清新日系胶片、温润空气感、暖琥珀调（5400K, A1/M1）</div>
+          <div style="font-size:0.62rem;color:var(--text-muted);margin-top:4px;">场景：阳光下的营地全景 · 搭建帐篷过程 · 人物互动 · 日间美食烹饪</div>
+        </div>
+        <div style="background:var(--bg-card);border-radius:var(--radius-sm);padding:10px 12px;border-left:3px solid var(--accent-rust);">
+          <div style="font-size:0.75rem;color:var(--accent-rust);font-weight:500;">MR 3 · 徕卡拟真</div>
+          <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:4px;">浓郁德味、深邃立体、纯净低感（4600K, A2）· 高饱和</div>
+          <div style="font-size:0.62rem;color:var(--text-muted);margin-top:4px;">场景：黄昏/蓝调时刻 · 焚火/钛炉火光 · 木质/皮革装备特写 · 暗光特写</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-card" style="margin-top:10px;">
+      <div class="tips-title">现场切换与调用方法</div>
+      <ul class="tips-list">
+        <li><strong>调出档位</strong>：相机顶部模式拨盘拧到 MR 档</li>
+        <li><strong>选择预设</strong>：屏幕出现 1/2/3 选项框时，转动背部圆盘选到目标数字，按下中间确定键</li>
+        <li><strong>临时调整</strong>：MR 档期间临时修改光圈或 ISO 不会破坏已存预设；下次重新切回该档位时自动还原为保存时的参数</li>
+      </ul>
+    </div>
+
+    <div class="tips-card" style="margin-top:10px;">
+      <div class="tips-title">拍摄避坑（保清晰 · 保画质）</div>
+      <ul class="tips-list">
+        <li><strong>防手抖发糊</strong>：半按快门看屏幕左下角快门速度；手持不低于 <strong>1/125s</strong>；光线暗快门变慢（如 1/30s）时，按 ISO 键调高（如 400→800/1600）</li>
+        <li><strong>精准对焦</strong>：对焦区域设 [区] 或 [自由点: M]，对焦模式保持 [AF-S]；绿色对焦框对准主体（帐篷角/咖啡杯/人脸），听到"嘀嘀"确认声后再完全按下快门</li>
+        <li><strong>夜间/焚火（MR 3）</strong>：4600K + 关闭 DRO 可完美还原炭火浓郁质感，暗部不发灰；光线极暗时可临时 ISO 调至 800~1600</li>
+      </ul>
+    </div>
+  </div>
+
 </div>
 
 <!-- ==================== TAB NAVIGATION ==================== -->
@@ -2050,6 +2097,10 @@
     <button class="tab-btn" data-panel="gear">
       <span class="tab-icon">🎒</span>
       <span>装备</span>
+    </button>
+    <button class="tab-btn" data-panel="camera">
+      <span class="tab-icon">📷</span>
+      <span>拍摄</span>
     </button>
   </div>
 </nav>
