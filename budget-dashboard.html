@@ -51,6 +51,16 @@
     align-items: center;
     box-shadow: var(--shadow-md);
   }
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-logo {
+    height: 32px;
+    width: auto;
+    border-radius: 6px;
+  }
   .header h1 {
     font-size: 1.25rem;
     color: #ffffff;
@@ -208,7 +218,10 @@
 <div class="container">
 
   <div class="header">
-    <h1>2026财年Q3 费用预算达成看板</h1>
+    <div class="header-title">
+      <img src="1024.png" alt="logo" class="header-logo">
+      <h1>2026财年Q3 费用预算达成看板</h1>
+    </div>
     <div class="meta" id="metaInfo">预算数据：2026-10-15<br>实际数据：待更新</div>
   </div>
 
