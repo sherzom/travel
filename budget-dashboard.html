@@ -156,6 +156,18 @@
   .tag.over { background: var(--red-bg); color: var(--red); }
   .tag.pending { background: #f1f5f9; color: var(--text-muted); }
 
+  .tax-note {
+    background: var(--primary-light);
+    border: 1px solid var(--border-blue);
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-bottom: 14px;
+    font-size: 0.75rem;
+    color: var(--primary-dark);
+    text-align: center;
+    font-weight: 600;
+  }
+
   .footer { text-align: center; padding: 14px 0; font-size: 0.7rem; color: var(--text-muted); }
 
   @media (max-width: 768px) {
@@ -173,6 +185,8 @@
 
   <div class="summary" id="summaryRow"></div>
 
+  <div class="tax-note">所有金额均为含税金额（业绩 & 费用）</div>
+
   <div class="table-wrap">
     <table>
       <thead>
@@ -189,26 +203,27 @@
 
 <script>
 const BUDGET_DATA = [
-  { division: "乳品事业部", line: "乳品", coin: 35233895.93, gift: 4965558.84, discount: 4087154.13, offline: 512305.23, total: 44798914.13 },
-  { division: "乳品事业部", line: "乳饮料", coin: 811681.77, gift: 407463.19, discount: 0, offline: 1189.69, total: 1220334.66 },
-  { division: "糖果事业部", line: "奶糖", coin: 704698.56, gift: 173929.40, discount: 208513.90, offline: 24558.59, total: 1111700.45 },
-  { division: "糖果事业部", line: "软糖", coin: 666270.41, gift: 224409.05, discount: 497969.83, offline: 31826.84, total: 1420476.12 },
-  { division: "糖果事业部", line: "口泡", coin: 1233.35, gift: 186.87, discount: 224.25, offline: 0, total: 1644.47 },
-  { division: "旺礼事业部", line: "旺礼", coin: 882264.14, gift: 2091378.77, discount: 736018.36, offline: 0, total: 3709661.27 },
-  { division: "果冻事业部", line: "果冻", coin: 95554.88, gift: 14478.01, discount: 333996.10, offline: 305.08, total: 444334.07 },
-  { division: "酒品事业部", line: "酒品", coin: 12631.34, gift: 226231.60, discount: 272.06, offline: 666106.14, total: 905241.14 },
-  { division: "冰品事业部", line: "冰品", coin: 15000.00, gift: 44271.08, discount: 15000.00, offline: 0, total: 74271.08 },
-  { division: "米果事业部", line: "米果", coin: 0, gift: 1584.67, discount: 10737.13, offline: 1712.85, total: 14034.65 },
-  { division: "豆果事业部", line: "豆果", coin: 6205.82, gift: 940.28, discount: 31260.31, offline: 269.74, total: 38676.15 },
-  { division: "旺健康创研事业部", line: "FixXBody", coin: 17203.78, gift: 32500.57, discount: 42873.62, offline: 25563.93, total: 118141.90 },
-  { division: "旺健康创研事业部", line: "爱至尊", coin: 88483.25, gift: 17696.65, discount: 35393.30, offline: 0, total: 141573.20 },
-  { division: "文宣品周边", line: "文宣品", coin: 997465.43, gift: 0, discount: 0, offline: 110829.49, total: 1108294.93 },
-  { division: "文宣品周边", line: "周边", coin: 911897.08, gift: 0, discount: 0, offline: 101321.90, total: 1013218.98 },
+  { division: "乳品事业部", line: "乳品", cash: 124201799.05, coin: 35233895.93, gift: 4965558.84, discount: 4087154.13, offline: 512305.23, total: 44798914.13 },
+  { division: "乳品事业部", line: "乳饮料", cash: 2716421.30, coin: 811681.77, gift: 407463.19, discount: 0, offline: 1189.69, total: 1220334.66 },
+  { division: "糖果事业部", line: "奶糖", cash: 7310079.81, coin: 704698.56, gift: 173929.40, discount: 208513.90, offline: 24558.59, total: 1111700.45 },
+  { division: "糖果事业部", line: "软糖", cash: 7252849.47, coin: 666270.41, gift: 224409.05, discount: 497969.83, offline: 31826.84, total: 1420476.12 },
+  { division: "糖果事业部", line: "口泡", cash: 7474.85, coin: 1233.35, gift: 186.87, discount: 224.25, offline: 0, total: 1644.47 },
+  { division: "旺礼事业部", line: "旺礼", cash: 18804037.91, coin: 882264.14, gift: 2091378.77, discount: 736018.36, offline: 0, total: 3709661.27 },
+  { division: "果冻事业部", line: "果冻", cash: 585222.10, coin: 95554.88, gift: 14478.01, discount: 333996.10, offline: 305.08, total: 444334.07 },
+  { division: "酒品事业部", line: "酒品", cash: 1596658.56, coin: 12631.34, gift: 226231.60, discount: 272.06, offline: 666106.14, total: 905241.14 },
+  { division: "冰品事业部", line: "冰品", cash: 150000.00, coin: 15000.00, gift: 44271.08, discount: 15000.00, offline: 0, total: 74271.08 },
+  { division: "米果事业部", line: "米果", cash: 32144.08, coin: 0, gift: 1584.67, discount: 10737.13, offline: 1712.85, total: 14034.65 },
+  { division: "豆果事业部", line: "豆果", cash: 43005.92, coin: 6205.82, gift: 940.28, discount: 31260.31, offline: 269.74, total: 38676.15 },
+  { division: "旺健康创研事业部", line: "FixXBody", cash: 271373.94, coin: 17203.78, gift: 32500.57, discount: 42873.62, offline: 25563.93, total: 118141.90 },
+  { division: "旺健康创研事业部", line: "爱至尊", cash: 353933.01, coin: 88483.25, gift: 17696.65, discount: 35393.30, offline: 0, total: 141573.20 },
+  { division: "文宣品周边", line: "文宣品", cash: 0, coin: 997465.43, gift: 0, discount: 0, offline: 110829.49, total: 1108294.93 },
+  { division: "文宣品周边", line: "周边", cash: 0, coin: 911897.08, gift: 0, discount: 0, offline: 101321.90, total: 1013218.98 },
 ];
 
 const ACTUAL_DATA = {};
 
 const FEES = [
+  { key: 'cash', label: '现金业绩' },
   { key: 'total', label: '总费用' },
   { key: 'coin', label: '旺金币' },
   { key: 'gift', label: '赠品' },
@@ -239,9 +254,11 @@ function render() {
 
   // Summary
   let totalBudget = 0, totalActual = 0, overCount = 0, actualCount = 0;
+  let cashBudget = 0, cashActual = 0, cashActualCount = 0;
   Object.values(groups).forEach(items => {
     items.forEach(item => {
       totalBudget += item.total;
+      cashBudget += item.cash;
       const actual = ACTUAL_DATA[item.line];
       if (actual) {
         actualCount++;
@@ -249,14 +266,19 @@ function render() {
         totalActual += aTotal;
         if (aTotal > item.total) overCount++;
       }
+      if (actual && actual.cash !== undefined) {
+        cashActualCount++;
+        cashActual += actual.cash || 0;
+      }
     });
   });
 
   const totalPct = totalBudget > 0 && totalActual > 0 ? (totalActual / totalBudget * 100).toFixed(1) : '-';
+  const cashPct = cashBudget > 0 && cashActual > 0 ? (cashActual / cashBudget * 100).toFixed(1) : '-';
   document.getElementById('summaryRow').innerHTML = `
-    <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3预算合计</div></div>
-    <div class="summary-card"><div class="value">${actualCount > 0 ? '¥' + fmt(totalActual) : '-'}</div><div class="label">实际合计</div></div>
-    <div class="summary-card"><div class="value">${totalPct}%</div><div class="label">总达成率</div></div>
+    <div class="summary-card"><div class="value">¥${fmt(cashBudget)}</div><div class="label">Q3现金业绩预算</div></div>
+    <div class="summary-card"><div class="value">${cashActualCount > 0 ? '¥' + fmt(cashActual) : '-'}</div><div class="label">现金业绩实际</div></div>
+    <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3费用预算合计</div></div>
     <div class="summary-card ${overCount > 0 ? 'alert' : ''}"><div class="value">${actualCount > 0 ? overCount + ' / ' + actualCount : '-'}</div><div class="label">超预算项数</div></div>
   `;
 
