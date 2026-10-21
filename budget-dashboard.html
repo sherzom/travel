@@ -9,7 +9,7 @@
     --primary: #1a56db;
     --primary-light: #e8f0fe;
     --primary-dark: #1347b8;
-    --bg: #f8fafc;
+    --bg: #f1f5f9;
     --white: #ffffff;
     --border: #e2e8f0;
     --border-blue: #bfdbfe;
@@ -22,114 +22,139 @@
     --red-bg: #fef2f2;
     --warn: #d97706;
     --warn-bg: #fffbeb;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(26,86,219,0.08);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 13px; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: linear-gradient(135deg, #eef2ff 0%, #f1f5f9 50%, #f8fafc 100%);
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    padding: 24px 16px;
+    min-height: 100vh;
+    padding: 28px 20px;
   }
 
   .container { max-width: 100%; margin: 0 auto; }
 
   /* Header */
   .header {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px 24px;
-    margin-bottom: 14px;
+    background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+    border-radius: 10px;
+    padding: 20px 28px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: var(--shadow-md);
   }
-  .header h1 { font-size: 1.2rem; color: var(--primary); font-weight: 700; }
-  .header .meta { font-size: 0.75rem; color: var(--text-muted); text-align: right; }
+  .header h1 {
+    font-size: 1.25rem;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .header .meta { font-size: 0.72rem; color: rgba(255,255,255,0.75); text-align: right; }
 
   /* Summary */
   .summary {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
+    margin-bottom: 16px;
   }
   .summary-card {
-    background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; text-align: center;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, transform 0.2s;
   }
-  .summary-card .value { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
-  .summary-card .label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px; }
+  .summary-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .summary-card .value { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+  .summary-card .label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 3px; }
   .summary-card.alert .value { color: var(--red); }
 
   /* Table */
   .table-wrap {
-    background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow: var(--shadow-sm);
   }
   table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
 
   /* Header row 1 - fee type groups */
   thead tr.group th {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
     color: var(--white);
-    padding: 8px 6px;
+    padding: 10px 6px;
     font-weight: 600;
     text-align: center;
     border-right: 1px solid rgba(255,255,255,0.2);
     font-size: 0.78rem;
+    letter-spacing: 0.3px;
   }
-  thead tr.group th.name-col { text-align: left; padding-left: 12px; min-width: 120px; }
+  thead tr.group th.name-col { text-align: left; padding-left: 14px; min-width: 130px; }
 
   /* Header row 2 - sub labels */
   thead tr.sub th {
-    background: #2a6aea;
-    color: rgba(255,255,255,0.85);
-    padding: 6px 4px;
+    background: #3b82f6;
+    color: rgba(255,255,255,0.9);
+    padding: 7px 4px;
     font-weight: 500;
     text-align: center;
     font-size: 0.68rem;
     border-right: 1px solid rgba(255,255,255,0.15);
     white-space: nowrap;
   }
-  thead tr.sub th.name-col { text-align: left; padding-left: 12px; }
+  thead tr.sub th.name-col { text-align: left; padding-left: 14px; }
 
   /* Body */
   tbody td {
-    padding: 8px 6px;
+    padding: 9px 6px;
     text-align: center;
-    border-bottom: 1px solid var(--border);
-    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+    border-right: 1px solid #f8fafc;
     vertical-align: middle;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
-  tbody td.name-col { text-align: left; padding-left: 12px; font-weight: 600; }
-  tbody tr:hover { background: var(--primary-light); }
+  tbody td.name-col { text-align: left; padding-left: 14px; font-weight: 600; }
+  tbody tr:hover { background: #f0f7ff; }
 
   /* Division group row */
   .division-row td {
-    background: var(--primary-light);
+    background: linear-gradient(90deg, #eff6ff 0%, #e8f0fe 100%);
     font-weight: 700;
     color: var(--primary-dark);
     border-bottom: 2px solid var(--border-blue);
+    border-top: 1px solid var(--border-blue);
+    font-size: 0.82rem;
   }
   .division-row td.name-col { font-size: 0.85rem; }
 
   /* Mini bar */
   .mini-bar {
     display: inline-block;
-    width: 50px;
-    height: 6px;
+    width: 48px;
+    height: 5px;
     background: #e2e8f0;
     border-radius: 3px;
     overflow: hidden;
     vertical-align: middle;
-    margin-right: 4px;
+    margin-right: 5px;
   }
-  .mini-bar-fill { height: 100%; border-radius: 3px; }
+  .mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
   .mini-bar-fill.normal { background: var(--primary); }
   .mini-bar-fill.warn { background: var(--warn); }
   .mini-bar-fill.over { background: var(--red); }
@@ -146,8 +171,8 @@
   /* Status tag */
   .tag {
     display: inline-block;
-    padding: 1px 6px;
-    border-radius: 8px;
+    padding: 2px 8px;
+    border-radius: 10px;
     font-size: 0.65rem;
     font-weight: 600;
   }
@@ -157,21 +182,25 @@
   .tag.pending { background: #f1f5f9; color: var(--text-muted); }
 
   .tax-note {
-    background: var(--primary-light);
+    background: linear-gradient(90deg, #eff6ff 0%, #e8f0fe 100%);
     border: 1px solid var(--border-blue);
-    border-radius: 6px;
-    padding: 8px 14px;
-    margin-bottom: 14px;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
     font-size: 0.75rem;
     color: var(--primary-dark);
     text-align: center;
     font-weight: 600;
+    box-shadow: var(--shadow-sm);
   }
 
-  .footer { text-align: center; padding: 14px 0; font-size: 0.7rem; color: var(--text-muted); }
+  .footer { text-align: center; padding: 16px 0; font-size: 0.7rem; color: var(--text-muted); }
 
   @media (max-width: 768px) {
+    body { padding: 16px 10px; }
     .summary { grid-template-columns: repeat(2, 1fr); }
+    .header { flex-direction: column; gap: 8px; }
+    .header .meta { text-align: center; }
   }
 </style>
 </head>
@@ -216,8 +245,8 @@ const BUDGET_DATA = [
   { division: "豆果事业部", line: "豆果", cash: 43005.92, coin: 6205.82, gift: 940.28, discount: 31260.31, offline: 269.74, total: 38676.15 },
   { division: "旺健康创研事业部", line: "FixXBody", cash: 271373.94, coin: 17203.78, gift: 32500.57, discount: 42873.62, offline: 25563.93, total: 118141.90 },
   { division: "旺健康创研事业部", line: "爱至尊", cash: 353933.01, coin: 88483.25, gift: 17696.65, discount: 35393.30, offline: 0, total: 141573.20 },
-  { division: "文宣品周边", line: "文宣品", cash: 0, coin: 997465.43, gift: 0, discount: 0, offline: 110829.49, total: 1108294.93 },
-  { division: "文宣品周边", line: "周边", cash: 0, coin: 911897.08, gift: 0, discount: 0, offline: 101321.90, total: 1013218.98 },
+  { division: "文创事业部", line: "文宣品", cash: 0, coin: 997465.43, gift: 0, discount: 0, offline: 110829.49, total: 1108294.93 },
+  { division: "文创事业部", line: "周边", cash: 0, coin: 911897.08, gift: 0, discount: 0, offline: 101321.90, total: 1013218.98 },
 ];
 
 const ACTUAL_DATA = {};
