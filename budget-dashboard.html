@@ -249,6 +249,9 @@
   .over-table .over-amount { color: var(--accent); font-weight: 700; }
   .over-table .over-pct { color: var(--accent); font-weight: 600; }
   .over-table .over-sum td { border-top: 2px solid #fecaca; font-weight: 700; background: #fffbfb; }
+  .over-table .over-fee { display: inline-block; padding: 1px 6px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; background: #fef2f2; color: var(--accent); }
+  .ok-section { border-color: #86efac !important; padding: 14px 22px !important; }
+  .ok-title { color: #16a34a !important; }
 
   .footer { text-align: center; padding: 16px 0; font-size: 0.7rem; color: var(--text-muted); }
 
@@ -360,7 +363,10 @@ function render() {
   // Summary
   let totalBudget = 0, totalActual = 0, totalDiff = 0;
   let cashBudget = 0, cashActual = 0;
-  const overLines = []; // {line, fee, budget, actual, diff}
+  const overItems = []; // {line, fee, feeName, budget, actual, diff, pct}
+  const FEE_NAMES = { cash: '现金业绩', coin: '旺金币', gift: '赠品', discount: '折扣', offline: '线下', total: '总费用' };
+  const feeKeys = ['coin', 'gift', 'discount', 'offline'];
+
   Object.values(groups).forEach(items => {
     items.forEach(item => {
       totalBudget += item.total;
@@ -368,8 +374,17 @@ function render() {
       const actual = ACTUAL_DATA[item.line];
       if (actual) {
         totalActual += actual.total || 0;
-        if (actual.total > item.total) {
-          overLines.push({ line: item.line, division: item.division, budget: item.total, actual: actual.total, diff: actual.total - item.total });
+        // Check each fee type for over-budget
+        for (const fee of feeKeys) {
+          const b = item[fee] || 0;
+          const a = actual[fee] || 0;
+          if (b > 0 && a > b) {
+            overItems.push({
+              line: item.line, division: item.division,
+              fee: fee, feeName: FEE_NAMES[fee],
+              budget: b, actual: a, diff: a - b, pct: ((a / b) * 100 - 100).toFixed(1)
+            });
+          }
         }
       }
     });
@@ -382,21 +397,22 @@ function render() {
     <div class="summary-card"><div class="value">¥${fmt(cashBudget)}</div><div class="label">Q3现金业绩预算</div></div>
     <div class="summary-card"><div class="value">${cashActual > 0 ? '¥' + fmt(cashActual) : '-'}</div><div class="label">现金业绩实际 (${cashPct}%)</div></div>
     <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3费用预算合计</div></div>
-    <div class="summary-card"><div class="value" style="color:${totalDiff > 0 ? 'var(--accent)' : 'var(--primary)'}">${totalActual > 0 ? '¥' + fmt(totalActual) : '-'}<span style="font-size:0.65rem;font-weight:500;${totalDiff > 0 ? 'color:var(--accent)' : ''}"> (${totalPct}%)</span></div><div class="label">Q3费用实际合计 ${totalDiff > 0 ? '⚠ 超' + fmtDiff(totalDiff) : ''}</div></div>
+    <div class="summary-card"><div class="value" style="color:${totalDiff > 0 ? 'var(--accent)' : 'var(--primary)'}">${totalActual > 0 ? '¥' + fmt(totalActual) : '-'}<span style="font-size:0.65rem;font-weight:500;${totalDiff > 0 ? 'color:var(--accent)' : ''}"> (${totalPct}%)</span></div><div class="label">Q3费用实际合计</div></div>
   `;
 
-  // Over-budget detail section
+  // Over-budget detail section - show by fee type
   let overHtml = '';
-  if (overLines.length > 0) {
-    overHtml = `<div class="over-section"><div class="over-title">⚠ 超预算明细（需补申请）</div><table class="over-table"><thead><tr><th>线别</th><th>预算</th><th>实际</th><th>超出金额</th><th>超出比例</th></tr></thead><tbody>`;
-    let overTotal = 0;
-    overLines.sort((a, b) => b.diff - a.diff).forEach(o => {
-      overTotal += o.diff;
-      const pct = ((o.diff / o.budget) * 100).toFixed(1);
-      overHtml += `<tr><td><span class="over-line">${o.line}</span><span class="over-div">${o.division}</span></td><td>¥${fmt(o.budget)}</td><td>¥${fmt(o.actual)}</td><td class="over-amount">+¥${fmt(o.diff)}</td><td class="over-pct">${pct}%</td></tr>`;
+  if (overItems.length > 0) {
+    overItems.sort((a, b) => b.diff - a.diff);
+    const overTotal = overItems.reduce((s, o) => s + o.diff, 0);
+    overHtml = `<div class="over-section"><div class="over-title">⚠ 超预算明细（需补申请，共 ${overItems.length} 项）</div><table class="over-table"><thead><tr><th>线别</th><th>费用类型</th><th>预算</th><th>实际</th><th>超出金额</th><th>超出比例</th></tr></thead><tbody>`;
+    overItems.forEach(o => {
+      overHtml += `<tr><td><span class="over-line">${o.line}</span><span class="over-div">${o.division}</span></td><td><span class="over-fee">${o.feeName}</span></td><td>¥${fmt(o.budget)}</td><td>¥${fmt(o.actual)}</td><td class="over-amount">+¥${fmt(o.diff)}</td><td class="over-pct">+${o.pct}%</td></tr>`;
     });
-    overHtml += `<tr class="over-sum"><td colspan="3">合计超出</td><td class="over-amount">+¥${fmt(overTotal)}</td><td></td></tr>`;
+    overHtml += `<tr class="over-sum"><td colspan="4">合计超出</td><td class="over-amount">+¥${fmt(overTotal)}</td><td></td></tr>`;
     overHtml += '</tbody></table></div>';
+  } else {
+    overHtml = `<div class="over-section ok-section"><div class="over-title ok-title">✅ 暂无超预算项目</div></div>`;
   }
   document.getElementById('overSection').innerHTML = overHtml;
 
@@ -412,7 +428,6 @@ function render() {
 
   // Body
   let html = '';
-  let rowIdx = 0;
   for (const [division, items] of Object.entries(groups)) {
     // Division total row
     html += `<tr class="division-row"><td class="name-col">${division}</td>`;
