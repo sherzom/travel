@@ -24,6 +24,8 @@
     --red-bg: #fef2f2;
     --warn: #f59e0b;
     --warn-bg: #fffbeb;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
     --shadow-sm: 0 2px 8px rgba(59,130,246,0.06);
     --shadow-md: 0 4px 16px rgba(59,130,246,0.1);
     --radius: 16px;
@@ -74,12 +76,12 @@
   }
   .header .meta { font-size: 0.72rem; color: rgba(255,255,255,0.8); text-align: right; }
 
-  /* Summary */
+  /* Summary - top cards */
   .summary {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   .summary-card {
     background: var(--white);
@@ -98,6 +100,146 @@
   .summary-card .label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; }
   .summary-card.alert .value { color: var(--accent); }
 
+  /* Executive summary - new row */
+  .exec-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .exec-card {
+    background: var(--white);
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: var(--shadow-sm);
+  }
+  .exec-card .exec-label {
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .exec-card .exec-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .exec-card .exec-diff {
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .exec-card .exec-diff.neg { color: var(--green); }
+  .exec-card .exec-diff.pos { color: var(--red); }
+  .exec-card .exec-diff.neutral { color: var(--text-muted); }
+
+  /* Over-budget alert section */
+  .over-section {
+    background: var(--white);
+    border: 1.5px solid #fecaca;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 12px rgba(239,68,68,0.06);
+  }
+  .over-section.ok-section {
+    border-color: #86efac;
+    box-shadow: 0 2px 12px rgba(34,197,94,0.06);
+  }
+  .over-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ok-section .over-title { color: #16a34a; }
+  .over-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .over-table th {
+    background: #fef2f2;
+    color: var(--accent);
+    padding: 7px 10px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid #fecaca;
+  }
+  .ok-section .over-table th {
+    background: #f0fdf4;
+    color: #16a34a;
+    border-bottom-color: #bbf7d0;
+  }
+  .over-table td {
+    padding: 7px 10px;
+    text-align: center;
+    border-bottom: 1px solid #fef3f3;
+    font-variant-numeric: tabular-nums;
+  }
+  .over-table .over-line { font-weight: 600; color: var(--text); }
+  .over-table .over-div { font-size: 0.68rem; color: var(--text-muted); }
+  .over-table .over-amount { color: var(--accent); font-weight: 700; }
+  .over-table .over-pct { color: var(--accent); font-weight: 600; }
+  .over-table .over-fee {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    background: #fef2f2;
+    color: var(--accent);
+  }
+  .ok-section .over-table .over-fee {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+
+  .tax-note {
+    background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    margin-bottom: 12px;
+    font-size: 0.72rem;
+    color: var(--primary-dark);
+    text-align: center;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Table toolbar */
+  .table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0 4px;
+  }
+  .table-toolbar .toolbar-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .toolbar-btn {
+    font-size: 0.72rem;
+    padding: 4px 12px;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .toolbar-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+  }
+
   /* Table */
   .table-wrap {
     background: var(--white);
@@ -108,64 +250,79 @@
   }
   table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
 
-  /* Header row 1 - fee type groups */
   thead tr.group th {
     background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
     color: var(--white);
-    padding: 12px 6px;
+    padding: 11px 6px;
     font-weight: 600;
     text-align: center;
     border-right: 1px solid rgba(255,255,255,0.2);
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     letter-spacing: 0.3px;
   }
-  thead tr.group th.name-col { text-align: left; padding-left: 16px; min-width: 130px; }
+  thead tr.group th.name-col { text-align: left; padding-left: 16px; min-width: 140px; }
 
-  /* Header row 2 - sub labels */
   thead tr.sub th {
     background: #6366f1;
     color: rgba(255,255,255,0.92);
-    padding: 8px 4px;
+    padding: 7px 4px;
     font-weight: 500;
     text-align: center;
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     border-right: 1px solid rgba(255,255,255,0.15);
     white-space: nowrap;
   }
   thead tr.sub th.name-col { text-align: left; padding-left: 16px; }
 
-  /* Body */
   tbody td {
-    padding: 11px 8px;
+    padding: 10px 8px;
     text-align: center;
     border-bottom: 1px solid #f3e8e8;
     border-right: 1px solid #faf5f5;
     vertical-align: middle;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
   }
-  tbody td.name-col { text-align: left; padding-left: 16px; font-weight: 600; font-size: 0.85rem; }
+  tbody td.name-col { text-align: left; padding-left: 16px; font-weight: 600; font-size: 0.83rem; }
   tbody tr:hover { background: #fef7ff; }
-  tbody tr.line-row:nth-child(even) { background: #fefcfc; }
-  tbody tr.line-row:nth-child(even):hover { background: #fef7ff; }
 
-  /* Division group row */
+  /* Division group row - clickable */
   .division-row td {
     background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
     font-weight: 700;
     color: var(--primary-dark);
     border-bottom: 2px solid #fde4e4;
     border-top: 2px solid #fde4e4;
-    font-size: 0.84rem;
-    padding: 12px 8px;
+    font-size: 0.82rem;
+    padding: 11px 8px;
+    cursor: pointer;
+    user-select: none;
   }
-  .division-row td.name-col { font-size: 0.88rem; }
+  .division-row td.name-col { font-size: 0.86rem; }
+  .division-row:hover td { background: linear-gradient(90deg, #ffe4e6 0%, #dbeafe 100%); }
+
+  .expand-arrow {
+    display: inline-block;
+    width: 16px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+  }
+  .division-row.expanded .expand-arrow {
+    transform: rotate(90deg);
+  }
+
+  /* Line detail rows - hidden by default */
+  .line-row { display: none; }
+  .line-row.show { display: table-row; }
+  .line-row:nth-child(even) { background: #fefcfc; }
+  .line-row:nth-child(even):hover { background: #fef7ff; }
 
   /* Mini bar */
   .mini-bar {
     display: inline-block;
-    width: 48px;
+    width: 44px;
     height: 6px;
     background: #fde4e4;
     border-radius: 4px;
@@ -174,26 +331,37 @@
     margin-right: 5px;
   }
   .mini-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-  .mini-bar-fill.normal { background: linear-gradient(90deg, #3b82f6, #6366f1); }
-  .mini-bar-fill.warn { background: var(--warn); }
-  .mini-bar-fill.over { background: var(--accent); }
+  /* Cash (revenue) colors */
+  .mini-bar-fill.cash-normal { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+  .mini-bar-fill.cash-good { background: linear-gradient(90deg, #22c55e, #16a34a); }
+  .mini-bar-fill.cash-bad { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  /* Fee (cost) colors */
+  .mini-bar-fill.fee-normal { background: linear-gradient(90deg, #fb923c, #f97316); }
+  .mini-bar-fill.fee-fast { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .mini-bar-fill.fee-over { background: linear-gradient(90deg, #ef4444, #dc2626); }
 
-  .pct { font-size: 0.72rem; font-weight: 600; }
-  .pct.normal { color: var(--primary); }
-  .pct.warn { color: var(--warn); }
-  .pct.over { color: var(--accent); }
+  .pct { font-size: 0.7rem; font-weight: 600; }
+  .pct.cash-normal { color: var(--primary); }
+  .pct.cash-good { color: var(--green); }
+  .pct.cash-bad { color: var(--red); }
+  .pct.fee-normal { color: var(--orange); }
+  .pct.fee-fast { color: var(--warn); }
+  .pct.fee-over { color: var(--red); }
   .pct.pending { color: var(--text-muted); }
 
-  .amount { font-size: 0.78rem; }
+  .amount { font-size: 0.76rem; }
   .amount.over { color: var(--accent); font-weight: 700; }
   .amount.under { color: #94a3b8; }
+  .diff-pos { color: var(--red); font-weight: 600; }
+  .diff-neg { color: var(--green); }
+  .diff-zero { color: var(--text-muted); }
 
   /* Status tag */
   .tag {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 2px 9px;
     border-radius: 12px;
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     font-weight: 600;
   }
   .tag.ok { background: var(--green-bg); color: var(--green); }
@@ -201,63 +369,23 @@
   .tag.over { background: var(--accent-light); color: var(--accent); }
   .tag.pending { background: #f9fafb; color: var(--text-muted); }
 
-  .tax-note {
-    background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    font-size: 0.75rem;
-    color: var(--primary-dark);
+  .footer {
     text-align: center;
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
+    padding: 16px 0 8px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
   }
-
-  /* Over-budget section */
-  .over-section {
-    background: var(--white);
-    border: 1.5px solid #fecaca;
-    border-radius: var(--radius);
-    padding: 18px 22px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 12px rgba(239,68,68,0.06);
+  .footer .note {
+    margin-top: 4px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    opacity: 0.8;
   }
-  .over-title {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 12px;
-  }
-  .over-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-  .over-table th {
-    background: #fef2f2;
-    color: var(--accent);
-    padding: 8px 12px;
-    text-align: center;
-    font-weight: 600;
-    border-bottom: 1px solid #fecaca;
-  }
-  .over-table td {
-    padding: 8px 12px;
-    text-align: center;
-    border-bottom: 1px solid #fef3f3;
-    font-variant-numeric: tabular-nums;
-  }
-  .over-table .over-line { font-weight: 700; color: var(--text); }
-  .over-table .over-div { font-size: 0.7rem; color: var(--text-muted); margin-left: 6px; }
-  .over-table .over-amount { color: var(--accent); font-weight: 700; }
-  .over-table .over-pct { color: var(--accent); font-weight: 600; }
-  .over-table .over-sum td { border-top: 2px solid #fecaca; font-weight: 700; background: #fffbfb; }
-  .over-table .over-fee { display: inline-block; padding: 1px 6px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; background: #fef2f2; color: var(--accent); }
-  .ok-section { border-color: #86efac !important; padding: 14px 22px !important; }
-  .ok-title { color: #16a34a !important; }
-
-  .footer { text-align: center; padding: 16px 0; font-size: 0.7rem; color: var(--text-muted); }
 
   @media (max-width: 768px) {
     body { padding: 16px 10px; }
     .summary { grid-template-columns: repeat(2, 1fr); }
+    .exec-summary { grid-template-columns: repeat(2, 1fr); }
     .header { flex-direction: column; gap: 8px; }
     .header .meta { text-align: center; }
   }
@@ -274,9 +402,22 @@
     <div class="meta" id="metaInfo">预算数据：2026-10-15<br>实际数据：待更新</div>
   </div>
 
+  <!-- Top summary cards -->
   <div class="summary" id="summaryRow"></div>
 
+  <!-- Executive summary - new -->
+  <div class="exec-summary" id="execSummary"></div>
+
+  <!-- Over-budget alert section -->
+  <div id="overSection"></div>
+
   <div class="tax-note">所有金额均为含税金额（业绩 & 费用）</div>
+
+  <!-- Table toolbar -->
+  <div class="table-toolbar">
+    <span class="toolbar-label">📊 事业部明细</span>
+    <button class="toolbar-btn" id="toggleAllBtn" onclick="toggleAll()">全部展开</button>
+  </div>
 
   <div class="table-wrap">
     <table>
@@ -288,11 +429,15 @@
     </table>
   </div>
 
-  <div class="footer">造旺发展事业部 · 数据来源：签呈费用测算表</div>
+  <div class="footer">
+    造旺发展事业部 · 数据来源：签呈费用测算表
+    <div class="note" id="footerNote"></div>
+  </div>
 
 </div>
 
 <script>
+// ==================== DATA ====================
 const BUDGET_DATA = [
   { division: "乳品事业部", line: "乳品", cash: 124201799.05, coin: 35233895.93, gift: 4965558.84, discount: 4087154.13, offline: 512305.23, total: 44798914.13 },
   { division: "乳品事业部", line: "乳饮料", cash: 2716421.30, coin: 811681.77, gift: 407463.19, discount: 0, offline: 1189.69, total: 1220334.66 },
@@ -328,41 +473,126 @@ const ACTUAL_DATA = {
   "豆果": { cash: 17092.24, coin: 5651.15, discount: 384.11, gift: 0, offline: 0, total: 6035.26 },
 };
 
+// ==================== CONFIG ====================
+const QUARTER_START = new Date('2026-10-01');
+const QUARTER_END = new Date('2026-12-31');
+
 const FEES = [
-  { key: 'cash', label: '现金业绩' },
-  { key: 'total', label: '总费用' },
-  { key: 'coin', label: '旺金币' },
-  { key: 'gift', label: '赠品' },
-  { key: 'discount', label: '折扣' },
-  { key: 'offline', label: '线下' },
+  { key: 'cash', label: '现金业绩', type: 'revenue' },
+  { key: 'total', label: '总费用', type: 'cost' },
+  { key: 'coin', label: '旺金币', type: 'cost' },
+  { key: 'gift', label: '赠品', type: 'cost' },
+  { key: 'discount', label: '折扣', type: 'cost' },
+  { key: 'offline', label: '线下', type: 'cost' },
 ];
 
-const SUBS = ['预算', '实际', '达成率', '状态'];
+const SUBS = ['预算', '实际', '偏差', '执行率'];
+const FEE_NAMES = { cash: '现金业绩', coin: '旺金币', gift: '赠品', discount: '折扣', offline: '线下', total: '总费用' };
+
+// ==================== HELPERS ====================
+function calcTimeProgress() {
+  const now = new Date();
+  const total = QUARTER_END - QUARTER_START;
+  const elapsed = now - QUARTER_START;
+  return Math.max(0, Math.min(1, elapsed / total));
+}
 
 function fmt(v) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
   if (Math.abs(v) >= 10000) return (v / 10000).toFixed(1) + '万';
   return v.toFixed(0);
 }
 
 function fmtDiff(v) {
-  if (v === 0) return '—';
+  if (v === null || v === undefined || isNaN(v) || v === 0) return '—';
   const sign = v > 0 ? '+' : '';
   if (Math.abs(v) >= 10000) return sign + (v / 10000).toFixed(1) + '万';
   return sign + v.toFixed(0);
 }
 
+// Revenue (cash): higher is better. Compare against time progress.
+function getRevenueStatus(pct, hasActual, timeProgress) {
+  if (!hasActual || pct === 0) return 'pending';
+  if (pct < timeProgress * 0.8) return 'bad';   // behind schedule
+  if (pct > timeProgress * 1.2) return 'good';  // ahead of schedule
+  return 'normal';
+}
+
+// Cost (fees): lower is better. Compare against time progress.
+function getCostStatus(pct, hasActual, timeProgress) {
+  if (!hasActual || pct === 0) return 'pending';
+  if (pct > 1.0) return 'over';                  // over budget
+  if (pct > timeProgress * 1.2) return 'fast';   // spending too fast
+  return 'normal';
+}
+
+function getMiniBarClass(feeType, status) {
+  if (feeType === 'revenue') {
+    switch(status) {
+      case 'good': return 'cash-good';
+      case 'bad': return 'cash-bad';
+      default: return 'cash-normal';
+    }
+  } else {
+    switch(status) {
+      case 'over': return 'fee-over';
+      case 'fast': return 'fee-fast';
+      default: return 'fee-normal';
+    }
+  }
+}
+
+function getPctClass(feeType, status) {
+  if (feeType === 'revenue') {
+    switch(status) {
+      case 'good': return 'cash-good';
+      case 'bad': return 'cash-bad';
+      default: return 'cash-normal';
+    }
+  } else {
+    switch(status) {
+      case 'over': return 'fee-over';
+      case 'fast': return 'fee-fast';
+      default: return 'fee-normal';
+    }
+  }
+}
+
+function getTagClass(status) {
+  switch(status) {
+    case 'over': return 'over';
+    case 'fast': return 'warn';
+    case 'bad': return 'warn';
+    case 'good': return 'ok';
+    case 'pending': return 'pending';
+    default: return 'ok';
+  }
+}
+
+function getTagText(status) {
+  switch(status) {
+    case 'over': return '超支';
+    case 'fast': return '偏快';
+    case 'bad': return '落后';
+    case 'good': return '超前';
+    case 'pending': return '未启动';
+    default: return '正常';
+  }
+}
+
+// ==================== RENDER ====================
 function render() {
+  const timeProgress = calcTimeProgress();
   const groups = {};
   BUDGET_DATA.forEach(d => {
     if (!groups[d.division]) groups[d.division] = [];
     groups[d.division].push(d);
   });
 
-  // Summary
-  let totalBudget = 0, totalActual = 0, totalDiff = 0;
+  // ---- Calculate totals ----
+  let totalBudget = 0, totalActual = 0;
   let cashBudget = 0, cashActual = 0;
-  const overItems = []; // {line, fee, feeName, budget, actual, diff, pct}
-  const FEE_NAMES = { cash: '现金业绩', coin: '旺金币', gift: '赠品', discount: '折扣', offline: '线下', total: '总费用' };
+  const overItems = [];
   const feeKeys = ['coin', 'gift', 'discount', 'offline'];
 
   Object.values(groups).forEach(items => {
@@ -373,7 +603,6 @@ function render() {
       if (actual) {
         totalActual += actual.total || 0;
         cashActual += actual.cash || 0;
-        // Check each fee type for over-budget
         for (const fee of feeKeys) {
           const b = item[fee] || 0;
           const a = actual[fee] || 0;
@@ -381,27 +610,93 @@ function render() {
             overItems.push({
               line: item.line, division: item.division,
               fee: fee, feeName: FEE_NAMES[fee],
-              budget: b, actual: a, diff: a - b, pct: ((a / b) * 100 - 100).toFixed(1)
+              budget: b, actual: a, diff: a - b,
+              pct: ((a / b) * 100).toFixed(1)
             });
           }
         }
       }
     });
   });
-  totalDiff = totalActual - totalBudget;
 
-  const totalPct = totalBudget > 0 && totalActual > 0 ? (totalActual / totalBudget * 100).toFixed(1) : '-';
-  const cashPct = cashBudget > 0 && cashActual > 0 ? (cashActual / cashBudget * 100).toFixed(1) : '-';
+  // ---- Top summary cards ----
+  const totalPct = totalBudget > 0 && totalActual > 0 ? (totalActual / totalBudget * 100).toFixed(1) : 0;
+  const cashPct = cashBudget > 0 && cashActual > 0 ? (cashActual / cashBudget * 100).toFixed(1) : 0;
+  const totalOver = totalActual > totalBudget;
+
   document.getElementById('summaryRow').innerHTML = `
     <div class="summary-card"><div class="value">¥${fmt(cashBudget)}</div><div class="label">Q3现金业绩预算</div></div>
     <div class="summary-card"><div class="value">¥${fmt(cashActual)}</div><div class="label">现金业绩实际 (${cashPct}%)</div></div>
     <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3费用预算合计</div></div>
-    <div class="summary-card"><div class="value" style="color:${totalActual > totalBudget ? 'var(--accent)' : 'var(--primary)'}">¥${fmt(totalActual)}<span style="font-size:0.65rem;font-weight:500"> (${totalPct}%)</span></div><div class="label">Q3费用实际合计 ${totalActual > totalBudget ? '⚠ 超支' : ''}</div></div>
+    <div class="summary-card ${totalOver ? 'alert' : ''}"><div class="value">¥${fmt(totalActual)}<span style="font-size:0.65rem;font-weight:500"> (${totalPct}%)</span></div><div class="label">Q3费用实际合计 ${totalOver ? '⚠ 超支' : ''}</div></div>
   `;
 
-  const divisionOrder = Object.keys(groups);
+  // ---- Executive summary ----
+  const feeDiff = (parseFloat(totalPct) - timeProgress * 100).toFixed(1);
+  const cashDiff = (parseFloat(cashPct) - timeProgress * 100).toFixed(1);
+  const feeDiffClass = parseFloat(feeDiff) > 0 ? 'pos' : 'neg';
+  const cashDiffClass = parseFloat(cashDiff) < 0 ? 'pos' : 'neg'; // cash: negative = bad
 
-  // Headers
+  document.getElementById('execSummary').innerHTML = `
+    <div class="exec-card">
+      <div class="exec-label">📅 时间进度</div>
+      <div class="exec-value">${(timeProgress * 100).toFixed(1)}%</div>
+      <div class="exec-diff neutral">Q3 已过 ${Math.floor((new Date() - QUARTER_START) / 86400000)} 天</div>
+    </div>
+    <div class="exec-card">
+      <div class="exec-label">💰 费用执行率</div>
+      <div class="exec-value">${totalPct}%</div>
+      <div class="exec-diff ${feeDiffClass}">较时间进度 ${parseFloat(feeDiff) > 0 ? '+' : ''}${feeDiff}pp</div>
+    </div>
+    <div class="exec-card">
+      <div class="exec-label">📈 业绩达成率</div>
+      <div class="exec-value">${cashPct}%</div>
+      <div class="exec-diff ${cashDiffClass}">较时间进度 ${parseFloat(cashDiff) > 0 ? '+' : ''}${cashDiff}pp</div>
+    </div>
+    <div class="exec-card">
+      <div class="exec-label">⚠️ 预警项数</div>
+      <div class="exec-value">${overItems.length} 项</div>
+      <div class="exec-diff ${overItems.length > 0 ? 'pos' : 'neg'}">${overItems.length > 0 ? '需关注超支' : '暂无超支'}</div>
+    </div>
+  `;
+
+  // ---- Over-budget alert section ----
+  let overHtml = '';
+  if (overItems.length > 0) {
+    overHtml = `
+      <div class="over-section">
+        <div class="over-title">⚠️ 超支预警（共 ${overItems.length} 项）</div>
+        <table class="over-table">
+          <thead>
+            <tr><th>事业部</th><th>线别</th><th>费用项</th><th>预算</th><th>实际</th><th>超支额</th><th>超支比例</th></tr>
+          </thead>
+          <tbody>
+            ${overItems.map(item => `
+              <tr>
+                <td><span class="over-div">${item.division}</span></td>
+                <td><span class="over-line">${item.line}</span></td>
+                <td><span class="over-fee">${item.feeName}</span></td>
+                <td>${fmt(item.budget)}</td>
+                <td class="over-amount">${fmt(item.actual)}</td>
+                <td class="over-amount">+${fmt(item.diff)}</td>
+                <td class="over-pct">${item.pct}%</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else {
+    overHtml = `
+      <div class="over-section ok-section">
+        <div class="over-title">✅ 暂无超支项，费用执行在预算内</div>
+      </div>
+    `;
+  }
+  document.getElementById('overSection').innerHTML = overHtml;
+
+  // ---- Table headers ----
+  const divisionOrder = Object.keys(groups);
   let h1 = '<th class="name-col">事业部 / 线别</th>';
   let h2 = '<th class="name-col"></th>';
   FEES.forEach(f => {
@@ -411,12 +706,16 @@ function render() {
   document.getElementById('headerGroup').innerHTML = h1;
   document.getElementById('headerSub').innerHTML = h2;
 
-  // Body
+  // ---- Table body ----
   let html = '';
   for (const division of divisionOrder) {
     const items = groups[division];
+    const divIndex = divisionOrder.indexOf(division);
+
     // Division total row
-    html += `<tr class="division-row"><td class="name-col">${division}</td>`;
+    html += `<tr class="division-row" id="div-row-${divIndex}" onclick="toggleRow(${divIndex})">`;
+    html += `<td class="name-col"><span class="expand-arrow">▶</span> ${division}</td>`;
+
     for (const fee of FEES) {
       const budget = items.reduce((s, i) => s + (i[fee.key] || 0), 0);
       const actual = items.reduce((s, i) => {
@@ -425,33 +724,54 @@ function render() {
       const hasActual = items.some(i => ACTUAL_DATA[i.line]);
       const diff = hasActual ? actual - budget : 0;
       const pct = budget > 0 && actual > 0 ? (actual / budget * 100) : 0;
+
+      let status;
+      if (fee.type === 'revenue') {
+        status = getRevenueStatus(pct, hasActual, timeProgress);
+      } else {
+        status = getCostStatus(pct, hasActual, timeProgress);
+      }
+
       const barW = Math.min(pct, 100);
-      const isOver = hasActual && actual > budget;
+      const barClass = getMiniBarClass(fee.type, status);
+      const pctClass = getPctClass(fee.type, status);
 
       html += `<td class="amount">${fmt(budget)}</td>`;
-      html += `<td class="amount ${isOver ? 'over' : ''}">${hasActual ? fmt(actual) : '—'}</td>`;
-      html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}" style="width:${barW}%"></span></span><span class="pct ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}">${pct.toFixed(0)}%</span>` : '<span class="pct pending">—</span>'}</td>`;
-      html += `<td>${hasActual ? `<span class="tag ${isOver ? 'over' : (pct > 80 ? 'warn' : 'ok')}">${isOver ? '超' : (pct > 80 ? '关注' : '正常')}</span>` : '<span class="tag pending">—</span>'}</td>`;
+      html += `<td class="amount ${status === 'over' ? 'over' : ''}">${hasActual ? fmt(actual) : '—'}</td>`;
+      html += `<td class="amount">${hasActual ? `<span class="${diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : 'diff-zero'}">${fmtDiff(diff)}</span>` : '—'}</td>`;
+      html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${barClass}" style="width:${barW}%"></span></span><span class="pct ${pctClass}">${pct.toFixed(0)}%</span>` : '<span class="tag pending">未启动</span>'}</td>`;
     }
     html += '</tr>';
 
-    // Line rows
+    // Line detail rows (hidden by default)
     for (const item of items) {
       const actual = ACTUAL_DATA[item.line];
-      html += `<tr class="line-row"><td class="name-col">${item.line}</td>`;
+      const hasActual = !!actual;
+      html += `<tr class="line-row" id="line-${divIndex}">`;
+      html += `<td class="name-col" style="padding-left:36px; font-weight:500; font-size:0.8rem;">${item.line}</td>`;
+
       for (const fee of FEES) {
         const budget = item[fee.key] || 0;
         const actualVal = actual ? (actual[fee.key] || 0) : 0;
-        const hasActual = actual && actual[fee.key] !== undefined;
-        const diff = hasActual ? actualVal - budget : 0;
-        const pct = budget > 0 && hasActual ? (actualVal / budget * 100) : 0;
+        const lineHasActual = actual && actual[fee.key] !== undefined && actual[fee.key] > 0;
+        const diff = lineHasActual ? actualVal - budget : 0;
+        const pct = budget > 0 && lineHasActual ? (actualVal / budget * 100) : 0;
+
+        let status;
+        if (fee.type === 'revenue') {
+          status = getRevenueStatus(pct, lineHasActual, timeProgress);
+        } else {
+          status = getCostStatus(pct, lineHasActual, timeProgress);
+        }
+
         const barW = Math.min(pct, 100);
-        const isOver = hasActual && actualVal > budget;
+        const barClass = getMiniBarClass(fee.type, status);
+        const pctClass = getPctClass(fee.type, status);
 
         html += `<td class="amount">${fmt(budget)}</td>`;
-        html += `<td class="amount ${isOver ? 'over' : ''}">${hasActual ? fmt(actualVal) : '—'}</td>`;
-        html += `<td class="amount ${isOver ? 'over' : (hasActual && diff < 0 ? 'under' : '')}">${hasActual ? fmtDiff(diff) : '—'}</td>`;
-        html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}" style="width:${barW}%"></span></span><span class="pct ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}">${pct.toFixed(0)}%</span>` : '<span class="pct pending">—</span>'}</td>`;
+        html += `<td class="amount ${status === 'over' ? 'over' : ''}">${lineHasActual ? fmt(actualVal) : '—'}</td>`;
+        html += `<td class="amount">${lineHasActual ? `<span class="${diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : 'diff-zero'}">${fmtDiff(diff)}</span>` : '—'}</td>`;
+        html += `<td>${lineHasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${barClass}" style="width:${barW}%"></span></span><span class="pct ${pctClass}">${pct.toFixed(0)}%</span>` : '<span class="tag pending">—</span>'}</td>`;
       }
       html += '</tr>';
     }
@@ -459,9 +779,43 @@ function render() {
 
   document.getElementById('tableBody').innerHTML = html;
 
+  // ---- Meta info ----
   const now = new Date().toLocaleDateString('zh-CN');
   document.getElementById('metaInfo').innerHTML =
     `预算数据：2026-10-15<br>实际数据：${totalActual > 0 ? '已更新 ' + now : '待更新'}`;
+
+  // ---- Footer note ----
+  document.getElementById('footerNote').innerHTML =
+    `* 执行率基准：Q3时间进度 ${(timeProgress * 100).toFixed(1)}%；超支判定：实际 > 预算`;
+}
+
+// ==================== INTERACTION ====================
+let allExpanded = false;
+
+function toggleRow(divIndex) {
+  const row = document.getElementById(`div-row-${divIndex}`);
+  const lines = document.querySelectorAll(`#line-${divIndex}`);
+  row.classList.toggle('expanded');
+  lines.forEach(l => l.classList.toggle('show'));
+}
+
+function toggleAll() {
+  allExpanded = !allExpanded;
+  document.querySelectorAll('.division-row').forEach((row, i) => {
+    if (allExpanded) {
+      row.classList.add('expanded');
+    } else {
+      row.classList.remove('expanded');
+    }
+  });
+  document.querySelectorAll('.line-row').forEach(line => {
+    if (allExpanded) {
+      line.classList.add('show');
+    } else {
+      line.classList.remove('show');
+    }
+  });
+  document.getElementById('toggleAllBtn').textContent = allExpanded ? '全部收起' : '全部展开';
 }
 
 render();
