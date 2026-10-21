@@ -6,13 +6,13 @@
 <title>2026财年Q3 费用预算达成看板</title>
 <style>
   :root {
-    --primary: #1a56db;
-    --primary-light: #e8f0fe;
-    --primary-dark: #1347b8;
-    --bg: #f1f5f9;
+    --primary: #475569;
+    --primary-light: #f1f5f9;
+    --primary-dark: #334155;
+    --bg: #f8fafc;
     --white: #ffffff;
     --border: #e2e8f0;
-    --border-blue: #bfdbfe;
+    --border-blue: #cbd5e1;
     --text: #1e293b;
     --text-secondary: #64748b;
     --text-muted: #94a3b8;
@@ -23,14 +23,14 @@
     --warn: #d97706;
     --warn-bg: #fffbeb;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 12px rgba(26,86,219,0.08);
+    --shadow-md: 0 4px 12px rgba(71,85,105,0.1);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 13px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: linear-gradient(135deg, #eef2ff 0%, #f1f5f9 50%, #f8fafc 100%);
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f8fafc 100%);
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -42,7 +42,7 @@
 
   /* Header */
   .header {
-    background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
     border-radius: 10px;
     padding: 20px 28px;
     margin-bottom: 16px;
@@ -95,7 +95,7 @@
 
   /* Header row 1 - fee type groups */
   thead tr.group th {
-    background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
     color: var(--white);
     padding: 10px 6px;
     font-weight: 600;
@@ -108,7 +108,7 @@
 
   /* Header row 2 - sub labels */
   thead tr.sub th {
-    background: #3b82f6;
+    background: #6b7280;
     color: rgba(255,255,255,0.9);
     padding: 7px 4px;
     font-weight: 500;
@@ -130,11 +130,11 @@
     font-variant-numeric: tabular-nums;
   }
   tbody td.name-col { text-align: left; padding-left: 14px; font-weight: 600; }
-  tbody tr:hover { background: #f0f7ff; }
+  tbody tr:hover { background: #f8fafc; }
 
   /* Division group row */
   .division-row td {
-    background: linear-gradient(90deg, #eff6ff 0%, #e8f0fe 100%);
+    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 100%);
     font-weight: 700;
     color: var(--primary-dark);
     border-bottom: 2px solid var(--border-blue);
@@ -182,7 +182,7 @@
   .tag.pending { background: #f1f5f9; color: var(--text-muted); }
 
   .tax-note {
-    background: linear-gradient(90deg, #eff6ff 0%, #e8f0fe 100%);
+    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 100%);
     border: 1px solid var(--border-blue);
     border-radius: 8px;
     padding: 10px 16px;
