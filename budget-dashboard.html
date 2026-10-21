@@ -349,6 +349,22 @@
   .pct.fee-over { color: var(--red); }
   .pct.pending { color: var(--text-muted); }
 
+  /* Stacked cost structure bar */
+  .stacked-bar {
+    display: inline-flex;
+    width: 56px;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  .stacked-bar .seg { height: 100%; }
+  .stacked-bar .seg-coin { background: #3b82f6; }
+  .stacked-bar .seg-gift { background: #22c55e; }
+  .stacked-bar .seg-discount { background: #f97316; }
+  .stacked-bar .seg-offline { background: #8b5cf6; }
+
   .amount { font-size: 0.76rem; }
   .amount.over { color: var(--accent); font-weight: 700; }
   .amount.under { color: #94a3b8; }
@@ -486,7 +502,7 @@ const FEES = [
   { key: 'offline', label: '线下', type: 'cost' },
 ];
 
-const SUBS = ['预算', '实际', '偏差', '执行率'];
+const SUBS = ['预算', '实际', '剩余', '执行率'];
 const FEE_NAMES = { cash: '现金业绩', coin: '旺金币', gift: '赠品', discount: '折扣', offline: '线下', total: '总费用' };
 
 // ==================== HELPERS ====================
@@ -718,7 +734,7 @@ function render() {
         const a = ACTUAL_DATA[i.line]; return s + (a ? (a[fee.key] || 0) : 0);
       }, 0);
       const hasActual = items.some(i => ACTUAL_DATA[i.line]);
-      const diff = hasActual ? actual - budget : 0;
+      const remain = hasActual ? budget - actual : 0; // 剩余预算
       const pct = budget > 0 && actual > 0 ? (actual / budget * 100) : 0;
 
       let status;
@@ -732,9 +748,27 @@ function render() {
       const barClass = getMiniBarClass(fee.type, status);
       const pctClass = getPctClass(fee.type, status);
 
+      // 总费用列加堆叠结构条
+      let stackedBar = '';
+      if (fee.key === 'total' && hasActual) {
+        const coinB = items.reduce((s, i) => s + (i.coin || 0), 0);
+        const giftB = items.reduce((s, i) => s + (i.gift || 0), 0);
+        const discB = items.reduce((s, i) => s + (i.discount || 0), 0);
+        const offB = items.reduce((s, i) => s + (i.offline || 0), 0);
+        const tot = coinB + giftB + discB + offB;
+        if (tot > 0) {
+          stackedBar = `<span class="stacked-bar" title="旺金币 ${(coinB/tot*100).toFixed(0)}% · 赠品 ${(giftB/tot*100).toFixed(0)}% · 折扣 ${(discB/tot*100).toFixed(0)}% · 线下 ${(offB/tot*100).toFixed(0)}%">
+            <span class="seg seg-coin" style="width:${(coinB/tot*100)}%"></span>
+            <span class="seg seg-gift" style="width:${(giftB/tot*100)}%"></span>
+            <span class="seg seg-discount" style="width:${(discB/tot*100)}%"></span>
+            <span class="seg seg-offline" style="width:${(offB/tot*100)}%"></span>
+          </span>`;
+        }
+      }
+
       html += `<td class="amount">${fmt(budget)}</td>`;
-      html += `<td class="amount ${status === 'over' ? 'over' : ''}">${hasActual ? fmt(actual) : '—'}</td>`;
-      html += `<td class="amount">${hasActual ? `<span class="${diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : 'diff-zero'}">${fmtDiff(diff)}</span>` : '—'}</td>`;
+      html += `<td class="amount ${remain < 0 ? 'over' : ''}">${hasActual ? fmt(actual) + stackedBar : '—'}</td>`;
+      html += `<td class="amount">${hasActual ? `<span class="${remain > 0 ? 'diff-neg' : remain < 0 ? 'diff-pos' : 'diff-zero'}">${fmtDiff(remain)}</span>` : '—'}</td>`;
       html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${barClass}" style="width:${barW}%"></span></span><span class="pct ${pctClass}">${pct.toFixed(0)}%</span>` : '<span class="tag pending">未启动</span>'}</td>`;
     }
     html += '</tr>';
@@ -750,7 +784,7 @@ function render() {
         const budget = item[fee.key] || 0;
         const actualVal = actual ? (actual[fee.key] || 0) : 0;
         const lineHasActual = actual && actual[fee.key] !== undefined && actual[fee.key] > 0;
-        const diff = lineHasActual ? actualVal - budget : 0;
+        const remain = lineHasActual ? budget - actualVal : 0; // 剩余预算
         const pct = budget > 0 && lineHasActual ? (actualVal / budget * 100) : 0;
 
         let status;
@@ -765,8 +799,8 @@ function render() {
         const pctClass = getPctClass(fee.type, status);
 
         html += `<td class="amount">${fmt(budget)}</td>`;
-        html += `<td class="amount ${status === 'over' ? 'over' : ''}">${lineHasActual ? fmt(actualVal) : '—'}</td>`;
-        html += `<td class="amount">${lineHasActual ? `<span class="${diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : 'diff-zero'}">${fmtDiff(diff)}</span>` : '—'}</td>`;
+        html += `<td class="amount ${remain < 0 ? 'over' : ''}">${lineHasActual ? fmt(actualVal) : '—'}</td>`;
+        html += `<td class="amount">${lineHasActual ? `<span class="${remain > 0 ? 'diff-neg' : remain < 0 ? 'diff-pos' : 'diff-zero'}">${fmtDiff(remain)}</span>` : '—'}</td>`;
         html += `<td>${lineHasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${barClass}" style="width:${barW}%"></span></span><span class="pct ${pctClass}">${pct.toFixed(0)}%</span>` : '<span class="tag pending">—</span>'}</td>`;
       }
       html += '</tr>';
