@@ -276,8 +276,6 @@
 
   <div class="summary" id="summaryRow"></div>
 
-  <div id="overSection"></div>
-
   <div class="tax-note">所有金额均为含税金额（业绩 & 费用）</div>
 
   <div class="table-wrap">
@@ -339,7 +337,7 @@ const FEES = [
   { key: 'offline', label: '线下' },
 ];
 
-const SUBS = ['预算', '实际', '差异', '达成率'];
+const SUBS = ['预算', '实际', '差异', '超出', '达成率'];
 
 function fmt(v) {
   if (Math.abs(v) >= 10000) return (v / 10000).toFixed(1) + '万';
@@ -402,27 +400,20 @@ function render() {
     <div class="summary-card ${overTotal > 0 ? 'alert' : ''}"><div class="value" style="color:${overTotal > 0 ? 'var(--accent)' : 'var(--primary)'}">${overTotal > 0 ? '⚠ 超 ¥' + fmt(overTotal) : '✅ 未超支'}</div><div class="label">费用超支金额 ${overTotal > 0 ? '(' + overItems.length + '项)' : ''}</div></div>
   `;
 
-  // Over-budget detail section - show by fee type
-  let overHtml = '';
-  if (overItems.length > 0) {
-    overItems.sort((a, b) => b.diff - a.diff);
-    const overTotal = overItems.reduce((s, o) => s + o.diff, 0);
-    overHtml = `<div class="over-section"><div class="over-title">⚠ 超预算明细（需补申请，共 ${overItems.length} 项）</div><table class="over-table"><thead><tr><th>线别</th><th>费用类型</th><th>预算</th><th>实际</th><th>超出金额</th><th>超出比例</th></tr></thead><tbody>`;
-    overItems.forEach(o => {
-      overHtml += `<tr><td><span class="over-line">${o.line}</span><span class="over-div">${o.division}</span></td><td><span class="over-fee">${o.feeName}</span></td><td>¥${fmt(o.budget)}</td><td>¥${fmt(o.actual)}</td><td class="over-amount">+¥${fmt(o.diff)}</td><td class="over-pct">+${o.pct}%</td></tr>`;
-    });
-    overHtml += `<tr class="over-sum"><td colspan="4">合计超出</td><td class="over-amount">+¥${fmt(overTotal)}</td><td></td></tr>`;
-    overHtml += '</tbody></table></div>';
-  } else {
-    overHtml = `<div class="over-section ok-section"><div class="over-title ok-title">✅ 暂无超预算项目</div></div>`;
-  }
-  document.getElementById('overSection').innerHTML = overHtml;
+  // Sort divisions: over-budget first
+  const sortedGroups = {};
+  const overDivisions = new Set(overItems.map(o => o.division));
+  const divisionOrder = Object.keys(groups).sort((a, b) => {
+    const aOver = overDivisions.has(a) ? 0 : 1;
+    const bOver = overDivisions.has(b) ? 0 : 1;
+    return aOver - bOver;
+  });
 
   // Headers
   let h1 = '<th class="name-col">事业部 / 线别</th>';
   let h2 = '<th class="name-col"></th>';
   FEES.forEach(f => {
-    h1 += `<th colspan="4">${f.label}</th>`;
+    h1 += `<th colspan="5">${f.label}</th>`;
     SUBS.forEach(s => { h2 += `<th>${s}</th>`; });
   });
   document.getElementById('headerGroup').innerHTML = h1;
@@ -430,7 +421,8 @@ function render() {
 
   // Body
   let html = '';
-  for (const [division, items] of Object.entries(groups)) {
+  for (const division of divisionOrder) {
+    const items = groups[division];
     // Division total row
     html += `<tr class="division-row"><td class="name-col">${division}</td>`;
     for (const fee of FEES) {
@@ -447,6 +439,7 @@ function render() {
       html += `<td class="amount">${fmt(budget)}</td>`;
       html += `<td class="amount ${isOver ? 'over' : ''}">${hasActual ? fmt(actual) : '—'}</td>`;
       html += `<td class="amount ${isOver ? 'over' : (hasActual && diff < 0 ? 'under' : '')}">${hasActual ? fmtDiff(diff) : '—'}</td>`;
+      html += `<td class="amount ${isOver ? 'over' : ''}">${isOver ? '+' + fmt(diff) : '—'}</td>`;
       html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}" style="width:${barW}%"></span></span><span class="pct ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}">${pct.toFixed(0)}%</span>` : '<span class="pct pending">—</span>'}</td>`;
     }
     html += '</tr>';
