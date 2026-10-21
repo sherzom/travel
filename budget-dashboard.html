@@ -431,7 +431,7 @@ function render() {
       html += `<td class="amount">${fmt(budget)}</td>`;
       html += `<td class="amount ${isOver ? 'over' : ''}">${hasActual ? fmt(actual) : '—'}</td>`;
       html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}" style="width:${barW}%"></span></span><span class="pct ${isOver ? 'over' : (pct > 80 ? 'warn' : 'normal')}">${pct.toFixed(0)}%</span>` : '<span class="pct pending">—</span>'}</td>`;
-      html += `<td>${hasActual ? `<span class="tag ${isOver ? 'over' : (pct > 80 ? 'warn' : 'ok')}">${isOver ? '超' : '正常'}</span>` : '<span class="tag pending">—</span>'}</td>`;
+      html += `<td>${hasActual ? `<span class="tag ${isOver ? 'over' : (pct > 80 ? 'warn' : 'ok')}">${isOver ? '超' : (pct > 80 ? '关注' : '正常')}</span>` : '<span class="tag pending">—</span>'}</td>`;
     }
     html += '</tr>';
 
