@@ -268,20 +268,20 @@ const BUDGET_DATA = [
 ];
 
 const ACTUAL_DATA = {
-  "FixXBody": { cash: 36720, coin: 514.8, discount: 103680, gift: 0, offline: 0 },
-  "爱至尊": { cash: 0, coin: 5645.25, discount: 0, gift: 0, offline: 0 },
-  "冰品": { cash: 3588, coin: 300, discount: 0, gift: 1142.4, offline: 60 },
-  "果冻": { cash: 16908.48, coin: 3906.46, discount: 278.21, gift: 2854.8, offline: 0 },
-  "酒品": { cash: 77480.4, coin: 796.2, discount: 5076, gift: 2574, offline: 57551.72 },
-  "米果": { cash: 0, coin: 0, discount: 0, gift: 0, offline: 790.5 },
-  "奶糖": { cash: 1213908.39, coin: 85632.46, discount: 28644.95, gift: 28902, offline: 9140.33 },
-  "乳品": { cash: 8348098.59, coin: 2120060.16, discount: 4138090.58, gift: 314357.25, offline: 27549.3 },
-  "乳饮料": { cash: 80679.15, coin: 18670.1, discount: 0, gift: 4777.5, offline: 0 },
-  "软糖": { cash: 1314234.84, coin: 95577.23, discount: 65146.93, gift: 29674.4, offline: 10874.66 },
-  "旺礼": { cash: 0, coin: 11654.48, discount: 0, gift: 0, offline: 42323.84 },
-  "文宣品": { cash: 0, coin: 174316.2, discount: 0, gift: 0, offline: 278 },
-  "周边": { cash: 0, coin: 190885.35, discount: 0, gift: 0, offline: 504 },
-  "豆果": { cash: 17092.24, coin: 5651.15, discount: 384.11, gift: 0, offline: 0 },
+  "FixXBody": { cash: 36720, coin: 514.8, discount: 103680, gift: 0, offline: 0, total: 104194.8 },
+  "爱至尊": { cash: 0, coin: 5645.25, discount: 0, gift: 0, offline: 0, total: 5645.25 },
+  "冰品": { cash: 3588, coin: 300, discount: 0, gift: 1142.4, offline: 60, total: 1502.4 },
+  "果冻": { cash: 16908.48, coin: 3906.46, discount: 278.21, gift: 2854.8, offline: 0, total: 7039.47 },
+  "酒品": { cash: 77480.4, coin: 796.2, discount: 5076, gift: 2574, offline: 57551.72, total: 65991.92 },
+  "米果": { cash: 0, coin: 0, discount: 0, gift: 0, offline: 790.5, total: 790.5 },
+  "奶糖": { cash: 1213908.39, coin: 85632.46, discount: 28644.95, gift: 28902, offline: 9140.33, total: 152319.74 },
+  "乳品": { cash: 8348098.59, coin: 2120060.16, discount: 4138090.58, gift: 314357.25, offline: 27549.3, total: 6600057.29 },
+  "乳饮料": { cash: 80679.15, coin: 18670.1, discount: 0, gift: 4777.5, offline: 0, total: 23447.6 },
+  "软糖": { cash: 1314234.84, coin: 95577.23, discount: 65146.93, gift: 29674.4, offline: 10874.66, total: 200273.22 },
+  "旺礼": { cash: 0, coin: 11654.48, discount: 0, gift: 0, offline: 42323.84, total: 53978.32 },
+  "文宣品": { cash: 0, coin: 174316.2, discount: 0, gift: 0, offline: 278, total: 174594.2 },
+  "周边": { cash: 0, coin: 190885.35, discount: 0, gift: 0, offline: 504, total: 191389.35 },
+  "豆果": { cash: 17092.24, coin: 5651.15, discount: 384.11, gift: 0, offline: 0, total: 6035.26 },
 };
 
 const FEES = [
@@ -339,9 +339,9 @@ function render() {
   const cashPct = cashBudget > 0 && cashActual > 0 ? (cashActual / cashBudget * 100).toFixed(1) : '-';
   document.getElementById('summaryRow').innerHTML = `
     <div class="summary-card"><div class="value">¥${fmt(cashBudget)}</div><div class="label">Q3现金业绩预算</div></div>
-    <div class="summary-card"><div class="value">${cashActualCount > 0 ? '¥' + fmt(cashActual) : '-'}</div><div class="label">现金业绩实际</div></div>
+    <div class="summary-card"><div class="value">${cashActualCount > 0 ? '¥' + fmt(cashActual) : '-'}</div><div class="label">现金业绩实际 (${cashPct}%)</div></div>
     <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3费用预算合计</div></div>
-    <div class="summary-card ${overCount > 0 ? 'alert' : ''}"><div class="value" style="${overCount > 0 ? 'color:var(--accent)' : ''}">${actualCount > 0 ? overCount + ' / ' + actualCount : '-'}</div><div class="label">超预算项数</div></div>
+    <div class="summary-card"><div class="value">${actualCount > 0 ? '¥' + fmt(totalActual) : '-'}</div><div class="label">Q3费用实际合计 (${totalPct}%)</div></div>
   `;
 
   // Headers
