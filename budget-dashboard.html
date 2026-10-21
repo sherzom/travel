@@ -374,6 +374,7 @@ function render() {
       const actual = ACTUAL_DATA[item.line];
       if (actual) {
         totalActual += actual.total || 0;
+        cashActual += actual.cash || 0;
         // Check each fee type for over-budget
         for (const fee of feeKeys) {
           const b = item[fee] || 0;
@@ -393,11 +394,12 @@ function render() {
 
   const totalPct = totalBudget > 0 && totalActual > 0 ? (totalActual / totalBudget * 100).toFixed(1) : '-';
   const cashPct = cashBudget > 0 && cashActual > 0 ? (cashActual / cashBudget * 100).toFixed(1) : '-';
+  const overTotal = overItems.reduce((s, o) => s + o.diff, 0);
   document.getElementById('summaryRow').innerHTML = `
     <div class="summary-card"><div class="value">¥${fmt(cashBudget)}</div><div class="label">Q3现金业绩预算</div></div>
-    <div class="summary-card"><div class="value">${cashActual > 0 ? '¥' + fmt(cashActual) : '-'}</div><div class="label">现金业绩实际 (${cashPct}%)</div></div>
+    <div class="summary-card"><div class="value">¥${fmt(cashActual)}</div><div class="label">现金业绩实际 (${cashPct}%)</div></div>
     <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3费用预算合计</div></div>
-    <div class="summary-card"><div class="value" style="color:${totalDiff > 0 ? 'var(--accent)' : 'var(--primary)'}">${totalActual > 0 ? '¥' + fmt(totalActual) : '-'}<span style="font-size:0.65rem;font-weight:500;${totalDiff > 0 ? 'color:var(--accent)' : ''}"> (${totalPct}%)</span></div><div class="label">Q3费用实际合计</div></div>
+    <div class="summary-card ${overTotal > 0 ? 'alert' : ''}"><div class="value" style="color:${overTotal > 0 ? 'var(--accent)' : 'var(--primary)'}">${overTotal > 0 ? '⚠ 超 ¥' + fmt(overTotal) : '✅ 未超支'}</div><div class="label">费用超支金额 ${overTotal > 0 ? '(' + overItems.length + '项)' : ''}</div></div>
   `;
 
   // Over-budget detail section - show by fee type
