@@ -593,7 +593,6 @@ function render() {
   let totalBudget = 0, totalActual = 0;
   let cashBudget = 0, cashActual = 0;
   const overItems = [];
-  const feeKeys = ['coin', 'gift', 'discount', 'offline'];
 
   Object.values(groups).forEach(items => {
     items.forEach(item => {
@@ -603,17 +602,15 @@ function render() {
       if (actual) {
         totalActual += actual.total || 0;
         cashActual += actual.cash || 0;
-        for (const fee of feeKeys) {
-          const b = item[fee] || 0;
-          const a = actual[fee] || 0;
-          if (b > 0 && a > b) {
-            overItems.push({
-              line: item.line, division: item.division,
-              fee: fee, feeName: FEE_NAMES[fee],
-              budget: b, actual: a, diff: a - b,
-              pct: ((a / b) * 100).toFixed(1)
-            });
-          }
+        // 只预警"总费用"层面的超支
+        const b = item.total || 0;
+        const a = actual.total || 0;
+        if (b > 0 && a > b) {
+          overItems.push({
+            line: item.line, division: item.division,
+            budget: b, actual: a, diff: a - b,
+            pct: ((a / b) * 100).toFixed(1)
+          });
         }
       }
     });
@@ -665,17 +662,16 @@ function render() {
   if (overItems.length > 0) {
     overHtml = `
       <div class="over-section">
-        <div class="over-title">⚠️ 超支预警（共 ${overItems.length} 项）</div>
+        <div class="over-title">⚠️ 超支预警 · 总费用超预算（共 ${overItems.length} 项）</div>
         <table class="over-table">
           <thead>
-            <tr><th>事业部</th><th>线别</th><th>费用项</th><th>预算</th><th>实际</th><th>超支额</th><th>超支比例</th></tr>
+            <tr><th>事业部</th><th>线别</th><th>预算</th><th>实际</th><th>超支额</th><th>超支比例</th></tr>
           </thead>
           <tbody>
             ${overItems.map(item => `
               <tr>
                 <td><span class="over-div">${item.division}</span></td>
                 <td><span class="over-line">${item.line}</span></td>
-                <td><span class="over-fee">${item.feeName}</span></td>
                 <td>${fmt(item.budget)}</td>
                 <td class="over-amount">${fmt(item.actual)}</td>
                 <td class="over-amount">+${fmt(item.diff)}</td>
@@ -689,7 +685,7 @@ function render() {
   } else {
     overHtml = `
       <div class="over-section ok-section">
-        <div class="over-title">✅ 暂无超支项，费用执行在预算内</div>
+        <div class="over-title">✅ 总费用暂无超支，执行在预算内</div>
       </div>
     `;
   }
