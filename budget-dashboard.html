@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2026财年Q3 费用预算达成看板</title>
+<style>
+  :root {
+    --bg-primary: #0c0c0a;
+    --bg-secondary: #161612;
+    --bg-card: #1c1c17;
+    --bg-card-alt: #202019;
+    --bg-elevated: #252520;
+    --border: #2a2a23;
+    --border-light: #33332b;
+    --text-primary: #e8e4dc;
+    --text-secondary: #a09c90;
+    --text-muted: #6a665c;
+    --accent-amber: #d4a853;
+    --accent-amber-dim: #b8923f;
+    --accent-green: #7a9e7e;
+    --accent-green-dim: #5e7e62;
+    --accent-rust: #c4784a;
+    --accent-rust-dim: #a8653a;
+    --accent-sky: #7aadde;
+    --accent-sky-dim: #5e8ab8;
+    --accent-red: #d4684a;
+    --accent-red-dim: #b8503a;
+    --accent-purple: #9a8ad4;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 15% 10%, rgba(122,158,126,0.035) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% 90%, rgba(212,168,83,0.025) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* Header */
+  .header {
+    padding: 32px 0 24px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .header .update-time {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin-top: 8px;
+  }
+
+  /* Summary Cards */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .summary-card .value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent-amber);
+  }
+  .summary-card .label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .summary-card.alert .value { color: var(--accent-red); }
+
+  /* Division Card */
+  .division {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .division.over-budget { border-color: var(--accent-red-dim); }
+  .division-header {
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .division-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .division-header .badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .badge.ok { background: rgba(122,158,126,0.15); color: var(--accent-green); }
+  .badge.warn { background: rgba(196,120,74,0.15); color: var(--accent-rust); }
+  .badge.danger { background: rgba(212,104,74,0.15); color: var(--accent-red); }
+
+  /* Line Item */
+  .line-item {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .line-item:last-child { border-bottom: none; }
+  .line-item.over-budget { background: rgba(212,104,74,0.04); }
+
+  .line-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .line-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .line-pct {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+  .pct-ok { color: var(--accent-green); }
+  .pct-warn { color: var(--accent-rust); }
+  .pct-danger { color: var(--accent-red); }
+
+  /* Bar Chart */
+  .bar-container {
+    position: relative;
+    height: 28px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .bar-budget {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(122,173,222,0.15),
+      rgba(122,173,222,0.15) 4px,
+      rgba(122,173,222,0.08) 4px,
+      rgba(122,173,222,0.08) 8px
+    );
+    border-right: 2px solid var(--accent-sky);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  }
+  .bar-actual {
+    position: absolute;
+    top: 4px; left: 0; bottom: 4px;
+    background: linear-gradient(180deg, var(--accent-amber) 0%, var(--accent-amber-dim) 100%);
+    border-radius: 4px;
+    min-width: 2px;
+    transition: width 0.5s ease;
+  }
+  .bar-actual.over {
+    background: linear-gradient(180deg, var(--accent-red) 0%, var(--accent-red-dim) 100%);
+  }
+  .bar-label {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  /* Fee Breakdown */
+  .fee-breakdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .fee-item {
+    text-align: center;
+    padding: 6px 4px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-sm);
+    position: relative;
+  }
+  .fee-item .fee-label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+  .fee-item .fee-val {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .fee-item .fee-pct {
+    font-size: 0.55rem;
+    margin-top: 1px;
+  }
+  .fee-item.over .fee-val { color: var(--accent-red); }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 16px 0;
+    margin-bottom: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 12px;
+    height: 8px;
+    border-radius: 2px;
+  }
+  .legend-dot.budget { background: rgba(122,173,222,0.2); border: 1px solid var(--accent-sky); }
+  .legend-dot.actual { background: var(--accent-amber); }
+  .legend-dot.over { background: var(--accent-red); }
+
+  /* No Data */
+  .no-data {
+    text-align: center;
+    padding: 12px;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    font-style: italic;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px 0;
+    font-size: 0.7rem;
+    color: var(--text-faint);
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .fee-breakdown { grid-template-columns: repeat(2, 1fr); }
+    .summary { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .summary-card .value { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <h1>2026财年Q3 费用预算达成看板</h1>
+    <div class="subtitle">预算 vs 实际 · 各事业部各线别费用对比</div>
+    <div class="update-time" id="updateTime">预算数据：2026-10-15 | 实际数据：待更新</div>
+  </div>
+
+  <div class="summary" id="summary">
+    <div class="summary-card">
+      <div class="value" id="totalDivision">10</div>
+      <div class="label">事业部数</div>
+    </div>
+    <div class="summary-card">
+      <div class="value" id="totalBudget">¥0</div>
+      <div class="label">Q3预算合计</div>
+    </div>
+    <div class="summary-card alert" id="overBudgetCard">
+      <div class="value" id="overBudgetCount">-</div>
+      <div class="label">超预算项</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot budget"></div>预算</div>
+    <div class="legend-item"><div class="legend-dot actual"></div>实际</div>
+    <div class="legend-item"><div class="legend-dot over"></div>超预算</div>
+  </div>
+
+  <div id="dashboard"></div>
+
+  <div class="footer">
+    造旺发展事业部 · 数据来源：签呈费用测算表<br>
+    实际达成数据待录入后更新
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// 预算数据（从Excel读取，2026-10-15）
+// ============================================================
+const BUDGET_DATA = [
+  { division: "乳品事业部", line: "乳品", coin: 35233895.93, gift: 4965558.84, discount: 4087154.13, offline: 512305.23, total: 44798914.13 },
+  { division: "乳品事业部", line: "乳饮料", coin: 811681.77, gift: 407463.19, discount: 0, offline: 1189.69, total: 1220334.66 },
+  { division: "糖果事业部", line: "奶糖", coin: 704698.56, gift: 173929.40, discount: 208513.90, offline: 24558.59, total: 1111700.45 },
+  { division: "糖果事业部", line: "软糖", coin: 666270.41, gift: 224409.05, discount: 497969.83, offline: 31826.84, total: 1420476.12 },
+  { division: "糖果事业部", line: "口泡", coin: 1233.35, gift: 186.87, discount: 224.25, offline: 0, total: 1644.47 },
+  { division: "旺礼事业部", line: "旺礼", coin: 882264.14, gift: 2091378.77, discount: 736018.36, offline: 0, total: 3709661.27 },
+  { division: "果冻事业部", line: "果冻", coin: 95554.88, gift: 14478.01, discount: 333996.10, offline: 305.08, total: 444334.07 },
+  { division: "酒品事业部", line: "酒品", coin: 12631.34, gift: 226231.60, discount: 272.06, offline: 666106.14, total: 905241.14 },
+  { division: "冰品事业部", line: "冰品", coin: 15000.00, gift: 44271.08, discount: 15000.00, offline: 0, total: 74271.08 },
+  { division: "米果事业部", line: "米果", coin: 0, gift: 1584.67, discount: 10737.13, offline: 1712.85, total: 14034.65 },
+  { division: "豆果事业部", line: "豆果", coin: 6205.82, gift: 940.28, discount: 31260.31, offline: 269.74, total: 38676.15 },
+  { division: "旺健康创研事业部", line: "FixXBody", coin: 17203.78, gift: 32500.57, discount: 42873.62, offline: 25563.93, total: 118141.90 },
+  { division: "旺健康创研事业部", line: "爱至尊", coin: 88483.25, gift: 17696.65, discount: 35393.30, offline: 0, total: 141573.20 },
+  { division: "文宣品周边", line: "文宣品", coin: 997465.43, gift: 0, discount: 0, offline: 110829.49, total: 1108294.93 },
+  { division: "文宣品周边", line: "周边", coin: 911897.08, gift: 0, discount: 0, offline: 101321.90, total: 1013218.98 },
+];
+
+// ============================================================
+// 实际数据（待用户提供后更新此部分）
+// 格式：{ "线别名称": { coin: x, gift: x, discount: x, offline: x } }
+// ============================================================
+const ACTUAL_DATA = {};
+// 示例格式：
+// const ACTUAL_DATA = {
+//   "乳品": { coin: 12000000, gift: 1500000, discount: 800000, offline: 100000 },
+//   "乳饮料": { coin: 200000, gift: 80000, discount: 0, offline: 300 },
+// };
+
+// ============================================================
+// 渲染逻辑
+// ============================================================
+function fmtMoney(v) {
+  if (v >= 10000) return (v / 10000).toFixed(1) + '万';
+  return v.toFixed(0);
+}
+
+function fmtFull(v) {
+  return v.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function getPctClass(pct, overBudget) {
+  if (overBudget) return 'pct-danger';
+  if (pct > 80) return 'pct-warn';
+  return 'pct-ok';
+}
+
+function getBadge(pct, overBudget) {
+  if (overBudget) return '<span class="badge danger">超预算</span>';
+  if (pct > 80) return '<span class="badge warn">关注</span>';
+  return '<span class="badge ok">正常</span>';
+}
+
+function renderBar(budget, actual, overBudget) {
+  const pct = budget > 0 ? (actual / budget * 100) : 0;
+  const barWidth = Math.min(pct, 150);
+  const actualOver = overBudget;
+
+  return `
+    <div class="bar-container">
+      <div class="bar-budget" style="width:100%"></div>
+      <div class="bar-actual ${actualOver ? 'over' : ''}" style="width:${Math.min(barWidth, 100)}%"></div>
+      <div class="bar-label">实际 ¥${fmtMoney(actual)} / 预算 ¥${fmtMoney(budget)}</div>
+    </div>
+  `;
+}
+
+function renderFeeBreakdown(budget, actual) {
+  const fees = [
+    { label: '旺金币', key: 'coin' },
+    { label: '赠品', key: 'gift' },
+    { label: '折扣', key: 'discount' },
+    { label: '线下', key: 'offline' },
+  ];
+
+  return '<div class="fee-breakdown">' + fees.map(f => {
+    const b = budget[f.key] || 0;
+    const a = actual ? (actual[f.key] || 0) : null;
+    const overBudget = a !== null && b > 0 && a > b;
+    const pctStr = a !== null && b > 0 ? `(${(a/b*100).toFixed(0)}%)` : '';
+
+    return `<div class="fee-item ${overBudget ? 'over' : ''}">
+      <div class="fee-label">${f.label}</div>
+      <div class="fee-val">${a !== null ? '¥' + fmtMoney(a) : '-'}</div>
+      <div class="fee-pct" style="color:var(--text-faint)">预算¥${fmtMoney(b)}</div>
+      ${a !== null ? `<div class="fee-pct ${overBudget ? 'pct-danger' : 'pct-ok'}">${pctStr}</div>` : ''}
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function render() {
+  const dashboard = document.getElementById('dashboard');
+
+  // Group by division
+  const groups = {};
+  BUDGET_DATA.forEach(d => {
+    if (!groups[d.division]) groups[d.division] = [];
+    groups[d.division].push(d);
+  });
+
+  // Calculate totals
+  let totalBudget = 0;
+  let overBudgetItems = 0;
+
+  Object.values(groups).forEach(items => {
+    items.forEach(item => {
+      totalBudget += item.total;
+      const actual = ACTUAL_DATA[item.line];
+      if (actual) {
+        const actualTotal = (actual.coin||0) + (actual.gift||0) + (actual.discount||0) + (actual.offline||0);
+        if (actualTotal > item.total) overBudgetItems++;
+      }
+    });
+  });
+
+  // Update summary
+  document.getElementById('totalDivision').textContent = Object.keys(groups).length;
+  document.getElementById('totalBudget').textContent = '¥' + fmtMoney(totalBudget);
+  document.getElementById('overBudgetCount').textContent = Object.keys(ACTUAL_DATA).length > 0 ? overBudgetItems : '-';
+
+  // Render divisions
+  let html = '';
+  for (const [division, items] of Object.entries(groups)) {
+    const isOverBudget = items.some(item => {
+      const actual = ACTUAL_DATA[item.line];
+      if (!actual) return false;
+      const actualTotal = (actual.coin||0) + (actual.gift||0) + (actual.discount||0) + (actual.offline||0);
+      return actualTotal > item.total;
+    });
+
+    html += `<div class="division ${isOverBudget ? 'over-budget' : ''}">
+      <div class="division-header">
+        <h2>${division}</h2>
+        ${getBadge(0, isOverBudget)}
+      </div>`;
+
+    for (const item of items) {
+      const actual = ACTUAL_DATA[item.line];
+      const actualTotal = actual ? (actual.coin||0) + (actual.gift||0) + (actual.discount||0) + (actual.offline||0) : 0;
+      const pct = item.total > 0 && actual ? (actualTotal / item.total * 100) : 0;
+      const overBudget = actual && actualTotal > item.total;
+
+      html += `<div class="line-item ${overBudget ? 'over-budget' : ''}">
+        <div class="line-header">
+          <span class="line-name">${item.line}</span>
+          ${actual ? `<span class="line-pct ${getPctClass(pct, overBudget)}">${pct.toFixed(1)}%</span>` : '<span class="line-pct" style="color:var(--text-faint)">待录入</span>'}
+        </div>
+        ${actual ? renderBar(item.total, actualTotal, overBudget) : '<div class="no-data">实际数据待录入</div>'}
+        ${renderFeeBreakdown(item.line === '文宣品' || item.line === '周边' ? { coin: item.coin, gift: item.gift, discount: item.discount, offline: item.offline } : item, actual)}
+      </div>`;
+    }
+
+    html += '</div>';
+  }
+
+  dashboard.innerHTML = html;
+
+  // Update time
+  const now = new Date().toLocaleDateString('zh-CN');
+  document.getElementById('updateTime').textContent =
+    `预算数据：2026-10-15 | 实际数据：${Object.keys(ACTUAL_DATA).length > 0 ? '已更新 ' + now : '待更新'}`;
+}
+
+// Initial render
+render();
+</script>
+</body>
+</html>
