@@ -6,31 +6,35 @@
 <title>2026财年Q3 费用预算达成看板</title>
 <style>
   :root {
-    --primary: #475569;
-    --primary-light: #f1f5f9;
-    --primary-dark: #334155;
-    --bg: #f8fafc;
+    --primary: #3b82f6;
+    --primary-light: #eff6ff;
+    --primary-dark: #1d4ed8;
+    --accent: #fb7185;
+    --accent-light: #fff1f2;
+    --bg: #fef7f0;
     --white: #ffffff;
-    --border: #e2e8f0;
-    --border-blue: #cbd5e1;
-    --text: #1e293b;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --green: #16a34a;
-    --green-bg: #dcfce7;
-    --red: #dc2626;
+    --border: #fde4e4;
+    --border-soft: #f3e8e8;
+    --text: #374151;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --green: #22c55e;
+    --green-bg: #f0fdf4;
+    --red: #ef4444;
     --red-bg: #fef2f2;
-    --warn: #d97706;
+    --warn: #f59e0b;
     --warn-bg: #fffbeb;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 12px rgba(71,85,105,0.1);
+    --shadow-sm: 0 2px 8px rgba(59,130,246,0.06);
+    --shadow-md: 0 4px 16px rgba(59,130,246,0.1);
+    --radius: 16px;
+    --radius-sm: 10px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 13px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f8fafc 100%);
+    background: linear-gradient(160deg, #fef7f0 0%, #fff1f2 30%, #eff6ff 70%, #fef7f0 100%);
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -42,24 +46,25 @@
 
   /* Header */
   .header {
-    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-    border-radius: 10px;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    border-radius: var(--radius);
     padding: 20px 28px;
     margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 20px rgba(59,130,246,0.15);
   }
   .header-title {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .header-logo {
-    height: 32px;
+    height: 36px;
     width: auto;
-    border-radius: 6px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   .header h1 {
     font-size: 1.25rem;
@@ -67,37 +72,37 @@
     font-weight: 700;
     letter-spacing: 0.5px;
   }
-  .header .meta { font-size: 0.72rem; color: rgba(255,255,255,0.75); text-align: right; }
+  .header .meta { font-size: 0.72rem; color: rgba(255,255,255,0.8); text-align: right; }
 
   /* Summary */
   .summary {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 16px;
   }
   .summary-card {
     background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 18px;
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 16px 18px;
     text-align: center;
     box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.2s, transform 0.2s;
+    transition: box-shadow 0.25s, transform 0.25s;
   }
   .summary-card:hover {
     box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
-  .summary-card .value { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
-  .summary-card .label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 3px; }
-  .summary-card.alert .value { color: var(--red); }
+  .summary-card .value { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+  .summary-card .label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; }
+  .summary-card.alert .value { color: var(--accent); }
 
   /* Table */
   .table-wrap {
     background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius);
     overflow-x: auto;
     box-shadow: var(--shadow-sm);
   }
@@ -105,50 +110,50 @@
 
   /* Header row 1 - fee type groups */
   thead tr.group th {
-    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
     color: var(--white);
-    padding: 10px 6px;
+    padding: 12px 6px;
     font-weight: 600;
     text-align: center;
     border-right: 1px solid rgba(255,255,255,0.2);
     font-size: 0.78rem;
     letter-spacing: 0.3px;
   }
-  thead tr.group th.name-col { text-align: left; padding-left: 14px; min-width: 130px; }
+  thead tr.group th.name-col { text-align: left; padding-left: 16px; min-width: 130px; }
 
   /* Header row 2 - sub labels */
   thead tr.sub th {
-    background: #6b7280;
-    color: rgba(255,255,255,0.9);
-    padding: 7px 4px;
+    background: #6366f1;
+    color: rgba(255,255,255,0.92);
+    padding: 8px 4px;
     font-weight: 500;
     text-align: center;
     font-size: 0.68rem;
     border-right: 1px solid rgba(255,255,255,0.15);
     white-space: nowrap;
   }
-  thead tr.sub th.name-col { text-align: left; padding-left: 14px; }
+  thead tr.sub th.name-col { text-align: left; padding-left: 16px; }
 
   /* Body */
   tbody td {
-    padding: 9px 6px;
+    padding: 10px 6px;
     text-align: center;
-    border-bottom: 1px solid #f1f5f9;
-    border-right: 1px solid #f8fafc;
+    border-bottom: 1px solid #fef3f3;
+    border-right: 1px solid #fafafa;
     vertical-align: middle;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
-  tbody td.name-col { text-align: left; padding-left: 14px; font-weight: 600; }
-  tbody tr:hover { background: #f8fafc; }
+  tbody td.name-col { text-align: left; padding-left: 16px; font-weight: 600; }
+  tbody tr:hover { background: #fef7ff; }
 
   /* Division group row */
   .division-row td {
-    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 100%);
+    background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
     font-weight: 700;
     color: var(--primary-dark);
-    border-bottom: 2px solid var(--border-blue);
-    border-top: 1px solid var(--border-blue);
+    border-bottom: 2px solid #fde4e4;
+    border-top: 1px solid #fde4e4;
     font-size: 0.82rem;
   }
   .division-row td.name-col { font-size: 0.85rem; }
@@ -157,45 +162,45 @@
   .mini-bar {
     display: inline-block;
     width: 48px;
-    height: 5px;
-    background: #e2e8f0;
-    border-radius: 3px;
+    height: 6px;
+    background: #fde4e4;
+    border-radius: 4px;
     overflow: hidden;
     vertical-align: middle;
     margin-right: 5px;
   }
-  .mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
-  .mini-bar-fill.normal { background: var(--primary); }
+  .mini-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .mini-bar-fill.normal { background: linear-gradient(90deg, #3b82f6, #6366f1); }
   .mini-bar-fill.warn { background: var(--warn); }
-  .mini-bar-fill.over { background: var(--red); }
+  .mini-bar-fill.over { background: var(--accent); }
 
   .pct { font-size: 0.72rem; font-weight: 600; }
   .pct.normal { color: var(--primary); }
   .pct.warn { color: var(--warn); }
-  .pct.over { color: var(--red); }
+  .pct.over { color: var(--accent); }
   .pct.pending { color: var(--text-muted); }
 
   .amount { font-size: 0.75rem; }
-  .amount.over { color: var(--red); font-weight: 600; }
+  .amount.over { color: var(--accent); font-weight: 600; }
 
   /* Status tag */
   .tag {
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 10px;
+    padding: 3px 10px;
+    border-radius: 12px;
     font-size: 0.65rem;
     font-weight: 600;
   }
   .tag.ok { background: var(--green-bg); color: var(--green); }
   .tag.warn { background: var(--warn-bg); color: var(--warn); }
-  .tag.over { background: var(--red-bg); color: var(--red); }
-  .tag.pending { background: #f1f5f9; color: var(--text-muted); }
+  .tag.over { background: var(--accent-light); color: var(--accent); }
+  .tag.pending { background: #f9fafb; color: var(--text-muted); }
 
   .tax-note {
-    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 100%);
-    border: 1px solid var(--border-blue);
-    border-radius: 8px;
-    padding: 10px 16px;
+    background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
     margin-bottom: 16px;
     font-size: 0.75rem;
     color: var(--primary-dark);
@@ -321,7 +326,7 @@ function render() {
     <div class="summary-card"><div class="value">¥${fmt(cashBudget)}</div><div class="label">Q3现金业绩预算</div></div>
     <div class="summary-card"><div class="value">${cashActualCount > 0 ? '¥' + fmt(cashActual) : '-'}</div><div class="label">现金业绩实际</div></div>
     <div class="summary-card"><div class="value">¥${fmt(totalBudget)}</div><div class="label">Q3费用预算合计</div></div>
-    <div class="summary-card ${overCount > 0 ? 'alert' : ''}"><div class="value">${actualCount > 0 ? overCount + ' / ' + actualCount : '-'}</div><div class="label">超预算项数</div></div>
+    <div class="summary-card ${overCount > 0 ? 'alert' : ''}"><div class="value" style="${overCount > 0 ? 'color:var(--accent)' : ''}">${actualCount > 0 ? overCount + ' / ' + actualCount : '-'}</div><div class="label">超预算项数</div></div>
   `;
 
   // Headers
