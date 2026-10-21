@@ -6,56 +6,54 @@
 <title>2026财年Q3 费用预算达成看板</title>
 <style>
   :root {
-    --primary: #3b82f6;
+    --primary: #1e40af;
     --primary-light: #eff6ff;
-    --primary-dark: #1d4ed8;
-    --accent: #fb7185;
-    --accent-light: #fff1f2;
-    --bg: #fef7f0;
+    --primary-dark: #1e3a8a;
+    --accent: #dc2626;
+    --accent-light: #fef2f2;
+    --bg: #f1f5f9;
     --white: #ffffff;
-    --border: #fde4e4;
-    --border-soft: #f3e8e8;
-    --text: #374151;
-    --text-secondary: #6b7280;
-    --text-muted: #9ca3af;
-    --green: #22c55e;
+    --border: #e2e8f0;
+    --border-soft: #e2e8f0;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --green: #16a34a;
     --green-bg: #f0fdf4;
-    --red: #ef4444;
+    --red: #dc2626;
     --red-bg: #fef2f2;
-    --warn: #f59e0b;
+    --warn: #d97706;
     --warn-bg: #fffbeb;
-    --orange: #f97316;
-    --orange-light: #fff7ed;
-    --shadow-sm: 0 2px 8px rgba(59,130,246,0.06);
-    --shadow-md: 0 4px 16px rgba(59,130,246,0.1);
-    --radius: 16px;
-    --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { font-size: 13px; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: linear-gradient(160deg, #fef7f0 0%, #fff1f2 30%, #eff6ff 70%, #fef7f0 100%);
+    background: var(--bg);
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    padding: 28px 20px;
+    padding: 24px 20px;
   }
 
   .container { max-width: 100%; margin: 0 auto; }
 
   /* Header */
   .header {
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    background: var(--primary-dark);
     border-radius: var(--radius);
-    padding: 20px 28px;
-    margin-bottom: 16px;
+    padding: 18px 24px;
+    margin-bottom: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 20px rgba(59,130,246,0.15);
+    box-shadow: var(--shadow-sm);
   }
   .header-title {
     display: flex;
@@ -199,16 +197,16 @@
   }
 
   .tax-note {
-    background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
-    border: 1.5px solid var(--border);
+    background: #f8fafc;
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 10px 16px;
+    padding: 8px 16px;
     margin-bottom: 12px;
     font-size: 0.72rem;
-    color: var(--primary-dark);
+    color: var(--text-secondary);
     text-align: center;
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
+    font-weight: 500;
+    box-shadow: none;
   }
 
   /* Table toolbar */
@@ -251,25 +249,25 @@
   table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
 
   thead tr.group th {
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    background: var(--primary);
     color: var(--white);
-    padding: 11px 6px;
+    padding: 10px 6px;
     font-weight: 600;
     text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.2);
+    border-right: 1px solid rgba(255,255,255,0.15);
     font-size: 0.76rem;
     letter-spacing: 0.3px;
   }
   thead tr.group th.name-col { text-align: left; padding-left: 16px; min-width: 140px; }
 
   thead tr.sub th {
-    background: #6366f1;
-    color: rgba(255,255,255,0.92);
+    background: var(--primary-dark);
+    color: rgba(255,255,255,0.9);
     padding: 7px 4px;
     font-weight: 500;
     text-align: center;
     font-size: 0.66rem;
-    border-right: 1px solid rgba(255,255,255,0.15);
+    border-right: 1px solid rgba(255,255,255,0.1);
     white-space: nowrap;
   }
   thead tr.sub th.name-col { text-align: left; padding-left: 16px; }
@@ -289,18 +287,18 @@
 
   /* Division group row - clickable */
   .division-row td {
-    background: linear-gradient(90deg, #fff1f2 0%, #eff6ff 100%);
+    background: #f8fafc;
     font-weight: 700;
     color: var(--primary-dark);
-    border-bottom: 2px solid #fde4e4;
-    border-top: 2px solid #fde4e4;
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
     font-size: 0.82rem;
-    padding: 11px 8px;
+    padding: 10px 8px;
     cursor: pointer;
     user-select: none;
   }
   .division-row td.name-col { font-size: 0.86rem; }
-  .division-row:hover td { background: linear-gradient(90deg, #ffe4e6 0%, #dbeafe 100%); }
+  .division-row:hover td { background: #f1f5f9; }
 
   .expand-arrow {
     display: inline-block;
