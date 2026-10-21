@@ -216,11 +216,30 @@
     align-items: center;
     margin-bottom: 8px;
     padding: 0 4px;
+    gap: 12px;
   }
   .table-toolbar .toolbar-label {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-secondary);
+  }
+  .toolbar-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    display: inline-block;
   }
   .toolbar-btn {
     font-size: 0.72rem;
@@ -430,6 +449,12 @@
   <!-- Table toolbar -->
   <div class="table-toolbar">
     <span class="toolbar-label">📊 事业部明细</span>
+    <div class="toolbar-legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>旺金币</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>赠品</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#f97316"></span>折扣</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span>线下</span>
+    </div>
     <button class="toolbar-btn" id="toggleAllBtn" onclick="toggleAll()">全部展开</button>
   </div>
 
