@@ -833,9 +833,8 @@ function render() {
   document.getElementById('tableBody').innerHTML = html;
 
   // ---- Meta info ----
-  const now = new Date().toLocaleDateString('zh-CN');
   document.getElementById('metaInfo').innerHTML =
-    `预算数据：2026-10-15<br>实际数据：${totalActual > 0 ? '已更新 ' + now : '待更新'}`;
+    `预算数据：2026-10-15<br>实际数据：${totalActual > 0 ? '已更新 截止2026/10/26' : '待更新'}`;
 
   // ---- Footer note ----
   document.getElementById('footerNote').innerHTML =
