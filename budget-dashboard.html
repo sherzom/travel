@@ -517,15 +517,19 @@ const QUARTER_START = new Date('2026-10-01');
 const QUARTER_END = new Date('2026-12-31');
 
 const FEES = [
-  { key: 'cash', label: '现金业绩', type: 'revenue' },
-  { key: 'total', label: '总费用', type: 'cost' },
-  { key: 'coin', label: '旺金币', type: 'cost' },
-  { key: 'gift', label: '赠品', type: 'cost' },
-  { key: 'discount', label: '折扣', type: 'cost' },
-  { key: 'offline', label: '线下', type: 'cost' },
+  { key: 'cash', label: '现金业绩', type: 'revenue', cols: 3 },
+  { key: 'total', label: '总费用', type: 'cost', cols: 4 },
+  { key: 'coin', label: '旺金币', type: 'cost', cols: 4 },
+  { key: 'gift', label: '赠品', type: 'cost', cols: 4 },
+  { key: 'discount', label: '折扣', type: 'cost', cols: 4 },
+  { key: 'offline', label: '线下', type: 'cost', cols: 4 },
 ];
 
-const SUBS = ['预算', '实际', '剩余', '执行率'];
+// 现金业绩是收入口径，无「剩余」概念，只展示 预算/实际/达成率
+const SUBS = {
+  3: ['预算', '实际', '达成率'],
+  4: ['预算', '实际', '剩余', '执行率'],
+};
 const FEE_NAMES = { cash: '现金业绩', coin: '旺金币', gift: '赠品', discount: '折扣', offline: '线下', total: '总费用' };
 
 // ==================== HELPERS ====================
@@ -735,8 +739,8 @@ function render() {
   let h1 = '<th class="name-col">事业部 / 线别</th>';
   let h2 = '<th class="name-col"></th>';
   FEES.forEach(f => {
-    h1 += `<th colspan="4">${f.label}</th>`;
-    SUBS.forEach(s => { h2 += `<th>${s}</th>`; });
+    h1 += `<th colspan="${f.cols}">${f.label}</th>`;
+    SUBS[f.cols].forEach(s => { h2 += `<th>${s}</th>`; });
   });
   document.getElementById('headerGroup').innerHTML = h1;
   document.getElementById('headerSub').innerHTML = h2;
@@ -790,8 +794,10 @@ function render() {
       }
 
       html += `<td class="amount">${fmt(budget)}</td>`;
-      html += `<td class="amount ${remain < 0 ? 'over' : ''}">${hasActual ? fmt(actual) + stackedBar : '—'}</td>`;
-      html += `<td class="amount">${hasActual ? `<span class="${remain > 0 ? 'diff-neg' : remain < 0 ? 'diff-pos' : 'diff-zero'}">${fmtDiff(remain)}</span>` : '—'}</td>`;
+      html += `<td class="amount ${fee.type === 'cost' && remain < 0 ? 'over' : ''}">${hasActual ? fmt(actual) + stackedBar : '—'}</td>`;
+      if (fee.cols === 4) {
+        html += `<td class="amount">${hasActual ? `<span class="${remain > 0 ? 'diff-neg' : remain < 0 ? 'diff-pos' : 'diff-zero'}">${fmtDiff(remain)}</span>` : '—'}</td>`;
+      }
       html += `<td>${hasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${barClass}" style="width:${barW}%"></span></span><span class="pct ${pctClass}">${pct.toFixed(0)}%</span>` : '<span class="tag pending">未启动</span>'}</td>`;
     }
     html += '</tr>';
@@ -822,8 +828,10 @@ function render() {
         const pctClass = getPctClass(fee.type, status);
 
         html += `<td class="amount">${fmt(budget)}</td>`;
-        html += `<td class="amount ${remain < 0 ? 'over' : ''}">${lineHasActual ? fmt(actualVal) : '—'}</td>`;
-        html += `<td class="amount">${lineHasActual ? `<span class="${remain > 0 ? 'diff-neg' : remain < 0 ? 'diff-pos' : 'diff-zero'}">${fmtDiff(remain)}</span>` : '—'}</td>`;
+        html += `<td class="amount ${fee.type === 'cost' && remain < 0 ? 'over' : ''}">${lineHasActual ? fmt(actualVal) : '—'}</td>`;
+        if (fee.cols === 4) {
+          html += `<td class="amount">${lineHasActual ? `<span class="${remain > 0 ? 'diff-neg' : remain < 0 ? 'diff-pos' : 'diff-zero'}">${fmtDiff(remain)}</span>` : '—'}</td>`;
+        }
         html += `<td>${lineHasActual ? `<span class="mini-bar"><span class="mini-bar-fill ${barClass}" style="width:${barW}%"></span></span><span class="pct ${pctClass}">${pct.toFixed(0)}%</span>` : '<span class="tag pending">—</span>'}</td>`;
       }
       html += '</tr>';
